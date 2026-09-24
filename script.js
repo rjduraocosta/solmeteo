@@ -158,7 +158,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.5.1";
+const APP_VERSION = "2.5.2";
 
 const LANG_KEY = "skycast:lang";
 const I18N = {
@@ -1535,8 +1535,8 @@ function exportPvCsv() {
     const total = kwhs.reduce((a, b) => a + parseFloat(b), 0).toFixed(3);
     lines.push(row.concat(kwhs, [total]).join(","));
   }
-  const city = (placeName || "skycast").toLowerCase().replace(/[^a-z0-9]+/g, "_") || "skycast";
-  const fileName = `skycast_${(data.hourly.time[start] || "day").slice(0, 10)}_${city}.csv`;
+  const city = (placeName || "solmeteo").toLowerCase().replace(/[^a-z0-9]+/g, "_") || "solmeteo";
+  const fileName = `solmeteo_${(data.hourly.time[start] || "day").slice(0, 10)}_${city}.csv`;
   const blob = new Blob([lines.join("\n")], { type: "text/csv" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");

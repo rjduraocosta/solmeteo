@@ -2,13 +2,20 @@
 
 A versão da aplicação aparece no rodapé da app e do manual (**SolMeteo © 2026 · Versão X.Y.Z**) e é incrementada a cada iteração. A entrada no topo corresponde sempre à versão corrente.
 
-Versão corrente: **2.5.1**
+Versão corrente: **2.5.2**
 
 Formato baseado em [Versões Semânticas](https://semver.org/):
 
 - **MAJOR** — alterações estruturais ou comportamento principal da app;
 - **MINOR** — novas funcionalidades ou melhoramentos;
 - **PATCH** — correções de erros.
+
+---
+
+## [2.5.2] — 2026-09-24
+
+### Corrigido
+- **Logótipo no canto superior esquerdo ainda com "Sky Cast"**: o nome estava marcado no HTML como `Sky<span>Cast</span>` (estilo bicolor), pelo que a substituição automática "SkyCast" não o apanhou. Marcado como `Sol<span>Meteo</span>`, mantendo o estilo. O nome do ficheiro CSV exportado (`skycast_…`) e o slug de cidade por omissão também passaram a `solmeteo`. (As chaves de armazenamento interno `skycast:*` mantêm-se para preservar as preferências do utilizador.)
 
 ---
 
