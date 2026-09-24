@@ -2,13 +2,20 @@
 
 A versão da aplicação aparece no rodapé da app e do manual (**SolMeteo © 2026 · Versão X.Y.Z**) e é incrementada a cada iteração. A entrada no topo corresponde sempre à versão corrente.
 
-Versão corrente: **2.5.0**
+Versão corrente: **2.5.1**
 
 Formato baseado em [Versões Semânticas](https://semver.org/):
 
 - **MAJOR** — alterações estruturais ou comportamento principal da app;
 - **MINOR** — novas funcionalidades ou melhoramentos;
 - **PATCH** — correções de erros.
+
+---
+
+## [2.5.1] — 2026-09-24
+
+### Corrigido
+- **Cache PWA antiga ("skycast-v1") a servir versões antigas**: o service worker mantinha o mesmo `CACHE_NAME` desde o início e servia os ficheiros estáticos em modo **cache primeiro** — os navegadores continuavam a mostrar o conteúdo antigo (nome antigo, versões anteriores) mesmo depois da publicação. Cache renomeada para **`solmeteo-v2`**: no `activate`, as caches antigas são apagadas e o app shell é re-buscado — a app passa a atualizar.
 
 ---
 

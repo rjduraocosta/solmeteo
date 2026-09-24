@@ -1,4 +1,4 @@
-const CACHE_NAME = "skycast-v1";
+const CACHE_NAME = "solmeteo-v2";
 const APP_SHELL = [
   "./",
   "./index.html",

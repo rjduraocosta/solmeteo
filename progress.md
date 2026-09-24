@@ -3,7 +3,7 @@
 ## Estado atual
 App de meteorologia em página única (HTML + CSS + JS) com visual moderno e comercial.
 Fonte de dados: **Open-Meteo** (grátis, sem chave de API).
-**Versão corrente: 2.5.0** — funcionalidades completas da proposta + melhoramentos da previsão semanal e gráficos (ver "Tarefas — Realizadas vs Pendentes").
+**Versão corrente: 2.5.1** — funcionalidades completas da proposta + melhoramentos da previsão semanal e gráficos (ver "Tarefas — Realizadas vs Pendentes").
 
 > ## ⚠️ REGRAS OBRIGATÓRIAS (não podem falhar)
 > 1. **A cada iteração, atualizar o `manual.html`** (manual de utilização com infográficos) sempre que se adiciona, altera ou remove qualquer funcionalidade/comportamento. O manual é **bilingue (PT/EN)** — cada alteração tem de ser refletida nos **dois idiomas**. Tem de estar sempre sincronizado com a app.
@@ -108,6 +108,7 @@ Fonte de dados: **Open-Meteo** (grátis, sem chave de API).
 - [x] **v2.4.9 — Dia completo (fim de dia 00h)**: adicionada a **13.ª guia vertical no bordo direito** de cada gráfico com a etiqueta **00h do dia seguinte** (calculada da hora final +1h; com dados reais a partir da meia-noite dá "00h"), fechando o último seguimento — grid com 12 espaços iguais de 2h e o dia completo visível.
 - [x] **v2.4.10 — Rótulo de fim de dia removido**: a etiqueta `00h`/`24h` no extremo direito era redundante/repetida (a esquerda já é 00h) — removida; a **guia vertical final mantém-se** como fronteira do dia, com o ritmo 0,2,…,22 intacto.
 - [x] **v2.5.0 — Renomeada para SolMeteo**: nome alterado de "SkyCast" (já usado por apps nas lojas) para **SolMeteo** em todos os pontos de contacto (títulos, manifesto PWA, rodapés, manual PT/EN, docs); verificação web confirmou que "SolMeteo" está livre no Google Play/App Store. Repositório de publicação renomeado para `rjduraocosta/solmeteo`; app publicada no GitHub Pages: `https://rjduraocosta.github.io/solmeteo/`.
+- [x] **v2.5.1 — Cache PWA antiga a servir versões antigas**: o service worker mantinha `CACHE_NAME` inalterado ("skycast-v1") com estáticos em cache-first — navegadores mostravam conteúdo antigo apesar das publicações. Cache renomeada para **`solmeteo-v2`**: no activate as caches antigas são apagadas e o app shell re-buscado — a app atualiza; recomendar hard refresh (Ctrl+F5) ou reinstalar a PWA.
 
 ### ⏳ Pendentes / Opcionais
 - [ ] Teste visual humano em vários navegadores/dispositivos.
