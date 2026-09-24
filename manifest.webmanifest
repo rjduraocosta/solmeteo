@@ -1,6 +1,6 @@
 {
-  "name": "SkyCast — Meteorologia & Solar",
-  "short_name": "SkyCast",
+  "name": "SolMeteo — Meteorologia & Solar",
+  "short_name": "SolMeteo",
   "description": "App de meteorologia e produção solar estimada fotovoltaica.",
   "start_url": "./index.html",
   "display": "standalone",

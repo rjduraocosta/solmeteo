@@ -1,14 +1,21 @@
-# Changelog — SkyCast
+# Changelog — SolMeteo
 
-A versão da aplicação aparece no rodapé da app e do manual (**SkyCast © 2026 · Versão X.Y.Z**) e é incrementada a cada iteração. A entrada no topo corresponde sempre à versão corrente.
+A versão da aplicação aparece no rodapé da app e do manual (**SolMeteo © 2026 · Versão X.Y.Z**) e é incrementada a cada iteração. A entrada no topo corresponde sempre à versão corrente.
 
-Versão corrente: **2.4.10**
+Versão corrente: **2.5.0**
 
 Formato baseado em [Versões Semânticas](https://semver.org/):
 
 - **MAJOR** — alterações estruturais ou comportamento principal da app;
 - **MINOR** — novas funcionalidades ou melhoramentos;
 - **PATCH** — correções de erros.
+
+---
+
+## [2.5.0] — 2026-09-24
+
+### Alterado
+- **Nome da app: SkyCast → SolMeteo**: evita conflito com apps homónimas já existentes nas lojas. Atualizado em todos os pontos de contacto — títulos (`<title>`), cabeçalho `app.title` (PT/EN), manifesto PWA (`name`/`short_name`), rodapés da app e do manual, textos e chaves i18n do manual (PT/EN) e documentação interna (`CHANGELOG.md`, `progress.md`). Publicado no GitHub Pages: `https://rjduraocosta.github.io/skycast/`.
 
 ---
 
@@ -108,7 +115,7 @@ Formato baseado em [Versões Semânticas](https://semver.org/):
 - **Qualidade do ar (EAQI)**: indicador no painel de hoje com o índice europeu (Bom → Muito mau), via `air-quality-api.open-meteo.com`; fica oculto quando indisponível.
 - **Previsão semanal de produção solar**: barras com a produção estimada dos 7 dias e total da semana (kWh · €) no painel solar — clicar (ou Enter/Espaço) numa barra seleciona esse dia.
 - **Exportar dados do dia em CSV**: botão “Exportar CSV” no painel solar descarrega hora a hora — temperatura, probabilidade/precipitação, radiação (GHI/DNI/difusa) e kWh por orientação + total.
-- **PWA instalável**: novo `sw.js` com cache da app shell (rede primeiro para o HTML, cache primeiro para os estáticos), registado na app — o SkyCast passa a abrir offline após a primeira visita.
+- **PWA instalável**: novo `sw.js` com cache da app shell (rede primeiro para o HTML, cache primeiro para os estáticos), registado na app — o SolMeteo passa a abrir offline após a primeira visita.
 
 ### Corrigido
 - **Sincronização de versão**: a entrada 2.2.2 ficara por fechar e as versões desencontradas entre `script.js` (2.3.0), manual, changelog e `progress.md` — tudo consolidado em **2.3.0** (a ênfase a verde/bold no resumo da economia mantém-se).

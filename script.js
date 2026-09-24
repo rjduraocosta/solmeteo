@@ -158,7 +158,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.4.10";
+const APP_VERSION = "2.5.0";
 
 const LANG_KEY = "skycast:lang";
 const I18N = {
@@ -167,7 +167,7 @@ const I18N = {
     days: ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"],
     months: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
     dirs: ["N", "NE", "E", "SE", "S", "SO", "O", "NO"],
-    "app.title": "SkyCast — Meteorologia",
+    "app.title": "SolMeteo — Meteorologia",
     "search.placeholder": "Pesquisar cidade ou região…",
     "search.aria": "Pesquisar cidade",
     "suggestions.aria": "Sugestões",
@@ -276,7 +276,7 @@ const I18N = {
     days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     dirs: ["N", "NE", "E", "SE", "S", "SW", "W", "NW"],
-    "app.title": "SkyCast — Weather",
+    "app.title": "SolMeteo — Weather",
     "search.placeholder": "Search city or region…",
     "search.aria": "Search city",
     "suggestions.aria": "Suggestions",
