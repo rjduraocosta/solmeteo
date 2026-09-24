@@ -15,7 +15,7 @@ Formato baseado em [Versões Semânticas](https://semver.org/):
 ## [2.5.0] — 2026-09-24
 
 ### Alterado
-- **Nome da app: SkyCast → SolMeteo**: evita conflito com apps homónimas já existentes nas lojas. Atualizado em todos os pontos de contacto — títulos (`<title>`), cabeçalho `app.title` (PT/EN), manifesto PWA (`name`/`short_name`), rodapés da app e do manual, textos e chaves i18n do manual (PT/EN) e documentação interna (`CHANGELOG.md`, `progress.md`). Publicado no GitHub Pages: `https://rjduraocosta.github.io/skycast/`.
+- **Nome da app: SkyCast → SolMeteo**: evita conflito com apps homónimas já existentes nas lojas. Atualizado em todos os pontos de contacto — títulos (`<title>`), cabeçalho `app.title` (PT/EN), manifesto PWA (`name`/`short_name`), rodapés da app e do manual, textos e chaves i18n do manual (PT/EN) e documentação interna (`CHANGELOG.md`, `progress.md`). O repositório de publicação foi renomeado em conformidade: `https://github.com/rjduraocosta/solmeteo`, publicado no GitHub Pages em `https://rjduraocosta.github.io/solmeteo/`.
 
 ---
 
