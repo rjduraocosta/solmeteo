@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyCast — Meteorologia</title>
+  <meta name="description" content="App de meteorologia moderno — veja o tempo em qualquer região do mundo." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#0b1020" />
+  <link rel="icon" type="image/svg+xml" href="icon-192.svg" />
+  <link rel="apple-touch-icon" href="icon-192.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="aurora aurora--2" aria-hidden="true"></div>
+
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand__mark" aria-hidden="true"></span>
+        <span class="brand__name">Sky<span>Cast</span></span>
+      </div>
+
+      <form class="search" id="searchForm" autocomplete="off">
+        <svg class="search__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Pesquisar cidade ou região…" aria-label="Pesquisar cidade"
+          data-i18n-ph="search.placeholder" data-i18n-aria="search.aria" />
+        <div class="search__suggestions" id="suggestions" role="listbox" aria-label="Sugestões" data-i18n-aria="suggestions.aria"></div>
+      </form>
+
+      <button class="locate" id="locateBtn" type="button" title="Usar a minha localização" aria-label="Usar a minha localização"
+        data-i18n-title="locate.title" data-i18n-aria="locate.aria">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 21s-6-5.686-6-10a6 6 0 0 1 12 0c0 4.314-6 10-6 10z"></path>
+          <circle cx="12" cy="11" r="2.5"></circle>
+        </svg>
+      </button>
+
+      <!-- Unit switch (°C / °F) -->
+      <div class="unit-switch" role="group" aria-label="Unidades de temperatura" data-i18n-aria="unit.aria">
+        <button type="button" class="unit__btn active" data-unit="c" aria-label="Celsius">°C</button>
+        <button type="button" class="unit__btn" data-unit="f" aria-label="Fahrenheit">°F</button>
+      </div>
+
+      <!-- Theme toggle (Dark / Light) -->
+      <button class="theme-toggle" id="themeBtn" type="button" title="Alternar modo claro / escuro" aria-label="Alternar tema"
+        data-i18n-title="theme.title" data-i18n-aria="theme.aria">
+        <svg class="theme-icon theme-icon--dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg class="theme-icon theme-icon--light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+
+      <a class="manual-btn" href="manual.html" title="Manual de utilização" aria-label="Abrir o manual de utilização"
+        data-i18n-title="manual.title" data-i18n-aria="manual.aria">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+        </svg>
+        <span class="manual-btn__label" data-i18n="manual.label">Manual</span>
+      </a>
+
+      <div class="lang" role="group" aria-label="Idioma" data-i18n-aria="lang.aria">
+        <button type="button" class="lang__btn" data-lang="pt" aria-label="Português">PT</button>
+        <button type="button" class="lang__btn" data-lang="en" aria-label="English">EN</button>
+      </div>
+    </header>
+
+    <!-- Recent / Favorite Cities Chips -->
+    <nav class="recents" id="recentsBar" aria-label="Cidades recentes" data-i18n-aria="recents.aria" hidden>
+      <span class="recents__label" data-i18n="recents.label">Recentes:</span>
+      <div class="recents__list" id="recentsList"></div>
+    </nav>
+
+    <section class="loader" id="loader" aria-hidden="true">
+      <span class="loader__spinner" aria-label="A carregar" data-i18n-aria="loader.aria"></span>
+      <p data-i18n="loader.text">A consultar as condições atmosféricas…</p>
+    </section>
+
+    <section class="hero" id="hero" hidden>
+      <div class="hero__main">
+        <div class="hero__loc">
+          <span id="regionName" class="hero__region">—</span>
+          <span id="regionNow" class="hero__now">—</span>
+        </div>
+        <div class="hero__temp">
+          <span id="heroTemp" class="hero__temp-value">--°</span>
+          <div class="hero__state">
+            <span id="heroIcon" class="hero__icon" aria-hidden="true"></span>
+            <span id="heroDesc" class="hero__desc">—</span>
+            <span id="heroFeels" class="hero__feels">Sensação térmica —°</span>
+          </div>
+        </div>
+        <div class="hero__stats">
+          <div class="stat">
+            <span class="stat__label" data-i18n="stat.maxmin">Máx / Mín</span>
+            <span class="stat__value" id="statMaxMin">--° / --°</span>
+          </div>
+          <div class="stat">
+            <span class="stat__label" data-i18n="stat.humidity">Humidade</span>
+            <span class="stat__value" id="statHumidity">--%</span>
+          </div>
+          <div class="stat">
+            <span class="stat__label" data-i18n="stat.wind">Vento</span>
+            <span class="stat__value" id="statWind">-- km/h</span>
+          </div>
+          <div class="stat">
+            <span class="stat__label" data-i18n="stat.uv">Índice UV</span>
+            <span class="stat__value" id="statUv">--</span>
+          </div>
+          <div class="stat stat--aqi" id="statAqiBox">
+            <span class="stat__label" data-i18n="stat.aqi">Qualidade do Ar</span>
+            <span class="stat__value" id="statAqi">--</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__side">
+        <div class="hero__coords">
+          <span id="heroCoords">—, —</span>
+        </div>
+        <div class="sun">
+          <div class="sun__item sun__item--rise">
+            <span class="sun__label" data-i18n="sun.rise">Nascer do sol</span>
+            <span class="sun__value" id="sunrise">--:--</span>
+          </div>
+          <div class="sun__divider"></div>
+          <div class="sun__item sun__item--set">
+            <span class="sun__label" data-i18n="sun.set">Pôr do sol</span>
+            <span class="sun__value" id="sunset">--:--</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="forecastPanel" hidden>
+      <div class="panel__head">
+        <div>
+          <h2 class="panel__title" data-i18n="hourly.title">Previsão horária</h2>
+          <span class="panel__sub" id="hourlySpan">Próximas 24 horas</span>
+        </div>
+        <div class="day-nav" role="group" aria-label="Navegar entre dias" data-i18n-aria="daynav.aria">
+          <button type="button" class="day-nav__btn" id="dayPrevBtn" title="Dia anterior" aria-label="Dia anterior" data-i18n-title="daynav.prev" data-i18n-aria="daynav.prev">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <span class="day-nav__label" id="dayNavLabel">Hoje</span>
+          <button type="button" class="day-nav__btn" id="dayNextBtn" title="Dia seguinte" aria-label="Dia seguinte" data-i18n-title="daynav.next" data-i18n-aria="daynav.next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="hourly" id="hourlyList"></div>
+    </section>
+
+    <section class="panel" id="tempPanel" hidden>
+      <div class="panel__head">
+        <h2 class="panel__title" data-i18n="temp.title">Temperatura ao longo do dia</h2>
+        <span class="panel__sub" id="tempSpan">—</span>
+      </div>
+      <div class="chart">
+        <div class="chart__head">
+          <span class="chart__label" data-i18n="temp.label">Temperatura horária</span>
+          <span class="chart__value chart__value--temp" id="tempRange">—</span>
+        </div>
+        <div class="chart__canvas" id="tempChart"></div>
+        <div class="chart__axis" id="tempAxis"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="solarPanel" hidden>
+      <div class="panel__head">
+        <h2 class="panel__title" data-i18n="solar.title">Radiação solar &amp; precipitação</h2>
+        <span class="panel__sub" id="solarSpan">Hoje · hora a hora</span>
+      </div>
+      <div class="charts">
+        <div class="chart">
+          <div class="chart__head">
+            <span class="chart__label" data-i18n="solar.label">Radiação solar</span>
+            <span class="chart__value chart__value--solar" id="solarPeak">— W/m²</span>
+          </div>
+          <div class="chart__canvas" id="solarChart"></div>
+          <div class="chart__axis" id="solarAxis"></div>
+        </div>
+        <div class="chart">
+          <div class="chart__head">
+            <span class="chart__label" data-i18n="rain.label">Precipitação</span>
+            <span class="chart__value chart__value--rain" id="rainTotal">— mm</span>
+          </div>
+          <div class="chart__canvas" id="rainChart"></div>
+          <div class="chart__axis" id="rainAxis"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="pvPanel" hidden>
+      <div class="panel__head">
+        <div class="panel__sup">
+          <h2 class="panel__title" data-i18n="pv.title">Produção solar estimada</h2>
+          <span class="panel__sub" id="pvSpan">—</span>
+          <span class="panel__sub pv-settings-summary" id="pvSummary">—</span>
+        </div>
+        <div class="pv-actions">
+          <button class="chip" id="pvExportBtn" type="button" title="Exportar dados do dia para CSV" data-i18n-title="pv.export.title" data-i18n="pv.export">Exportar CSV</button>
+          <button class="chip" id="pvConfigBtn" type="button" aria-expanded="false" data-i18n="pv.btn">Configurar sistema</button>
+        </div>
+      </div>
+
+      <form class="pv-config" id="pvConfig" hidden>
+        <div class="pv-groups">
+          <div class="pv-group pv-group--head">
+            <span class="pv-group__tag pv-group__tag--head"></span>
+            <span data-i18n="pv.head.power">Pot&ecirc;ncia (kWp)</span>
+            <span data-i18n="pv.head.tilt">Inclina&ccedil;&atilde;o (&deg;)</span>
+            <span data-i18n="pv.head.az">Orienta&ccedil;&atilde;o (&deg;)</span>
+            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre múltiplas orientações" data-i18n-aria="pv.tip.groups.aria">
+              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.groups">Apoia at&eacute; <strong>4 orienta&ccedil;&otilde;es</strong> (ex.: telhados com pain&eacute;is em v&aacute;rias &aacute;guas). Cada linha &eacute; um grupo com a sua pot&ecirc;ncia (kWp), inclina&ccedil;&atilde;o e orienta&ccedil;&atilde;o.<br/><strong>Linhas com 0 kWp s&atilde;o ignoradas</strong> e n&atilde;o aparecem nos gr&aacute;ficos.<br/>Sugest&atilde;o de inclina&ccedil;&atilde;o: &asymp; latitude (39&deg; em Lisboa). Orienta&ccedil;&atilde;o: 0&deg; N &middot; 90&deg; E &middot; 180&deg; S &middot; 270&deg; O.</span>
+            </span>
+          </div>
+          <div class="pv-group">
+            <span class="pv-group__tag" style="background: #38bdf8">1</span>
+            <input type="number" id="pvKp0" min="0" max="1000" step="0.01" inputmode="decimal" placeholder="0" />
+            <input type="number" id="pvTilt0" min="0" max="90" step="1" inputmode="numeric" placeholder="0" />
+            <input type="number" id="pvAz0" min="0" max="360" step="1" inputmode="numeric" placeholder="0" />
+          </div>
+          <div class="pv-group">
+            <span class="pv-group__tag" style="background: #818cf8">2</span>
+            <input type="number" id="pvKp1" min="0" max="1000" step="0.01" inputmode="decimal" placeholder="0" />
+            <input type="number" id="pvTilt1" min="0" max="90" step="1" inputmode="numeric" placeholder="0" />
+            <input type="number" id="pvAz1" min="0" max="360" step="1" inputmode="numeric" placeholder="0" />
+          </div>
+          <div class="pv-group">
+            <span class="pv-group__tag" style="background: #34d399">3</span>
+            <input type="number" id="pvKp2" min="0" max="1000" step="0.01" inputmode="decimal" placeholder="0" />
+            <input type="number" id="pvTilt2" min="0" max="90" step="1" inputmode="numeric" placeholder="0" />
+            <input type="number" id="pvAz2" min="0" max="360" step="1" inputmode="numeric" placeholder="0" />
+          </div>
+          <div class="pv-group">
+            <span class="pv-group__tag" style="background: #fb7185">4</span>
+            <input type="number" id="pvKp3" min="0" max="1000" step="0.01" inputmode="decimal" placeholder="0" />
+            <input type="number" id="pvTilt3" min="0" max="90" step="1" inputmode="numeric" placeholder="0" />
+            <input type="number" id="pvAz3" min="0" max="360" step="1" inputmode="numeric" placeholder="0" />
+          </div>
+        </div>
+        <label class="pv-field">
+          <span class="pv-field__head">
+            <span data-i18n="pv.field.eff">Rendimento (%)</span>
+            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre rendimento" data-i18n-aria="pv.tip.eff.aria">
+              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.eff">Perdas reais do sistema: inversor, cabos, temperatura dos m&oacute;dulos e sujidade. Valor t&iacute;pico: 75&ndash;85%.</span>
+            </span>
+          </span>
+          <input type="number" id="pvEff" min="5" max="100" step="1" required />
+        </label>
+        <label class="pv-field">
+          <span class="pv-field__head">
+            <span data-i18n="pv.field.tariff">Tarifa (&euro;/kWh)</span>
+            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tarifa" data-i18n-aria="pv.tip.tariff.aria">
+              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.tariff">Pre&ccedil;o m&eacute;dio da energia para estimar o valor da produ&ccedil;&atilde;o em euros. Valor meramente indicativo — n&atilde;o substitui o teu contrato de fornecimento.</span>
+            </span>
+          </span>
+          <input type="number" id="pvTariff" min="0" max="5" step="0.001" required />
+        </label>
+        <label class="pv-field">
+          <span class="pv-field__head">
+            <span data-i18n="pv.field.thermal">Efeito t&eacute;rmico</span>
+            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre efeito térmico" data-i18n-aria="pv.tip.thermal.aria">
+              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.thermal"><strong>Inclu&iacute;do no rendimento</strong> &mdash; o fator t&eacute;rmico &eacute; um valor fixo dentro do rendimento (t&iacute;pico 75&ndash;85%).<br/><strong>Temperatura real</strong> &mdash; usa a temperatura do dia &agrave; hora a hora: os m&oacute;dulos perdem ~0,4% por cada &deg;C acima de 25&deg;C (NOCT 45&deg;C). Com esta op&ccedil;&atilde;o, o rendimento refere-se apenas a outras perdas (inversor, cabos, sujidade &mdash; t&iacute;pico 90&ndash;95%); o efeito da temperatura &eacute; somado automaticamente, individualmente por orienta&ccedil;&atilde;o.</span>
+            </span>
+          </span>
+          <select id="pvThermal">
+            <option value="fixed" data-i18n="pv.thermal.fixed">Inclu&iacute;do no rendimento (fixo)</option>
+            <option value="temp" data-i18n="pv.thermal.temp">Temperatura real (hora a hora)</option>
+          </select>
+        </label>
+        <div class="pv-config__actions">
+          <button type="submit" class="chip chip--primary" data-i18n="pv.save">Guardar</button>
+          <button type="button" class="chip" id="pvReset" data-i18n="pv.reset">Repor automático</button>
+        </div>
+        <p class="pv-config__hint" data-i18n="pv.hint">Linhas com 0 kWp s&atilde;o ignoradas. Os valores guardados aplicam-se a todas as cidades.</p>
+      </form>
+
+      <div class="pv-charts" id="pvCharts"></div>
+
+      <div class="chart chart--wide">
+        <div class="chart__head">
+          <span class="chart__label" data-i18n="pv.total">Produção total estimada</span>
+          <span class="chart__value chart__value--pv" id="pvDayTotal">— kWh</span>
+        </div>
+        <div class="chart__canvas" id="pvChart"></div>
+        <div class="chart__axis" id="pvAxis"></div>
+      </div>
+      <p class="pv-econ" id="pvEcon">—</p>
+
+      <!-- Weekly PV Summary -->
+      <div class="pv-weekly" id="pvWeeklyBox">
+        <div class="pv-weekly__head">
+          <span class="pv-weekly__title" data-i18n="pv.weekly.title">Previsão semanal (7 dias acumulados)</span>
+          <span class="pv-weekly__total" id="pvWeeklyTotal">— kWh · — €</span>
+        </div>
+        <div class="pv-weekly__bars" id="pvWeeklyBars"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="dailyPanel" hidden>
+      <div class="panel__head">
+        <h2 class="panel__title" data-i18n="daily.title">Previsão a 7 dias</h2>
+        <span class="panel__sub" data-i18n="daily.sub">Dia a dia</span>
+      </div>
+      <div class="daily" id="dailyList"></div>
+    </section>
+
+    <footer class="footer">
+      <span><span data-i18n="footer.source">Fonte:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
+      <span><a href="manual.html" data-i18n="footer.manual">Manual de utilização</a></span>
+      <span>SkyCast © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.4.10</span></span>
+    </footer>
+  </main>
+
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

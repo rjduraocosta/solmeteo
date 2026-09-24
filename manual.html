@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyCast · Manual de Utilização</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg-2: #111a33;
+      --panel: rgba(255, 255, 255, 0.06);
+      --panel-strong: rgba(255, 255, 255, 0.09);
+      --border: rgba(255, 255, 255, 0.12);
+      --text: #f2f5ff;
+      --text-dim: #a8b2d1;
+      --text-faint: #6b7599;
+      --accent: #38bdf8;
+      --accent-2: #818cf8;
+      --gold: #fbbf24;
+      --emerald: #34d399;
+      --rose: #fb7185;
+      --radius: 20px;
+      --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { color-scheme: dark; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background:
+        radial-gradient(1200px 600px at 80% -10%, #16285c 0%, transparent 60%),
+        radial-gradient(900px 500px at -10% 10%, #1b2a4a 0%, transparent 55%),
+        linear-gradient(160deg, var(--bg) 0%, var(--bg-2) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    main { max-width: 920px; margin: 0 auto; padding: 32px 20px 80px; }
+
+    header.top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px 16px;
+      margin-bottom: 26px;
+    }
+    .home-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      height: 42px; padding: 0 16px; border-radius: 999px;
+      border: 1px solid var(--border); background: var(--panel-strong);
+      color: var(--text); font-family: var(--font); font-size: 0.8rem; font-weight: 600;
+      text-decoration: none; white-space: nowrap; justify-self: start;
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    }
+    .home-btn svg { width: 16px; height: 16px; flex: none; }
+    .home-btn:hover { border-color: rgba(56, 189, 248, 0.55); color: var(--accent); transform: translateY(-2px); }
+    .brand { grid-column: 1 / -1; min-width: 0; display: flex; align-items: center; gap: 12px; }
+    .brand__mark {
+      width: 34px; height: 34px; flex: none; border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: grid; place-items: center;
+      font-size: 18px; font-weight: 800; color: #0b1020;
+    }
+    .brand div { min-width: 0; }
+    .brand h1 { font-size: 1.1rem; font-weight: 700; }
+    .brand p { font-size: 0.78rem; color: var(--text-dim); }
+    .badges { justify-self: end; display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; align-items: center; min-width: 0; }
+    .badge {
+      font-size: 0.7rem; padding: 5px 10px; border-radius: 999px;
+      border: 1px solid var(--border); background: var(--panel-strong);
+      color: var(--text-dim); white-space: normal; text-align: center;
+    }
+    .badge--live { color: var(--emerald); border-color: rgba(52, 211, 153, 0.5); }
+    .lang { flex: none; }
+
+    .lang {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 4px; border-radius: 999px;
+      border: 1px solid var(--border); background: var(--panel-strong);
+    }
+    .lang__btn {
+      border: 0; background: transparent; color: var(--text-dim);
+      font-family: var(--font); font-size: 0.78rem; font-weight: 600; line-height: 1;
+      padding: 8px 11px; border-radius: 999px; cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .lang__btn:hover { color: var(--text); }
+    .lang__btn.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b1020; font-weight: 800;
+    }
+
+    h2 {
+      font-size: 1.25rem; margin: 40px 0 6px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    h2 .num {
+      width: 26px; height: 26px; flex: none; border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #0b1020; font-size: 0.85rem; font-weight: 800;
+      display: grid; place-items: center;
+    }
+    h3 { font-size: 1rem; margin: 22px 0 6px; color: var(--text); }
+    p.lede { color: var(--text-dim); margin-bottom: 14px; font-size: 0.95rem; }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      backdrop-filter: blur(10px);
+    }
+    .card strong { color: var(--text); }
+
+    ul.tips { list-style: none; display: grid; gap: 8px; }
+    ul.tips li {
+      display: flex; gap: 10px; align-items: flex-start;
+      font-size: 0.92rem; color: var(--text-dim);
+    }
+    ul.tips li .dot {
+      width: 8px; height: 8px; border-radius: 50%; flex: none; margin-top: 8px;
+    }
+    .dot--sky { background: var(--accent); }
+    .dot--indigo { background: var(--accent-2); }
+    .dot--emerald { background: var(--emerald); }
+    .dot--gold { background: var(--gold); }
+    .dot--rose { background: var(--rose); }
+
+    .fig {
+      width: 100%; height: auto; display: block;
+      border: 1px solid var(--border); border-radius: 14px;
+      background: rgba(11, 16, 32, 0.45);
+      margin: 12px 0 6px;
+    }
+    figcaption { font-size: 0.78rem; color: var(--text-faint); text-align: center; margin-bottom: 12px; }
+
+    .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+    .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+
+    .kv { background: var(--panel-strong); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; }
+    .kv h4 { font-size: 0.8rem; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+    .kv p { font-size: 0.9rem; color: var(--text); }
+    .kv p small { color: var(--text-dim); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--text-faint); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    td { color: var(--text-dim); }
+    td strong { color: var(--text); }
+    code {
+      background: rgba(11, 16, 32, 0.7); border: 1px solid var(--border);
+      padding: 1px 6px; border-radius: 6px; font-size: 0.82em; color: #a5b4fc;
+    }
+
+    .example { border-left: 3px solid var(--emerald); }
+    .example td:first-child { color: var(--emerald); font-weight: 600; }
+
+    footer.footer {
+      margin-top: 48px; padding-top: 18px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      font-size: 0.78rem; color: var(--text-faint);
+    }
+    a { color: #93c5fd; }
+
+    @media (max-width: 760px) {
+      header.top { gap: 10px; }
+      .home-btn { padding: 0 12px; }
+    }
+    @media (max-width: 520px) {
+      .home-btn__label { display: none; }
+      .home-btn { padding: 0 14px; }
+      .brand__mark { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="top">
+      <a class="home-btn" href="index.html" aria-label="Voltar à página inicial" title="Voltar à página inicial" data-i18n-aria="m.home.aria" data-i18n-title="m.home.aria">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5"></path>
+          <path d="M12 19l-7-7 7-7"></path>
+        </svg>
+        <span class="home-btn__label" data-i18n="m.home">Voltar à app</span>
+      </a>
+      <div class="brand">
+        <span class="brand__mark">S</span>
+        <div>
+          <h1 data-i18n="m.title">SkyCast — Manual de Utilização</h1>
+          <p data-i18n="m.subtitle">Previsão meteorológica + produção solar estimada</p>
+        </div>
+      </div>
+      <div class="badges">
+        <span class="badge badge--live" data-i18n="m.badge.live">Atualizado com a versão corrente</span>
+        <span class="badge" data-i18n="m.badge.offline">Funciona offline (100% local)</span>
+        <span class="badge" data-i18n="m.badge.data">Dados: Open-Meteo</span>
+        <span class="lang" role="group" aria-label="Idioma">
+          <button type="button" class="lang__btn" data-lang="pt" aria-label="Português">PT</button>
+          <button type="button" class="lang__btn" data-lang="en" aria-label="English">EN</button>
+        </span>
+      </div>
+    </header>
+
+    <p class="lede" data-i18n-html="m.lede">Este manual acompanha o desenvolvimento do <strong>SkyCast</strong> e explica, em linguagem simples e com infografias, tudo o que a aplicação consegue fazer e como a usar. É atualizado à medida que novas funcionalidades são adicionadas.</p>
+
+    <!-- ============================== INTRO ============================== -->
+    <h2><span class="num">1</span><span data-i18n="m.s1">O que é o SkyCast?</span></h2>
+    <p class="lede" data-i18n="m.s1.lede">Uma aplicação web de tempo e energia solar que vive 100% no teu browser: não guarda dados em servidores, não precisa de conta e funciona sem internet depois de os dados carregarem.</p>
+    <div class="grid3">
+      <div class="kv"><h4 data-i18n="m.kv1.h">Hoje + hora a hora</h4><p data-i18n="m.kv1.p">Temperatura, vento, humidade, UV, nascer/pôr do sol e previsão das próximas 24 horas.</p></div>
+      <div class="kv"><h4 data-i18n="m.kv2.h">Previsão a 7 dias</h4><p data-i18n="m.kv2.p">Escolhe um dia para veres os detalhes e os gráficos desse dia.</p></div>
+      <div class="kv"><h4 data-i18n="m.kv3.h">Produção solar</h4><p data-i18n="m.kv3.p">Estimativa de kWh gerados por dia e economia em euros, configurável até 4 orientações de painéis.</p></div>
+    </div>
+
+    <!-- ============================== COMEÇAR ============================== -->
+    <h2><span class="num">2</span><span data-i18n="m.s2">Começar a usar</span></h2>
+    <p class="lede" data-i18n="m.s2.lede">Há duas formas de escolher o local:</p>
+    <div class="grid2">
+      <div class="card">
+        <h3 data-i18n="m.s2a.h">Pesquisar cidade</h3>
+        <ul class="tips">
+          <li><span class="dot dot--sky"></span><span data-i18n="m.s2a.l1">Escreve o nome da cidade na barra de pesquisa. As sugestões aparecem automaticamente.</span></li>
+          <li><span class="dot dot--sky"></span><span data-i18n="m.s2a.l2">Escolhe a cidade e os dados carregam. A última cidade fica guardada para a próxima visita.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 data-i18n="m.s2b.h">Geolocalização automática</h3>
+        <ul class="tips">
+          <li><span class="dot dot--indigo"></span><span data-i18n="m.s2b.l1">Toca no botão de localização para usar a tua posição atual.</span></li>
+          <li><span class="dot dot--indigo"></span><span data-i18n="m.s2b.l2">Se a permissão for negada, a aplicação usa uma estimativa pela ligação à internet (fallback por IP).</span></li>
+        </ul>
+      </div>
+    </div>
+    <figure>
+      <svg class="fig" viewBox="0 0 260 110" role="img" aria-label="Barra de pesquisa com sugestões" data-i18n-aria="m.fig.search.aria">
+        <rect x="10" y="30" width="240" height="40" rx="12" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)"/>
+        <circle cx="34" cy="50" r="11" fill="none" stroke="#a8b2d1" stroke-width="2.5"/>
+        <line x1="42" y1="58" x2="50" y2="66" stroke="#a8b2d1" stroke-width="3" stroke-linecap="round"/>
+        <rect x="52" y="42" width="120" height="14" rx="7" fill="rgba(168,178,209,0.5)"/>
+        <text x="62" y="54" font-size="11" fill="#f2f5ff">Lisboa…</text>
+        <rect x="16" y="78" width="100" height="22" rx="8" fill="rgba(56,189,248,0.18)" stroke="rgba(56,189,248,0.5)"/>
+        <circle cx="28" cy="89" r="4" fill="#38bdf8"/>
+        <text x="38" y="93" font-size="11" fill="#f2f5ff">Lisboa, PT</text>
+      </svg>
+      <figcaption data-i18n="m.fig.search.cap">Pesquisa com sugestões instantâneas de cidades.</figcaption>
+    </figure>
+
+    <!-- ============================== PAINÉIS ============================== -->
+    <h2><span class="num">3</span><span data-i18n="m.s3">Ler o painel de hoje</span></h2>
+    <p class="lede" data-i18n="m.s3.lede">O painel principal mostra o estado atual e o resumo do dia: temperatura (real e sensação), mínima/máxima, humidade, vento, índice UV e horas de nascer/pôr do sol. Debaixo dele, a listagem horária mostra as próximas 24 horas — passa o rato (ou toca) numa hora para veres o detalhe.</p>
+
+    <h2><span class="num">4</span><span data-i18n="m.s4">Gráficos e previsão a 7 dias</span></h2>
+    <ul class="tips">
+      <li><span class="dot dot--gold"></span><span data-i18n-html="m.s4.l1"><strong>Temperatura</strong> — curva com mínimos e máximos ao longo do dia.</span></li>
+      <li><span class="dot dot--gold"></span><span data-i18n-html="m.s4.l2"><strong>Radiação solar</strong> — irradiância (W/m²) hora a hora, útil para dimensionares o autoconsumo.</span></li>
+      <li><span class="dot dot--gold"></span><span data-i18n-html="m.s4.l3"><strong>Precipitação</strong> — chuva esperada em mm por hora.</span></li>
+      <li><span class="dot dot--emerald"></span><span data-i18n-html="m.s4.l4"><strong>Produção solar estimada</strong> — ver secção seguinte.</span></li>
+      <li><span class="dot dot--sky"></span><span data-i18n-html="m.s4.l5">Na <strong>previsão a 7 dias</strong>, clica num dia para mudares o "dia selecionado": o painel de hoje e todos os gráficos passam a mostrar esse dia.</span></li>
+      <li><span class="dot dot--sky"></span><span data-i18n-html="m.s4.l6">Nas setas <strong>‹ anterior / seguinte ›</strong> junto ao título "Previsão horária" mudas de dia sem desceres até à previsão a 7 dias.</span></li>
+    </ul>
+
+    <!-- ============================== PV ============================== -->
+    <h2><span class="num">5</span><span data-i18n="m.s5">Produção solar estimada</span></h2>
+    <p class="lede" data-i18n-html="m.s5.lede">O SkyCast estima quantos kWh os teus painéis produzem num dia, usando a <strong>posição do sol</strong> (hora e coordenadas da cidade) e as <strong>condições de céu</strong> (radiação solar, difusa e direta) da previsão meteorológica.</p>
+
+    <figure>
+      <svg class="fig" viewBox="0 0 420 120" role="img" aria-label="Fluxo: sol, irradiância, painel, energia, euros" data-i18n-aria="m.fig.flow.aria">
+        <g>
+          <circle cx="50" cy="60" r="22" fill="rgba(251,191,36,0.9)"/>
+          <g stroke="#fbbf24" stroke-width="3" stroke-linecap="round">
+            <line x1="50" y1="14" x2="50" y2="26"/><line x1="50" y1="94" x2="50" y2="106"/>
+            <line x1="14" y1="60" x2="26" y2="60"/><line x1="74" y1="60" x2="86" y2="60"/>
+            <line x1="24" y1="34" x2="33" y2="43"/><line x1="67" y1="77" x2="76" y2="86"/>
+            <line x1="24" y1="86" x2="33" y2="77"/><line x1="67" y1="43" x2="76" y2="34"/>
+          </g>
+        </g>
+        <path d="M78 60 L150 60" stroke="#a8b2d1" stroke-dasharray="4 4" stroke-width="2"/>
+        <g>
+          <line x1="170" y1="96" x2="150" y2="80" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+          <polygon points="170,96 170,58 222,80" fill="#38bdf8"/>
+          <line x1="170" y1="58" x2="224" y2="58" stroke="#38bdf8" stroke-width="3"/>
+          <line x1="224" y1="58" x2="224" y2="96" stroke="#38bdf8" stroke-width="3"/>
+          <line x1="224" y1="96" x2="150" y2="80" stroke="rgba(56,189,248,0.35)" stroke-width="3"/>
+        </g>
+        <path d="M228 60 L300 60" stroke="#a8b2d1" stroke-dasharray="4 4" stroke-width="2"/>
+        <g>
+          <rect x="306" y="38" width="46" height="34" rx="8" fill="rgba(129,140,248,0.25)" stroke="#818cf8" stroke-width="2"/>
+          <polyline points="312,62 322,48 328,58 336,44 344,54" fill="none" stroke="#818cf8" stroke-width="2.5"/>
+        </g>
+        <path d="M358 60 L390 60" stroke="#a8b2d1" stroke-dasharray="4 4" stroke-width="2"/>
+        <g>
+          <circle cx="396" cy="60" r="16" fill="rgba(251,191,36,0.35)" stroke="#fbbf24" stroke-width="2"/>
+          <text x="392" y="65" font-size="16" fill="#fbbf24">€</text>
+        </g>
+        <text x="52" y="118" font-size="10" text-anchor="middle" fill="#a8b2d1" data-i18n="m.fig.flow.sun">Sol</text>
+        <text x="186" y="118" font-size="10" text-anchor="middle" fill="#a8b2d1" data-i18n="m.fig.flow.panel">Painel (irradiância POA)</text>
+        <text x="328" y="118" font-size="10" text-anchor="middle" fill="#a8b2d1">kWh</text>
+        <text x="396" y="86" font-size="10" text-anchor="middle" fill="#a8b2d1">€</text>
+      </svg>
+      <figcaption data-i18n="m.fig.flow.cap">Do sol à carteira: irradiância no plano dos painéis → energia (kWh) → economia estimada (€).</figcaption>
+    </figure>
+
+    <div class="card">
+      <strong data-i18n="m.s5.card">O que aparece no painel:</strong>
+      <ul class="tips">
+        <li><span class="dot dot--emerald"></span><span data-i18n-html="m.s5.l1">Um <strong>mini-gráfico por orientação</strong> com a produção hora a hora (cor e ponto cardinal correspondentes).</span></li>
+        <li><span class="dot dot--gold"></span><span data-i18n-html="m.s5.l2">Um gráfico <strong>total</strong> (soma de todas as orientações) com o kWh do dia.</span></li>
+        <li><span class="dot dot--gold"></span><span data-i18n-html="m.s5.l3">A linha final mostra a <strong>economia estimada em euros</strong>, com base na tarifa que definires (valor indicativo).</span></li>
+      </ul>
+    </div>
+
+    <h3><span>5.1 </span><span data-i18n="m.s5.1">As orientações dos painéis</span></h3>
+    <p class="lede" data-i18n-html="m.s5.1.lede">Muitas casas têm painéis em mais do que uma face do telhado. O SkyCast permite configurar <strong>até 4 orientações</strong>, cada uma com a sua potência, inclinação e direção. Linhas com <strong>0 kWp são ignoradas</strong>.</p>
+    <figure>
+      <svg class="fig" viewBox="0 0 300 170" role="img" aria-label="Casa com telhado em duas águas com painéis em duas orientações" data-i18n-aria="m.fig.roof.aria">
+        <rect x="45" y="120" width="210" height="44" rx="6" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.2)"/>
+        <polygon points="60,120 130,70 200,120" fill="rgba(56,189,248,0.18)" stroke="#38bdf8" stroke-width="2"/>
+        <polygon points="200,120 250,92 250,120" fill="rgba(52,211,153,0.18)" stroke="#34d399" stroke-width="2"/>
+        <rect x="90" y="132" width="42" height="32" rx="3" fill="rgba(56,189,248,0.5)"/>
+        <rect x="146" y="132" width="48" height="32" rx="3" fill="rgba(52,211,153,0.45)"/>
+        <text x="130" y="50" font-size="12" fill="#38bdf8" text-anchor="middle" data-i18n="m.fig.roof.s">Face S · 180°</text>
+        <text x="232" y="96" font-size="12" fill="#34d399" text-anchor="middle" data-i18n="m.fig.roof.o">Face O · 270°</text>
+        <circle cx="130" cy="96" r="7" fill="#38bdf8"/>
+        <circle cx="232" cy="112" r="7" fill="#34d399"/>
+      </svg>
+      <figcaption data-i18n="m.fig.roof.cap">Exemplo: uma água virada a Sul (180°) e outra a Oeste (270°) — cada face é uma orientação com a sua cor.</figcaption>
+    </figure>
+
+    <h3><span>5.2 </span><span data-i18n="m.s5.2">Significado de direção e inclinação</span></h3>
+    <div class="grid2">
+      <figure>
+        <svg class="fig" viewBox="0 0 220 150" role="img" aria-label="Rosa dos ventos com orientação em graus" data-i18n-aria="m.fig.compass.aria">
+          <circle cx="110" cy="70" r="46" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+          <circle cx="110" cy="70" r="30" fill="none" stroke="rgba(255,255,255,0.12)"/>
+          <text x="110" y="16" font-size="13" text-anchor="middle" fill="#f2f5ff">N · 0°</text>
+          <text x="110" y="138" font-size="13" text-anchor="middle" fill="#38bdf8">S · 180°</text>
+          <text x="166" y="74" font-size="13" text-anchor="middle" fill="#f2f5ff">E · 90°</text>
+          <text x="54" y="74" font-size="13" text-anchor="middle" fill="#f2f5ff" data-i18n="m.fig.compass.o">O · 270°</text>
+          <line x1="110" y1="70" x2="110" y2="116" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+          <polygon points="104,116 116,116 110,124" fill="#38bdf8"/>
+          <circle cx="110" cy="70" r="5" fill="#f2f5ff"/>
+          <text x="104" y="104" font-size="10" fill="#38bdf8">35°</text>
+        </svg>
+        <figcaption data-i18n="m.fig.compass.cap">Orientação em graus, do painel para onde aponta (Norte = 0°). O exemplo mostra painéis virados a Sul.</figcaption>
+      </figure>
+      <figure>
+        <svg class="fig" viewBox="0 0 220 150" role="img" aria-label="Inclinação dos painéis em ângulo com o solo" data-i18n-aria="m.fig.tilt.aria">
+          <line x1="20" y1="120" x2="210" y2="120" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+          <polygon points="110,120 110,84 188,120" fill="rgba(129,140,248,0.2)" stroke="#818cf8" stroke-width="2.5"/>
+          <line x1="110" y1="120" x2="148" y2="120" stroke="#a8b2d1" stroke-dasharray="4 4"/>
+          <path d="M 122 120 A 12 12 0 0 0 134 108" fill="none" stroke="#fbbf24" stroke-width="2"/>
+          <text x="122" y="106" font-size="11" fill="#fbbf24">35°</text>
+          <g transform="translate(24,26)">
+            <circle r="14" fill="rgba(251,191,36,0.9)"/><g stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round">
+              <line x1="0" y1="-22" x2="0" y2="-30"/><line x1="0" y1="22" x2="0" y2="30"/>
+              <line x1="-22" y1="0" x2="-30" y2="0"/><line x1="22" y1="0" x2="30" y2="0"/>
+            </g>
+          </g>
+        </svg>
+        <figcaption data-i18n="m.fig.tilt.cap">Inclinação em graus relativos ao chão: 0° = horizontal, 90° = vertical, ~35° é típico de Portugal.</figcaption>
+      </figure>
+    </div>
+
+    <h3><span>5.3 </span><span data-i18n="m.s5.3">Campos do formulário "Configurar sistema"</span></h3>
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th data-i18n="m.f.th.campo">Campo</th><th data-i18n="m.f.th.oque">O que é</th><th data-i18n="m.f.th.dica">Dica</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong data-i18n="m.f.kwp">Potência (kWp)</strong></td>
+            <td data-i18n="m.f.kwp.p">Potência de pico desse grupo de painéis (STC).</td>
+            <td data-i18n-html="m.f.kwp.t">Aceita 2 casas decimais — ex.: 10 módulos de 500 W = <code>5</code> ou microinversor de <code>0.3</code>&nbsp;kWp.</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.tilt">Inclinação (°)</strong></td>
+            <td data-i18n="m.f.tilt.p">Ângulo dos painéis em relação ao solo.</td>
+            <td data-i18n="m.f.tilt.t">Sugestão ≈ latitude (39° em Lisboa).</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.az">Orientação (°)</strong></td>
+            <td data-i18n="m.f.az.p">Direção dos painéis (0° N · 90° E · 180° S · 270° O).</td>
+            <td data-i18n="m.f.az.t">Sul no hemisfério norte, Norte no sul.</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.eff">Rendimento (%)</strong></td>
+            <td data-i18n="m.f.eff.p">Perdas do sistema: inversor, cabos, temperatura, sujidade.</td>
+            <td data-i18n="m.f.eff.t">Típico 75–85% (sem térmica real) ou 90–95% (com térmica real).</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.tariff">Tarifa (€/kWh)</strong></td>
+            <td data-i18n="m.f.tariff.p">Preço da energia para calcular a economia.</td>
+            <td data-i18n-html="m.f.tariff.t">Aceita pelo menos 3 casas decimais, ex.: <code>0.150</code>.</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.thermal">Efeito térmico</strong></td>
+            <td data-i18n="m.f.thermal.p">Como lidar com a perda de eficiência dos módulos com o calor.</td>
+            <td data-i18n="m.f.thermal.t">Escolhe entre "fixo" ou "temperatura real hora a hora".</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.zero">Linhas com 0 kWp</strong></td>
+            <td data-i18n="m.f.zero.p">Orientações sem potência são ignoradas.</td>
+            <td data-i18n="m.f.zero.t">Usa "Repor automático" para voltar aos valores sugeridos.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3 data-i18n="m.ex.h">Exemplo prático: duas orientações</h3>
+      <p class="lede" data-i18n="m.ex.lede">Uma casa com 5 kWp numa água a Sul (35°) + 3 kWp numa água a Este (20°):</p>
+      <table class="example">
+        <thead><tr>
+          <th data-i18n="m.ex.th.az">Orientação</th>
+          <th data-i18n="m.ex.th.kwp">Potência (kWp)</th>
+          <th data-i18n="m.ex.th.tilt">Inclinação (°)</th>
+          <th data-i18n="m.ex.th.az2">Orientação (°)</th>
+          <th data-i18n="m.ex.th.color">Cor no gráfico / nome</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>5</strong></td><td>35</td><td>180</td><td><span class="dot dot--sky" style="display:inline-block"></span> S · 180°</td></tr>
+          <tr><td>2</td><td><strong>3</strong></td><td>20</td><td>90</td><td><span class="dot dot--indigo" style="display:inline-block"></span> E · 90°</td></tr>
+          <tr><td>3</td><td>0</td><td>—</td><td>—</td><td data-i18n="m.ex.ignored">ignorada</td></tr>
+          <tr><td>4</td><td>0</td><td>—</td><td>—</td><td data-i18n="m.ex.ignored">ignorada</td></tr>
+        </tbody>
+      </table>
+      <p class="lede" style="margin-top:10px;margin-bottom:0" data-i18n-html="m.ex.outro">Guardas e o painel passa a mostrar <strong>2 mini-gráficos</strong> (um por orientação, com a respetiva cor) + o gráfico total da soma.</p>
+    </div>
+
+    <h3><span>5.4 </span><span data-i18n="m.s5.4">Efeito térmico</span></h3>
+    <div class="grid2">
+      <figure>
+        <svg class="fig" viewBox="0 0 220 140" role="img" aria-label="Curva de derating térmico" data-i18n-aria="m.fig.derate.aria">
+          <line x1="26" y1="116" x2="196" y2="116" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <line x1="26" y1="116" x2="26" y2="16" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <path d="M 30 34 L 196 100" stroke="#fb7185" stroke-width="3"/>
+          <circle cx="30" cy="34" r="5" fill="#fb7185"/>
+          <circle cx="196" cy="100" r="5" fill="#fb7185"/>
+          <text x="30" y="26" font-size="10" fill="#fb7185" text-anchor="middle" data-i18n="m.fig.derate.cold">frio · 105%</text>
+          <text x="196" y="114" font-size="10" fill="#fb7185" text-anchor="middle" data-i18n="m.fig.derate.hot">quente · -20%</text>
+          <text x="30" y="130" font-size="10" fill="#a8b2d1" data-i18n="m.fig.derate.xt">Temperatura do módulo</text>
+          <text x="236" y="70" font-size="10" fill="#a8b2d1" transform="rotate(90 236 70)" data-i18n="m.fig.derate.y">Eficiência</text>
+        </svg>
+        <figcaption data-i18n="m.fig.derate.cap">Os módulos perdem ~0,4% por cada °C acima de 25 °C; ao frio podem até produzir acima do valor de catálogo.</figcaption>
+      </figure>
+      <div class="card" style="margin:12px 0 6px">
+        <ul class="tips">
+          <li><span class="dot dot--emerald"></span><span data-i18n-html="m.s5.4.l1"><strong>Incluído no rendimento (fixo)</strong> — é o comportamento por omissão: o efeito térmico é um valor fixo dentro do rendimento.</span></li>
+          <li><span class="dot dot--rose"></span><span data-i18n-html="m.s5.4.l2"><strong>Temperatura real (hora a hora)</strong> — usa a temperatura prevista do dia. Com esta opção, o campo Rendimento passa a referir-se às outras perdas (inversor, cabos, sujidade) e o fator térmico é somado automaticamente.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ============================== FAQ ============================== -->
+    <h2><span class="num">6</span><span data-i18n="m.s6">Perguntas frequentes</span></h2>
+    <div class="card">
+      <h3 data-i18n="m.faq1.h">A morada de rua influencia a estimativa?</h3>
+      <p class="lede" data-i18n-html="m.faq1.p">Não. A produção solar depende das <strong>coordenadas da cidade</strong> (latitude/longitude). Sombras de prédios ou árvores à volta da morada não são modeladas.</p>
+      <h3 data-i18n="m.faq2.h">Porque é que a economia é "indicativa"?</h3>
+      <p class="lede" data-i18n="m.faq2.p">A estimativa usa a tarifa que definires. A produção real varia com sombreamento, sujidade e degradação dos módulos; o cálculo é uma boa aproximação para dimensionar ou avaliar um sistema, não uma fatura.</p>
+      <h3 data-i18n="m.faq3.h">Posso usar para o país todo?</h3>
+      <p class="lede" data-i18n="m.faq3.p">Sim — pesquisas qualquer cidade do mundo. A configuração dos painéis (potência, inclinações, rendimento, tarifa) é a mesma para todas as cidades.</p>
+      <h3 data-i18n="m.faq4.h">Os meus dados ficam onde?</h3>
+      <p class="lede" data-i18n-html="m.faq4.p">Tudo fica no teu browser. Apenas a configuração e a última cidade são guardadas localmente (<code>localStorage</code>).</p>
+    </div>
+
+    <!-- ============================== PERSONALIZAÇÃO ============================== -->
+    <h2><span class="num">7</span><span data-i18n="m.s7">Personalização e extras</span></h2>
+    <p class="lede" data-i18n="m.s7.lede">A barra superior tem controlos rápidos para personalizar a app, e o painel solar tem extras de análise. Tudo o que escolheres fica guardado no teu browser.</p>
+    <div class="grid2">
+      <div class="card">
+        <h3 data-i18n="m.s7a.h">Unidades °C / °F</h3>
+        <ul class="tips">
+          <li><span class="dot dot--sky"></span><span data-i18n-html="m.s7a.p">Alternas a temperatura entre graus Celsius e Fahrenheit. A escolha fica guardada e toda a previsão é atualizada de imediato — painel de hoje, hora a hora, máx/mín e gráficos.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 data-i18n="m.s7b.h">Tema claro / escuro</h3>
+        <ul class="tips">
+          <li><span class="dot dot--indigo"></span><span data-i18n-html="m.s7b.p">O botão lua/sol alterna entre o tema escuro (por omissão) e o claro, para ambientes com muita luz.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 data-i18n="m.s7c.h">Cidades recentes</h3>
+        <ul class="tips">
+          <li><span class="dot dot--gold"></span><span data-i18n-html="m.s7c.p">As últimas cidades visitadas aparecem em "chips" por baixo da barra de pesquisa. Toca numa para a carregares de novo.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 data-i18n="m.s7d.h">Qualidade do ar</h3>
+        <ul class="tips">
+          <li><span class="dot dot--emerald"></span><span data-i18n-html="m.s7d.p">No painel de hoje há um indicador com o índice europeu de qualidade do ar (EAQI): Bom, Razoável, Moderado, Mau ou Muito mau.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 data-i18n="m.s7e.h">Exportar dados (CSV)</h3>
+        <ul class="tips">
+          <li><span class="dot dot--sky"></span><span data-i18n-html="m.s7e.p">O botão "Exportar CSV" no painel solar descarrega um ficheiro com os dados do dia selecionado: hora a hora, temperatura, precipitação, radiação e a produção estimada de cada orientação.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 data-i18n="m.s7f.h">Previsão semanal de produção</h3>
+        <ul class="tips">
+          <li><span class="dot dot--gold"></span><span data-i18n-html="m.s7f.p">Debaixo do gráfico total há uma previsão dos 7 dias — cada barra mostra o seu total de produção em cima (kWh) — e o total da semana (kWh e €). Toca numa barra para selecionares esse dia.</span></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 data-i18n="m.s7g.h">Instala a app (PWA)</h3>
+        <ul class="tips">
+          <li><span class="dot dot--indigo"></span><span data-i18n-html="m.s7g.p">Podes instalar o SkyCast no telemóvel ou computador (menu do navegador → "Instalar aplicação"). Depois da primeira visita, a app abre e mostra a última cidade mesmo sem internet.</span></li>
+        </ul>
+      </div>
+    </div>
+
+<footer class="footer">
+      <span><span data-i18n="m.footer.src">Fonte meteorológica:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
+      <span>SkyCast · <span data-i18n="m.version">Versão</span> <span id="manualVersion">2.4.10</span></span>
+    </footer>
+  </main>
+
+  <script>
+    const I18N = {
+      pt: {
+        "m.home": "Voltar à app",
+        "m.home.aria": "Voltar à página inicial",
+        "m.version": "Versão",
+        "m.title": "SkyCast — Manual de Utilização",
+        "m.subtitle": "Previsão meteorológica + produção solar estimada",
+        "m.badge.live": "Atualizado com a versão corrente",
+        "m.badge.offline": "Funciona offline (100% local)",
+        "m.badge.data": "Dados: Open-Meteo",
+        "m.lede": "Este manual acompanha o desenvolvimento do <strong>SkyCast</strong> e explica, em linguagem simples e com infografias, tudo o que a aplicação consegue fazer e como a usar. É atualizado à medida que novas funcionalidades são adicionadas.",
+        "m.s1": "O que é o SkyCast?",
+        "m.s1.lede": "Uma aplicação web de tempo e energia solar que vive 100% no teu browser: não guarda dados em servidores, não precisa de conta e funciona sem internet depois de os dados carregarem.",
+        "m.kv1.h": "Hoje + hora a hora",
+        "m.kv1.p": "Temperatura, vento, humidade, UV, nascer/pôr do sol e previsão das próximas 24 horas.",
+        "m.kv2.h": "Previsão a 7 dias",
+        "m.kv2.p": "Escolhe um dia para veres os detalhes e os gráficos desse dia.",
+        "m.kv3.h": "Produção solar",
+        "m.kv3.p": "Estimativa de kWh gerados por dia e economia em euros, configurável até 4 orientações de painéis.",
+        "m.s2": "Começar a usar",
+        "m.s2.lede": "Há duas formas de escolher o local:",
+        "m.s2a.h": "Pesquisar cidade",
+        "m.s2a.l1": "Escreve o nome da cidade na barra de pesquisa. As sugestões aparecem automaticamente.",
+        "m.s2a.l2": "Escolhe a cidade e os dados carregam. A última cidade fica guardada para a próxima visita.",
+        "m.s2b.h": "Geolocalização automática",
+        "m.s2b.l1": "Toca no botão de localização para usar a tua posição atual.",
+        "m.s2b.l2": "Se a permissão for negada, a aplicação usa uma estimativa pela ligação à internet (fallback por IP).",
+        "m.fig.search.aria": "Barra de pesquisa com sugestões",
+        "m.fig.search.cap": "Pesquisa com sugestões instantâneas de cidades.",
+        "m.s3": "Ler o painel de hoje",
+        "m.s3.lede": "O painel principal mostra o estado atual e o resumo do dia: temperatura (real e sensação), mínima/máxima, humidade, vento, índice UV, qualidade do ar e horas de nascer/pôr do sol. Debaixo dele, a listagem horária mostra as próximas 24 horas — passa o rato (ou toca) numa hora para veres o detalhe.",
+        "m.s4": "Gráficos e previsão a 7 dias",
+        "m.s4.l1": "<strong>Temperatura</strong> — curva com mínimos e máximos ao longo do dia.",
+        "m.s4.l2": "<strong>Radiação solar</strong> — irradiância (W/m²) hora a hora, útil para dimensionares o autoconsumo.",
+        "m.s4.l3": "<strong>Precipitação</strong> — chuva esperada em mm por hora.",
+        "m.s4.l4": "<strong>Produção solar estimada</strong> — ver secção seguinte.",
+        "m.s4.l5": "Na <strong>previsão a 7 dias</strong>, clica num dia para mudares o \"dia selecionado\": o painel de hoje e todos os gráficos passam a mostrar esse dia.",
+        "m.s4.l6": "Nas setas <strong>‹ anterior / seguinte ›</strong> junto ao título \"Previsão horária\" mudas de dia sem desceres até à previsão a 7 dias.",
+        "m.s5": "Produção solar estimada",
+        "m.s5.lede": "O SkyCast estima quantos kWh os teus painéis produzem num dia, usando a <strong>posição do sol</strong> (hora e coordenadas da cidade) e as <strong>condições de céu</strong> (radiação solar, difusa e direta) da previsão meteorológica.",
+        "m.fig.flow.aria": "Fluxo: sol, irradiância, painel, energia, euros",
+        "m.fig.flow.sun": "Sol",
+        "m.fig.flow.panel": "Painel (irradiância POA)",
+        "m.fig.flow.cap": "Do sol à carteira: irradiância no plano dos painéis → energia (kWh) → economia estimada (€).",
+        "m.s5.card": "O que aparece no painel:",
+        "m.s5.l1": "Um <strong>mini-gráfico por orientação</strong> com a produção hora a hora (cor e ponto cardinal correspondentes).",
+        "m.s5.l2": "Um gráfico <strong>total</strong> (soma de todas as orientações) com o kWh do dia.",
+        "m.s5.l3": "A linha final mostra a <strong>economia estimada em euros</strong>, com base na tarifa que definires (valor indicativo).",
+        "m.s5.1": "As orientações dos painéis",
+        "m.s5.1.lede": "Muitas casas têm painéis em mais do que uma face do telhado. O SkyCast permite configurar <strong>até 4 orientações</strong>, cada uma com a sua potência, inclinação e direção. Linhas com <strong>0 kWp são ignoradas</strong>.",
+        "m.fig.roof.aria": "Casa com telhado em duas águas com painéis em duas orientações",
+        "m.fig.roof.s": "Face S · 180°",
+        "m.fig.roof.o": "Face O · 270°",
+        "m.fig.roof.cap": "Exemplo: uma água virada a Sul (180°) e outra a Oeste (270°) — cada face é uma orientação com a sua cor.",
+        "m.s5.2": "Significado de direção e inclinação",
+        "m.fig.compass.aria": "Rosa dos ventos com orientação em graus",
+        "m.fig.compass.o": "O · 270°",
+        "m.fig.compass.cap": "Orientação em graus, do painel para onde aponta (Norte = 0°). O exemplo mostra painéis virados a Sul.",
+        "m.fig.tilt.aria": "Inclinação dos painéis em ângulo com o solo",
+        "m.fig.tilt.cap": "Inclinação em graus relativos ao chão: 0° = horizontal, 90° = vertical, ~35° é típico de Portugal.",
+        "m.s5.3": "Campos do formulário \"Configurar sistema\"",
+        "m.f.th.campo": "Campo",
+        "m.f.th.oque": "O que é",
+        "m.f.th.dica": "Dica",
+        "m.f.kwp": "Potência (kWp)",
+        "m.f.kwp.p": "Potência de pico desse grupo de painéis (STC).",
+        "m.f.kwp.t": "Aceita 2 casas decimais — ex.: 10 módulos de 500 W = <code>5</code> ou microinversor de <code>0.3</code>&nbsp;kWp. O resumo mostra o valor exato tal como foi escrito (sem zeros finais).",
+        "m.f.tilt": "Inclinação (°)",
+        "m.f.tilt.p": "Ângulo dos painéis em relação ao solo.",
+        "m.f.tilt.t": "Sugestão ≈ latitude (39° em Lisboa).",
+        "m.f.az": "Orientação (°)",
+        "m.f.az.p": "Direção dos painéis (0° N · 90° E · 180° S · 270° O).",
+        "m.f.az.t": "Sul no hemisfério norte, Norte no sul.",
+        "m.f.eff": "Rendimento (%)",
+        "m.f.eff.p": "Perdas do sistema: inversor, cabos, temperatura, sujidade.",
+        "m.f.eff.t": "Típico 75–85% (sem térmica real) ou 90–95% (com térmica real).",
+        "m.f.tariff": "Tarifa (€/kWh)",
+        "m.f.tariff.p": "Preço da energia para calcular a economia.",
+        "m.f.tariff.t": "Aceita pelo menos 3 casas decimais, ex.: <code>0.150</code>.",
+        "m.f.thermal": "Efeito térmico",
+        "m.f.thermal.p": "Como lidar com a perda de eficiência dos módulos com o calor.",
+        "m.f.thermal.t": "Escolhe entre \"fixo\" ou \"temperatura real hora a hora\".",
+        "m.f.zero": "Linhas com 0 kWp",
+        "m.f.zero.p": "Orientações sem potência são ignoradas.",
+        "m.f.zero.t": "Usa \"Repor automático\" para voltar aos valores sugeridos.",
+        "m.ex.h": "Exemplo prático: duas orientações",
+        "m.ex.lede": "Uma casa com 5 kWp numa água a Sul (35°) + 3 kWp numa água a Este (20°):",
+        "m.ex.th.az": "Orientação",
+        "m.ex.th.kwp": "Potência (kWp)",
+        "m.ex.th.tilt": "Inclinação (°)",
+        "m.ex.th.az2": "Orientação (°)",
+        "m.ex.th.color": "Cor no gráfico / nome",
+        "m.ex.ignored": "ignorada",
+        "m.ex.outro": "Guardas e o painel passa a mostrar <strong>2 mini-gráficos</strong> (um por orientação, com a respetiva cor) + o gráfico total da soma.",
+        "m.s5.4": "Efeito térmico",
+        "m.fig.derate.aria": "Curva de derating térmico",
+        "m.fig.derate.cold": "frio · 105%",
+        "m.fig.derate.hot": "quente · -20%",
+        "m.fig.derate.xt": "Temperatura do módulo",
+        "m.fig.derate.y": "Eficiência",
+        "m.fig.derate.cap": "Os módulos perdem ~0,4% por cada °C acima de 25 °C; ao frio podem até produzir acima do valor de catálogo.",
+        "m.s5.4.l1": "<strong>Incluído no rendimento (fixo)</strong> — é o comportamento por omissão: o efeito térmico é um valor fixo dentro do rendimento.",
+        "m.s5.4.l2": "<strong>Temperatura real (hora a hora)</strong> — usa a temperatura prevista do dia. Com esta opção, o campo Rendimento passa a referir-se às outras perdas (inversor, cabos, sujidade) e o fator térmico é somado automaticamente.",
+        "m.s6": "Perguntas frequentes",
+        "m.faq1.h": "A morada de rua influencia a estimativa?",
+        "m.faq1.p": "Não. A produção solar depende das <strong>coordenadas da cidade</strong> (latitude/longitude). Sombras de prédios ou árvores à volta da morada não são modeladas.",
+        "m.faq2.h": "Porque é que a economia é \"indicativa\"?",
+        "m.faq2.p": "A estimativa usa a tarifa que definires. A produção real varia com sombreamento, sujidade e degradação dos módulos; o cálculo é uma boa aproximação para dimensionar ou avaliar um sistema, não uma fatura.",
+        "m.faq3.h": "Posso usar para o país todo?",
+        "m.faq3.p": "Sim — pesquisas qualquer cidade do mundo. A configuração dos painéis (potência, inclinações, rendimento, tarifa) é a mesma para todas as cidades.",
+        "m.faq4.h": "Os meus dados ficam onde?",
+        "m.faq4.p": "Tudo fica no teu browser (em <code>localStorage</code>): configuração dos painéis, última cidade, idioma, tema, unidades e cidades recentes. Nada é enviado para servidores — os dados meteorológicos vêm da API pública Open-Meteo.",
+        "m.footer.src": "Fonte meteorológica:",
+        "m.s7": "Personalização e extras",
+        "m.s7.lede": "A barra superior tem controlos rápidos para personalizar a app, e o painel solar tem extras de análise. Tudo o que escolheres fica guardado no teu browser.",
+        "m.s7a.h": "Unidades °C / °F",
+        "m.s7a.p": "Alternas a temperatura entre graus Celsius e Fahrenheit. A escolha fica guardada e toda a previsão é atualizada de imediato — painel de hoje, hora a hora, máx/mín e gráficos.",
+        "m.s7b.h": "Tema claro / escuro",
+        "m.s7b.p": "O botão lua/sol alterna entre o tema escuro (por omissão) e o claro, para ambientes com muita luz.",
+        "m.s7c.h": "Cidades recentes",
+        "m.s7c.p": "As últimas cidades visitadas aparecem em <strong>chips</strong> por baixo da barra de pesquisa. Toca numa para a carregares de novo.",
+        "m.s7d.h": "Qualidade do ar",
+        "m.s7d.p": "No painel de hoje há um indicador com o <strong>índice europeu de qualidade do ar (EAQI)</strong>: Bom, Razoável, Moderado, Mau ou Muito mau.",
+        "m.s7e.h": "Exportar dados (CSV)",
+        "m.s7e.p": "O botão <strong>\"Exportar CSV\"</strong> no painel solar descarrega um ficheiro com os dados do dia selecionado: hora a hora, temperatura, precipitação, radiação e a produção estimada de cada orientação.",
+        "m.s7f.h": "Previsão semanal de produção",
+        "m.s7f.p": "Debaixo do gráfico total há uma previsão dos 7 dias — cada barra mostra o seu total de produção em cima (kWh) — e o total da semana (kWh e €). Toca numa barra para selecionares esse dia.",
+        "m.s7g.h": "Instala a app (PWA)",
+        "m.s7g.p": "Podes instalar o SkyCast no telemóvel ou computador (menu do navegador → \"Instalar aplicação\"). Depois da primeira visita, a app abre e mostra a última cidade mesmo sem internet.",
+      },
+      en: {
+        "m.home": "Back to app",
+        "m.home.aria": "Back to the home page",
+        "m.version": "Version",
+        "m.title": "SkyCast — User Manual",
+        "m.subtitle": "Weather forecast + estimated solar production",
+        "m.badge.live": "Updated with the current version",
+        "m.badge.offline": "Works offline (100% local)",
+        "m.badge.data": "Data: Open-Meteo",
+        "m.lede": "This manual follows the development of <strong>SkyCast</strong> and explains, in plain language with infographics, everything the app can do and how to use it. It is updated as new features are added.",
+        "m.s1": "What is SkyCast?",
+        "m.s1.lede": "A weather and solar-energy web app that lives 100% in your browser: no data stored on servers, no account needed, and it works offline once data has loaded.",
+        "m.kv1.h": "Today + hour by hour",
+        "m.kv1.p": "Temperature, wind, humidity, UV, sunrise/sunset and the next-24-hours forecast.",
+        "m.kv2.h": "7-day forecast",
+        "m.kv2.p": "Pick a day to see its details and charts.",
+        "m.kv3.h": "Solar production",
+        "m.kv3.p": "Estimate of daily kWh and savings in euros, configurable with up to 4 panel orientations.",
+        "m.s2": "Getting started",
+        "m.s2.lede": "There are two ways to pick the location:",
+        "m.s2a.h": "Search city",
+        "m.s2a.l1": "Type the city name in the search bar. Suggestions appear automatically.",
+        "m.s2a.l2": "Pick the city and the data loads. The last city is saved for the next visit.",
+        "m.s2b.h": "Automatic geolocation",
+        "m.s2b.l1": "Tap the location button to use your current position.",
+        "m.s2b.l2": "If permission is denied, the app uses an estimate from your internet connection (IP fallback).",
+        "m.fig.search.aria": "Search bar with suggestions",
+        "m.fig.search.cap": "Search with instant city suggestions.",
+        "m.s3": "Reading today's panel",
+        "m.s3.lede": "The main panel shows the current conditions and a daily summary: temperature (actual and feels-like), min/max, humidity, wind, UV index, air quality and sunrise/sunset times. Below it, the hourly strip shows the next 24 hours — hover (or tap) an hour for details.",
+        "m.s4": "Charts and 7-day forecast",
+        "m.s4.l1": "<strong>Temperature</strong> — curve with daily lows and highs.",
+        "m.s4.l2": "<strong>Solar radiation</strong> — hourly irradiance (W/m²), useful for sizing self-consumption.",
+        "m.s4.l3": "<strong>Precipitation</strong> — expected rain in mm per hour.",
+        "m.s4.l4": "<strong>Estimated solar production</strong> — see next section.",
+        "m.s4.l5": "In the <strong>7-day forecast</strong>, click a day to change the \"selected day\": today's panel and every chart switch to that day.",
+        "m.s4.l6": "Use the <strong>‹ previous / next ›</strong> arrows next to the \"Hourly forecast\" title to change days without scrolling down to the 7-day forecast.",
+        "m.s5": "Estimated solar production",
+        "m.s5.lede": "SkyCast estimates how many kWh your panels produce in a day, using the <strong>sun's position</strong> (hour and city coordinates) and the <strong>sky conditions</strong> (solar, diffuse and direct radiation) from the weather forecast.",
+        "m.fig.flow.aria": "Flow: sun, irradiance, panel, energy, euros",
+        "m.fig.flow.sun": "Sun",
+        "m.fig.flow.panel": "Panel (POA irradiance)",
+        "m.fig.flow.cap": "From the sun to your wallet: irradiance on the panel plane → energy (kWh) → estimated savings (€).",
+        "m.s5.card": "What appears in the panel:",
+        "m.s5.l1": "A <strong>mini chart per orientation</strong> with hourly production (matching colour and cardinal point).",
+        "m.s5.l2": "A <strong>total</strong> chart (sum of all orientations) with the day's kWh.",
+        "m.s5.l3": "The final line shows the <strong>estimated savings in euros</strong>, based on the tariff you set (indicative value).",
+        "m.s5.1": "Panel orientations",
+        "m.s5.1.lede": "Many houses have panels on more than one roof face. SkyCast lets you configure <strong>up to 4 orientations</strong>, each with its own power, tilt and direction. Rows with <strong>0 kWp are ignored</strong>.",
+        "m.fig.roof.aria": "House with a two-slope roof and panels in two orientations",
+        "m.fig.roof.s": "Face S · 180°",
+        "m.fig.roof.o": "Face W · 270°",
+        "m.fig.roof.cap": "Example: one slope facing South (180°) and another facing West (270°) — each face is an orientation with its own colour.",
+        "m.s5.2": "Direction and tilt explained",
+        "m.fig.compass.aria": "Compass rose with orientation in degrees",
+        "m.fig.compass.o": "W · 270°",
+        "m.fig.compass.cap": "Orientation in degrees, where the panel points (North = 0°). The example shows panels facing South.",
+        "m.fig.tilt.aria": "Panel tilt angle with the ground",
+        "m.fig.tilt.cap": "Tilt in degrees relative to the ground: 0° = flat, 90° = vertical, ~35° is typical for Portugal.",
+        "m.s5.3": "Fields of the \"Set up system\" form",
+        "m.f.th.campo": "Field",
+        "m.f.th.oque": "What it is",
+        "m.f.th.dica": "Tip",
+        "m.f.kwp": "Power (kWp)",
+        "m.f.kwp.p": "Peak power of that panel group (STC).",
+        "m.f.kwp.t": "Accepts 2 decimal places — e.g. 10 × 500 W modules = <code>5</code> or a <code>0.3</code>&nbsp;kWp microinverter. The summary shows the exact value as typed (no trailing zeros).",
+        "m.f.tilt": "Tilt (°)",
+        "m.f.tilt.p": "Angle of the panels relative to the ground.",
+        "m.f.tilt.t": "Suggestion ≈ latitude (39° in Lisbon).",
+        "m.f.az": "Orientation (°)",
+        "m.f.az.p": "Direction of the panels (0° N · 90° E · 180° S · 270° W).",
+        "m.f.az.t": "South in the northern hemisphere, North in the southern.",
+        "m.f.eff": "Efficiency (%)",
+        "m.f.eff.p": "System losses: inverter, cables, temperature, soiling.",
+        "m.f.eff.t": "Typical 75–85% (without real thermal) or 90–95% (with real thermal).",
+        "m.f.tariff": "Tariff (€/kWh)",
+        "m.f.tariff.p": "Energy price used to compute savings.",
+        "m.f.tariff.t": "Accepts at least 3 decimal places, e.g. <code>0.150</code>.",
+        "m.f.thermal": "Thermal effect",
+        "m.f.thermal.p": "How the module efficiency loss with heat is handled.",
+        "m.f.thermal.t": "Choose between \"fixed\" or \"real hourly temperature\".",
+        "m.f.zero": "Rows with 0 kWp",
+        "m.f.zero.p": "Orientations with no power are ignored.",
+        "m.f.zero.t": "Use \"Reset to auto\" to restore the suggested values.",
+        "m.ex.h": "Practical example: two orientations",
+        "m.ex.lede": "A house with 5 kWp on a south slope (35°) + 3 kWp on an east slope (20°):",
+        "m.ex.th.az": "Orientation",
+        "m.ex.th.kwp": "Power (kWp)",
+        "m.ex.th.tilt": "Tilt (°)",
+        "m.ex.th.az2": "Orientation (°)",
+        "m.ex.th.color": "Chart colour / name",
+        "m.ex.ignored": "ignored",
+        "m.ex.outro": "Once saved, the panel shows <strong>2 mini charts</strong> (one per orientation, with matching colour) + the total sum chart.",
+        "m.s5.4": "Thermal effect",
+        "m.fig.derate.aria": "Thermal derating curve",
+        "m.fig.derate.cold": "cold · 105%",
+        "m.fig.derate.hot": "hot · -20%",
+        "m.fig.derate.xt": "Module temperature",
+        "m.fig.derate.y": "Efficiency",
+        "m.fig.derate.cap": "Modules lose ~0.4% per °C above 25 °C; in the cold they can even produce above the catalogue value.",
+        "m.s5.4.l1": "<strong>Included in efficiency (fixed)</strong> — the default behaviour: the thermal factor is a fixed value within efficiency.",
+        "m.s5.4.l2": "<strong>Real temperature (hourly)</strong> — uses the day's forecast temperature. With this option, the efficiency field refers only to the other losses (inverter, cables, soiling) and the thermal factor is added automatically.",
+        "m.s6": "Frequently asked questions",
+        "m.faq1.h": "Does the street address affect the estimate?",
+        "m.faq1.p": "No. Solar production depends on the <strong>city coordinates</strong> (latitude/longitude). Shadows from nearby buildings or trees are not modelled.",
+        "m.faq2.h": "Why is the savings \"indicative\"?",
+        "m.faq2.p": "The estimate uses the tariff you set. Real production varies with shading, soiling and module degradation; the calculation is a good approximation for sizing or evaluating a system, not an invoice.",
+        "m.faq3.h": "Can I use it for the whole country?",
+        "m.faq3.p": "Yes — you can search any city in the world. The panel configuration (power, tilts, efficiency, tariff) is the same for all cities.",
+        "m.faq4.h": "Where does my data stay?",
+        "m.faq4.p": "Everything stays in your browser (in <code>localStorage</code>): panel configuration, last city, language, theme, units and recent cities. Nothing is sent to servers — weather data comes from the public Open-Meteo API.",
+        "m.footer.src": "Weather source:",
+        "m.s7": "Customisation & extras",
+        "m.s7.lede": "The top bar has quick controls to personalise the app, and the solar panel has extra analysis tools. Anything you choose is saved in your browser.",
+        "m.s7a.h": "Units °C / °F",
+        "m.s7a.p": "Switch the temperature between Celsius and Fahrenheit. The choice is saved and the whole forecast updates immediately — today's panel, hourly, min/max and charts.",
+        "m.s7b.h": "Light / dark theme",
+        "m.s7b.p": "The moon/sun button toggles between the dark theme (default) and the light one, for bright environments.",
+        "m.s7c.h": "Recent cities",
+        "m.s7c.p": "The last visited cities appear as <strong>chips</strong> below the search bar. Tap one to load it again.",
+        "m.s7d.h": "Air quality",
+        "m.s7d.p": "Today's panel has an indicator with the <strong>European Air Quality Index (EAQI)</strong>: Good, Fair, Moderate, Poor or Very poor.",
+        "m.s7e.h": "Export data (CSV)",
+        "m.s7e.p": "The <strong>\"Export CSV\"</strong> button in the solar panel downloads a file with the selected day's data: hourly temperature, precipitation, radiation and the estimated production of each orientation.",
+        "m.s7f.h": "Weekly production forecast",
+        "m.s7f.p": "Below the total chart there is a 7-day forecast — each bar shows its own production total above it (kWh) — and the week total (kWh and €). Tap a bar to select that day.",
+        "m.s7g.h": "Install the app (PWA)",
+        "m.s7g.p": "You can install SkyCast on your phone or computer (browser menu → \"Install application\"). After the first visit, the app opens and shows the last city even without internet.",
+      },
+    };
+
+    let lang = localStorage.getItem("skycast:lang");
+    if (!I18N[lang]) lang = "pt";
+
+    const t = (k) => (I18N[lang][k] != null ? I18N[lang][k] : k);
+
+    function apply() {
+      document.documentElement.lang = lang;
+      document.title = t("m.title");
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        el.textContent = t(el.getAttribute("data-i18n"));
+      });
+      document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+        el.innerHTML = t(el.getAttribute("data-i18n-html"));
+      });
+      document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+        el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria")));
+      });
+      document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+        if (el.title != null) el.title = t(el.getAttribute("data-i18n-title"));
+      });
+      document.querySelectorAll(".lang__btn").forEach((b) => {
+        b.classList.toggle("active", b.getAttribute("data-lang") === lang);
+      });
+    }
+
+    document.querySelectorAll(".lang__btn").forEach((b) => {
+      b.addEventListener("click", () => {
+        const next = b.getAttribute("data-lang");
+        if (next === lang) return;
+        lang = I18N[next] ? next : "pt";
+        localStorage.setItem("skycast:lang", lang);
+        apply();
+      });
+    });
+
+    document.getElementById("manualVersion").textContent = "2.4.10";
+    apply();
+  </script>
+</body>
+</html>
