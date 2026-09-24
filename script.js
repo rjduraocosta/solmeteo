@@ -158,7 +158,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.5.2";
+const APP_VERSION = "2.5.3";
 
 const LANG_KEY = "skycast:lang";
 const I18N = {

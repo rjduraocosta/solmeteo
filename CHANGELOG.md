@@ -2,13 +2,20 @@
 
 A versão da aplicação aparece no rodapé da app e do manual (**SolMeteo © 2026 · Versão X.Y.Z**) e é incrementada a cada iteração. A entrada no topo corresponde sempre à versão corrente.
 
-Versão corrente: **2.5.2**
+Versão corrente: **2.5.3**
 
 Formato baseado em [Versões Semânticas](https://semver.org/):
 
 - **MAJOR** — alterações estruturais ou comportamento principal da app;
 - **MINOR** — novas funcionalidades ou melhoramentos;
 - **PATCH** — correções de erros.
+
+---
+
+## [2.5.3] — 2026-09-24
+
+### Alterado
+- **Manual: instruções de instalação PWA por dispositivo (PT/EN)**: explicado que o SolMeteo instala em Android, computador e iPhone, mas com passos diferentes — **Android/desktop (Chrome/Edge)**: menu do navegador → "Instalar aplicação"; **iPhone/iPad (Safari)**: sem menu automático, usar Partilhar → "Adicionar ao ecrã principal". Nota de funcionamento off-line mantida. Novas chaves i18n `m.s7g.a`, `m.s7g.i`, `m.s7g.o` nos dois idiomas.
 
 ---
 

@@ -510,14 +510,17 @@
       <div class="card">
         <h3 data-i18n="m.s7g.h">Instala a app (PWA)</h3>
         <ul class="tips">
-          <li><span class="dot dot--indigo"></span><span data-i18n-html="m.s7g.p">Podes instalar o SolMeteo no telemóvel ou computador (menu do navegador → "Instalar aplicação"). Depois da primeira visita, a app abre e mostra a última cidade mesmo sem internet.</span></li>
+          <li><span class="dot dot--indigo"></span><span data-i18n-html="m.s7g.p">Podes instalar o SolMeteo em Android, computador ou iPhone — os passos dependem do dispositivo:</span></li>
+          <li><span class="dot dot--indigo"></span><span data-i18n-html="m.s7g.a"><b>Android e computador (Chrome/Edge):</b> menu do navegador → "Instalar aplicação" — o SolMeteo fica nos apps do dispositivo como uma app normal.</span></li>
+          <li><span class="dot dot--indigo"></span><span data-i18n-html="m.s7g.i"><b>iPhone/iPad (Safari):</b> não há menu automático — toca no botão Partilhar (quadrado com seta para cima) → "Adicionar ao ecrã principal", e o SolMeteo fica com ícone próprio no ecrã inicial.</span></li>
+          <li><span class="dot dot--indigo"></span><span data-i18n-html="m.s7g.o">Depois da primeira visita, a app abre e mostra a última cidade mesmo sem internet.</span></li>
         </ul>
       </div>
     </div>
 
 <footer class="footer">
       <span><span data-i18n="m.footer.src">Fonte meteorológica:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
-      <span>SolMeteo · <span data-i18n="m.version">Versão</span> <span id="manualVersion">2.5.2</span></span>
+      <span>SolMeteo · <span data-i18n="m.version">Versão</span> <span id="manualVersion">2.5.3</span></span>
     </footer>
   </main>
 
@@ -650,7 +653,10 @@
         "m.s7f.h": "Previsão semanal de produção",
         "m.s7f.p": "Debaixo do gráfico total há uma previsão dos 7 dias — cada barra mostra o seu total de produção em cima (kWh) — e o total da semana (kWh e €). Toca numa barra para selecionares esse dia.",
         "m.s7g.h": "Instala a app (PWA)",
-        "m.s7g.p": "Podes instalar o SolMeteo no telemóvel ou computador (menu do navegador → \"Instalar aplicação\"). Depois da primeira visita, a app abre e mostra a última cidade mesmo sem internet.",
+        "m.s7g.p": "Podes instalar o SolMeteo em Android, computador ou iPhone — os passos dependem do dispositivo:",
+        "m.s7g.a": "<b>Android e computador (Chrome/Edge):</b> menu do navegador → \"Instalar aplicação\" — o SolMeteo fica nos apps do dispositivo como uma app normal.",
+        "m.s7g.i": "<b>iPhone/iPad (Safari):</b> não há menu automático — toca no botão Partilhar (quadrado com seta para cima) → \"Adicionar ao ecrã principal\", e o SolMeteo fica com ícone próprio no ecrã inicial.",
+        "m.s7g.o": "Depois da primeira visita, a app abre e mostra a última cidade mesmo sem internet.",
       },
       en: {
         "m.home": "Back to app",
@@ -779,7 +785,10 @@
         "m.s7f.h": "Weekly production forecast",
         "m.s7f.p": "Below the total chart there is a 7-day forecast — each bar shows its own production total above it (kWh) — and the week total (kWh and €). Tap a bar to select that day.",
         "m.s7g.h": "Install the app (PWA)",
-        "m.s7g.p": "You can install SolMeteo on your phone or computer (browser menu → \"Install application\"). After the first visit, the app opens and shows the last city even without internet.",
+        "m.s7g.p": "You can install SolMeteo on Android, desktop or iPhone — the steps depend on the device:",
+        "m.s7g.a": "<b>Android and desktop (Chrome/Edge):</b> browser menu → \"Install application\" — SolMeteo lands in the device's apps like a normal one.",
+        "m.s7g.i": "<b>iPhone/iPad (Safari):</b> there is no automatic prompt — tap the Share button (square with up arrow) → \"Add to Home Screen\", and SolMeteo gets its own icon on the home screen.",
+        "m.s7g.o": "After the first visit, the app opens and shows the last city even without internet.",
       },
     };
 
@@ -818,7 +827,7 @@
       });
     });
 
-    document.getElementById("manualVersion").textContent = "2.5.2";
+    document.getElementById("manualVersion").textContent = "2.5.3";
     apply();
   </script>
 </body>
