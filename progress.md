@@ -3,7 +3,7 @@
 ## Estado atual
 App de meteorologia em página única (HTML + CSS + JS) com visual moderno e comercial.
 Fonte de dados: **Open-Meteo** (grátis, sem chave de API).
-**Versão corrente: 2.5.2** — funcionalidades completas da proposta + melhoramentos da previsão semanal e gráficos (ver "Tarefas — Realizadas vs Pendentes").
+**Versão corrente: 2.5.3** — funcionalidades completas da proposta + melhoramentos da previsão semanal e gráficos (ver "Tarefas — Realizadas vs Pendentes").
 
 > ## ⚠️ REGRAS OBRIGATÓRIAS (não podem falhar)
 > 1. **A cada iteração, atualizar o `manual.html`** (manual de utilização com infográficos) sempre que se adiciona, altera ou remove qualquer funcionalidade/comportamento. O manual é **bilingue (PT/EN)** — cada alteração tem de ser refletida nos **dois idiomas**. Tem de estar sempre sincronizado com a app.
@@ -111,6 +111,7 @@ Fonte de dados: **Open-Meteo** (grátis, sem chave de API).
 - [x] **v2.5.0 — Renomeada para SolMeteo**: nome alterado de "SkyCast" (já usado por apps nas lojas) para **SolMeteo** em todos os pontos de contacto (títulos, manifesto PWA, rodapés, manual PT/EN, docs); verificação web confirmou que "SolMeteo" está livre no Google Play/App Store. Repositório de publicação renomeado para `rjduraocosta/solmeteo`; app publicada no GitHub Pages: `https://rjduraocosta.github.io/solmeteo/`.
 - [x] **v2.5.1 — Cache PWA antiga a servir versões antigas**: o service worker mantinha `CACHE_NAME` inalterado ("skycast-v1") com estáticos em cache-first — navegadores mostravam conteúdo antigo apesar das publicações. Cache renomeada para **`solmeteo-v2`**: no activate as caches antigas são apagadas e o app shell re-buscado — a app atualiza; recomendar hard refresh (Ctrl+F5) ou reinstalar a PWA.
 - [x] **v2.5.2 — Logótipo "Sky Cast" a persistir**: o nome estava entre `<span>`s (`Sky<span>Cast</span>`) e escapou à substituição automática — corrigido para `Sol<span>Meteo</span>` mantendo o estilo bicolor; prefixo do CSV exportado e slug por omissão também renomeados (chaves internas `skycast:*` mantidas para preservar preferências).
+- [x] **v2.5.3 — Manual: instalação PWA por dispositivo (PT/EN)**: clarificado que o SolMeteo instala em Android, computador e iPhone, com passos diferentes — **Android/desktop (Chrome/Edge)**: menu "Instalar aplicação"; **iPhone/iPad (Safari)**: Partilhar → "Adicionar ao ecrã principal" (sem menu automático). Novas chaves i18n `m.s7g.a`, `m.s7g.i`, `m.s7g.o` nos dois idiomas.
 
 ### ⏳ Pendentes / Opcionais
 - [ ] Teste visual humano em vários navegadores/dispositivos.
