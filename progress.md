@@ -10,6 +10,7 @@ Fonte de dados: **Open-Meteo** (grátis, sem chave de API).
 > 2. Atualizar este `progress.md` em cada iteração (plano, realizadas/pendentes, regras).
 > 3. Verificações antes de terminar: `node --check` no `script.js` e (quando a lógica de render muda) smoke-test com harness DOM simulado em Node.
 > 4. **A cada iteração, incrementar a versão da app** em `script.js` (`APP_VERSION`), no rodapé de `index.html` e no rodapé de `manual.html`, e **adicionar a entrada correspondente no topo de `CHANGELOG.md`** (no. de versão + alterações/melhorias/correções).
+> 5. **Fluxo de trabalho (branch + merge — não publicar cedo)**: cada iteração começa por **criar um branch novo** a partir do `main` atualizado (`git pull` antes), ex.: `feat/<tema>`; todas as alterações/commits (script, styles, html, manual, changelog, progress) ficam nesse branch; **testar sempre localmente primeiro** (`node --check` + smoke-test quando a lógica de render muda) e só depois dar a iteração como pronta; **nunca publicar o GitHub Pages de imediato** — o deploy acontece **apenas quando o utilizador indicar**, fazendo **merge do branch no `main`** (`git checkout main` + `git merge --no-ff <branch>` + `git push origin main`), porque o Pages constrói automaticamente a partir do `main` (um branch não publica nada). Após o merge: verificar o site ao vivo (HTTP 200 + versão) e **apagar o branch fundido** (local e, se enviado, remoto).
 
 ---
 
@@ -129,6 +130,7 @@ Fonte de dados: **Open-Meteo** (grátis, sem chave de API).
   - Verificações: `node --check` para JS, validação dos IDs do DOM após cada alteração e smoke-test de fluxo (harness DOM simulado em Node) quando se altera a lógica de renderização.
   - **Obrigatório a cada iteração**: atualizar este `progress.md` — plano, tarefas realizadas/pendentes e regras/skills.
   - **Obrigatório a cada iteração**: atualizar o `manual.html` (manual de utilização com infográficos) para refletir todas as funcionalidades existentes — o manual é bilingue **PT/EN** e as alterações têm de entrar nos **dois idiomas** — ver secção "REGRAS OBRIGATÓRIAS" no topo.
+  - **Fluxo por iteração (regra 5)**: `git pull origin main` → criar branch novo (`git checkout -b feat/<tema>`) → alterar/comitar **no branch** → **testar localmente primeiro** (`node --check` e smoke-test, que é hermético/data fixa) → **não publicar o GitHub Pages**: só quando o utilizador indicar, `git checkout main; git merge --no-ff <branch>; git push origin main` (o Pages publica sozinho a partir de `main`) → verificar `https://rjduraocosta.github.io/solmeteo/` (HTTP 200 + versão) → apagar o branch fundido.
 
 ---
 
