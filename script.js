@@ -180,7 +180,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.8.0";
+const APP_VERSION = "2.9.0";
 
 const LANG_KEY = "skycast:lang";
 const I18N = {
@@ -1639,7 +1639,8 @@ function simulateForecastBattery(data, settings) {
       prod24.push(hourProd);
     }
 
-    const sim = simulateBatteryAndConsumption(prod24, settings, currentSoc);
+    const dateStr = (data.hourly.time[start] || "").slice(0, 10);
+    const sim = simulateBatteryAndConsumption(prod24, settings, currentSoc, dateStr);
     currentSoc = sim.finalSoc;
     results.push(sim);
   }
@@ -1828,7 +1829,19 @@ function renderPvWeekly(totals, settings) {
   }
   els.pvWeeklyBox.hidden = false;
   const week = totals.reduce((a, b) => a + b, 0);
-  els.pvWeeklyTotal.textContent = `${week.toFixed(1)} kWh · ${(week * settings.tariff).toFixed(2)} €`;
+  let weekEuros = 0;
+  totals.forEach((v, d) => {
+    const dStart = d * 24;
+    for (let h = 0; h < 24; h++) {
+      const t = weatherData.hourly.time[dStart + h];
+      if (t) {
+        const dDate = t.slice(0, 10);
+        // Estimate proportion
+        weekEuros += (v / 24) * getHourlyTariff(settings, dDate, h);
+      }
+    }
+  });
+  els.pvWeeklyTotal.textContent = `${week.toFixed(1)} kWh · ${weekEuros.toFixed(2)} €`;
   els.pvWeeklyBars.innerHTML = "";
   const max = Math.max.apply(null, totals.concat([0.1]));
   totals.forEach((v, i) => {
@@ -2026,6 +2039,12 @@ function buildPvChart(production, opts = {}) {
       ${peakMarker}
     </svg>
   `;
+}
+
+if (els.pvTariffType) {
+  els.pvTariffType.addEventListener("change", (e) => {
+    updateTariffVisibility(e.target.value);
+  });
 }
 
 els.pvConfigBtn.addEventListener("click", () => {

@@ -2,13 +2,26 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.8.0**
+Current Version: **2.9.0**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.9.0] — 2026-11-04
+
+### Added
+- **Bi-Hourly Electricity Tariff Modeling (ERSE)**: Selectable Flat (24h uniform) or Bi-hourly tariff schemes with support for official Portuguese ERSE **Daily Cycle** (off-peak 22:00–08:00) and **Weekly Cycle** (weekday nights 00:00–07:00, Saturday afternoons/nights, and 24h all-day Sunday off-peak).
+- **Hourly Differentiated Economics**: Hourly evaluation applying respective Peak (Day) or Off-Peak (Night) rates to direct self-consumption savings, battery discharge value, and grid import costs.
+- **Clarified Energy Balance Metrics**:
+  - `AUTOCONSUMO TOTAL`: Explicitly itemizes solar self-consumption and battery discharge contributions (`X.X kWh solar direto + Y.Y kWh bateria · Z% autossuficiente`).
+  - `BATERIA (DESCARGA)`: Explicitly itemizes daytime charging energy and final battery state of charge (`Carregou X.X kWh · SoC final: Y%`).
+- **Bilingual User Manual Updates**: Documented bi-hourly tariff structures and enhanced dashboard metric clarity in Portuguese and English (`manual.html`).
+- **Service Worker Cache Invalidation**: Updated cache identifier to `solmeteo-v2.9.0`.
 
 ---
 

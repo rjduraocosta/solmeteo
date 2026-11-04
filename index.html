@@ -277,13 +277,59 @@
         </label>
         <label class="pv-field">
           <span class="pv-field__head">
+            <span data-i18n="pv.field.tarifftype">Tipo de tarifa</span>
+            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tipo de tarifa" data-i18n-aria="pv.tip.tarifftype.aria">
+              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.tarifftype">Escolhe entre <strong>Tarifa Simples</strong> (pre&ccedil;o fixo 24h) ou <strong>Bi-hor&aacute;ria</strong> (pre&ccedil;os diferenciados dia/noite e fins de semana segundo a ERSE).</span>
+            </span>
+          </span>
+          <select id="pvTariffType">
+            <option value="simple" data-i18n="pv.tariff.simple">Simples (fixa 24h)</option>
+            <option value="bi-hourly" data-i18n="pv.tariff.bihourly">Bi-hor&aacute;ria (dia/noite)</option>
+          </select>
+        </label>
+        <label class="pv-field" id="pvTariffSimpleBox">
+          <span class="pv-field__head">
             <span data-i18n="pv.field.tariff">Tarifa (&euro;/kWh)</span>
             <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tarifa" data-i18n-aria="pv.tip.tariff.aria">
               <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.tariff">Pre&ccedil;o m&eacute;dio da energia para estimar o valor da produ&ccedil;&atilde;o em euros. Valor meramente indicativo — n&atilde;o substitui o teu contrato de fornecimento.</span>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.tariff">Pre&ccedil;o m&eacute;dio da energia para estimar o valor da produ&ccedil;&atilde;o em euros. Valor meramente indicativo &mdash; n&atilde;o substitui o teu contrato de fornecimento.</span>
             </span>
           </span>
-          <input type="number" id="pvTariff" min="0" max="5" step="0.001" required />
+          <input type="number" id="pvTariff" min="0" max="5" step="0.001" placeholder="0.182" />
+        </label>
+        <label class="pv-field" id="pvCycleBox" hidden>
+          <span class="pv-field__head">
+            <span data-i18n="pv.field.cycle">Ciclo bi-hor&aacute;rio</span>
+            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre ciclo bi-horário" data-i18n-aria="pv.tip.cycle.aria">
+              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.cycle"><strong>Ciclo Di&aacute;rio:</strong> Vazio das 22h &agrave;s 08h todos os dias.<br/><strong>Ciclo Semanal:</strong> Dias &uacute;teis (vazio 00h&ndash;07h), S&aacute;bado (vazio 00h&ndash;09h, 14h&ndash;20h, 22h&ndash;24h), Domingo (vazio 24h).</span>
+            </span>
+          </span>
+          <select id="pvTariffCycle">
+            <option value="daily" data-i18n="pv.cycle.daily">Ciclo Di&aacute;rio</option>
+            <option value="weekly" data-i18n="pv.cycle.weekly">Ciclo Semanal</option>
+          </select>
+        </label>
+        <label class="pv-field" id="pvTariffPeakBox" hidden>
+          <span class="pv-field__head">
+            <span data-i18n="pv.field.tariffpeak">Tarifa Dia / Fora Vazio (&euro;/kWh)</span>
+            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tarifa fora de vazio" data-i18n-aria="pv.tip.tariffpeak.aria">
+              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.tariffpeak">Pre&ccedil;o da eletricidade nas horas diurnas (fora de vazio). Tipicamente 0,18 a 0,25 &euro;/kWh.</span>
+            </span>
+          </span>
+          <input type="number" id="pvTariffPeak" min="0" max="5" step="0.001" placeholder="0.210" />
+        </label>
+        <label class="pv-field" id="pvTariffOffPeakBox" hidden>
+          <span class="pv-field__head">
+            <span data-i18n="pv.field.tariffoffpeak">Tarifa Noite / Vazio (&euro;/kWh)</span>
+            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tarifa de vazio" data-i18n-aria="pv.tip.tariffoffpeak.aria">
+              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.tariffoffpeak">Pre&ccedil;o da eletricidade nas horas econ&oacute;micas (vazio). Tipicamente 0,10 a 0,13 &euro;/kWh.</span>
+            </span>
+          </span>
+          <input type="number" id="pvTariffOffPeak" min="0" max="5" step="0.001" placeholder="0.115" />
         </label>
         <label class="pv-field">
           <span class="pv-field__head">
@@ -379,12 +425,12 @@
 
         <div class="pv-balance__grid">
           <div class="pv-metric pv-metric--self">
-            <span class="pv-metric__label" data-i18n="pv.metric.self">Autoconsumo Solar</span>
+            <span class="pv-metric__label" data-i18n="pv.metric.self">Autoconsumo Total</span>
             <span class="pv-metric__val" id="pvSelfVal">0.0 kWh</span>
             <span class="pv-metric__sub" id="pvSelfPct">0% autossuficiente</span>
           </div>
           <div class="pv-metric pv-metric--batt" id="pvBattBox">
-            <span class="pv-metric__label" data-i18n="pv.metric.batt">Bateria (Ciclo)</span>
+            <span class="pv-metric__label" data-i18n="pv.metric.batt">Bateria (Descarga)</span>
             <span class="pv-metric__val" id="pvBattVal">0.0 kWh</span>
             <span class="pv-metric__sub" id="pvBattSoc">SoC final: 0%</span>
           </div>
@@ -429,7 +475,7 @@
     <footer class="footer">
       <span><span data-i18n="footer.source">Fonte:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
       <span><a href="manual.html" data-i18n="footer.manual">Manual de utilização</a></span>
-      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.8.0</span></span>
+      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.9.0</span></span>
     </footer>
   </main>
 

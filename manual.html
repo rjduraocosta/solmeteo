@@ -472,6 +472,7 @@
         <li><span class="dot dot--gold"></span><span data-i18n-html="m.s5.6.p4"><strong>Injeção na Rede &amp; Excedente:</strong> Quando a bateria atinge os 100%, o excedente é injetado na rede e valorizado pela tarifa de injeção configurada.</span></li>
         <li><span class="dot dot--rose"></span><span data-i18n-html="m.s5.6.p5"><strong>Reserva M&iacute;nima (DoD / 0% a 100%):</strong> Define a percentagem m&iacute;nima abaixo da qual a bateria cessa a descarga (padr&atilde;o de 20% para prote&ccedil;&atilde;o e emerg&ecirc;ncia). Atingido o limite, o consumo passa automaticamente para a rede p&uacute;blica.</span></li>
         <li><span class="dot dot--indigo"></span><span data-i18n-html="m.s5.6.p6"><strong>Ciclo Multi-Dia Cont&iacute;nuo:</strong> A simula&ccedil;&atilde;o &eacute; cont&iacute;nua ao longo dos 7 dias da previs&atilde;o: o n&iacute;vel de carga (SoC) com que a bateria termina a noite transita com exatid&atilde;o para o dia seguinte.</span></li>
+        <li><span class="dot dot--gold"></span><span data-i18n-html="m.s5.6.p7"><strong>Tarifas Bi-hor&aacute;rias (ERSE):</strong> Suporta tarif&aacute;rios simples (24h fixa) ou bi-hor&aacute;rios com distin&ccedil;&atilde;o de <strong>Ciclo Di&aacute;rio</strong> (vazio das 22h &agrave;s 08h) e <strong>Ciclo Semanal</strong> (vazio alargado no fim de semana), calculando a poupan&ccedil;a e o custo de rede com rigor hor&aacute;rio.</span></li>
       </ul>
     </div>
 
@@ -541,7 +542,7 @@
 
 <footer class="footer">
       <span><span data-i18n="m.footer.src">Fonte meteorológica:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
-      <span>SolMeteo · <span data-i18n="m.version">Versão</span> <span id="manualVersion">2.8.0</span></span>
+      <span>SolMeteo · <span data-i18n="m.version">Versão</span> <span id="manualVersion">2.9.0</span></span>
     </footer>
   </main>
 
@@ -660,6 +661,7 @@
         "m.s5.6.p4": "<strong>Injeção na Rede &amp; Excedente:</strong> Quando a bateria atinge os 100%, o excedente é injetado na rede e valorizado pela tarifa de injeção configurada.",
         "m.s5.6.p5": "<strong>Reserva Mínima (DoD / 0% a 100%):</strong> Define a percentagem mínima abaixo da qual a bateria cessa a descarga (padrão de 20% para proteção e emergência). Atingido o limite, o consumo passa automaticamente para a rede pública.",
         "m.s5.6.p6": "<strong>Ciclo Multi-Dia Contínuo:</strong> A simulação é contínua ao longo dos 7 dias da previsão: o nível de carga (SoC) com que a bateria termina a noite transita com exatidão para o dia seguinte.",
+        "m.s5.6.p7": "<strong>Tarifas Bi-horárias (ERSE):</strong> Suporta tarifários simples (24h fixa) ou bi-horários com distinção de <strong>Ciclo Diário</strong> (vazio das 22h às 08h) e <strong>Ciclo Semanal</strong> (vazio alargado no fim de semana), calculando a poupança e o custo de rede com rigor horário.",
         "m.s6": "Perguntas frequentes",
         "m.faq1.h": "A morada de rua influencia a estimativa?",
         "m.faq1.p": "Não. A produção solar depende das <strong>coordenadas da cidade</strong> (latitude/longitude). Sombras de prédios ou árvores à volta da morada não são modeladas.",
@@ -803,6 +805,7 @@
         "m.s5.6.p4": "<strong>Grid Export &amp; Surplus:</strong> Once the battery reaches 100% capacity, excess generation is exported to the grid at your configured feed-in tariff.",
         "m.s5.6.p5": "<strong>Minimum Reserve (DoD / 0% to 100%):</strong> Configures the minimum threshold below which the battery halts discharge (standard 20% for cell health and backup). Once reached, home loads are seamlessly imported from the grid.",
         "m.s5.6.p6": "<strong>Continuous Multi-Day Cycle:</strong> The simulation carries over seamlessly across the 7-day forecast: the battery state of charge (SoC) at midnight transitions accurately into the next morning.",
+        "m.s5.6.p7": "<strong>Bi-Hourly Tariffs (ERSE):</strong> Supports simple flat tariffs or bi-hourly billing with standard <strong>Daily Cycle</strong> (off-peak 22h–08h) and <strong>Weekly Cycle</strong> (extended off-peak on weekends), modeling real savings and grid costs down to each hour.",
         "m.s6": "Frequently asked questions",
         "m.faq1.h": "Does the street address affect the estimate?",
         "m.faq1.p": "No. Solar production depends on the <strong>city coordinates</strong> (latitude/longitude). Shadows from nearby buildings or trees are not modelled.",
