@@ -520,7 +520,7 @@
 
 <footer class="footer">
       <span><span data-i18n="m.footer.src">Fonte meteorológica:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
-      <span>SolMeteo · <span data-i18n="m.version">Versão</span> <span id="manualVersion">2.5.3</span></span>
+      <span>SolMeteo · <span data-i18n="m.version">Versão</span> <span id="manualVersion">2.6.0</span></span>
     </footer>
   </main>
 
@@ -640,10 +640,10 @@
         "m.footer.src": "Fonte meteorológica:",
         "m.s7": "Personalização e extras",
         "m.s7.lede": "A barra superior tem controlos rápidos para personalizar a app, e o painel solar tem extras de análise. Tudo o que escolheres fica guardado no teu browser.",
-        "m.s7a.h": "Unidades °C / °F",
-        "m.s7a.p": "Alternas a temperatura entre graus Celsius e Fahrenheit. A escolha fica guardada e toda a previsão é atualizada de imediato — painel de hoje, hora a hora, máx/mín e gráficos.",
-        "m.s7b.h": "Tema claro / escuro",
-        "m.s7b.p": "O botão lua/sol alterna entre o tema escuro (por omissão) e o claro, para ambientes com muita luz.",
+        "m.s7a.h": "Unidades (°C/°F, km/h/mph)",
+        "m.s7a.p": "Alternas a temperatura (°C / °F) e a velocidade do vento (km/h / mph) nos seletores da barra superior ou tocando diretamente no cartão de vento do painel. A escolha fica gravada e atualiza de imediato toda a previsão.",
+        "m.s7b.h": "Tema claro / escuro e deteção automática",
+        "m.s7b.p": "O SolMeteo deteta automaticamente o tema do teu sistema (modo claro ou escuro). Podes também usar o botão lua/sol na barra superior para alternar e guardar manualmente a tua preferência.",
         "m.s7c.h": "Cidades recentes",
         "m.s7c.p": "As últimas cidades visitadas aparecem em <strong>chips</strong> por baixo da barra de pesquisa. Toca numa para a carregares de novo.",
         "m.s7d.h": "Qualidade do ar",
@@ -772,10 +772,10 @@
         "m.footer.src": "Weather source:",
         "m.s7": "Customisation & extras",
         "m.s7.lede": "The top bar has quick controls to personalise the app, and the solar panel has extra analysis tools. Anything you choose is saved in your browser.",
-        "m.s7a.h": "Units °C / °F",
-        "m.s7a.p": "Switch the temperature between Celsius and Fahrenheit. The choice is saved and the whole forecast updates immediately — today's panel, hourly, min/max and charts.",
-        "m.s7b.h": "Light / dark theme",
-        "m.s7b.p": "The moon/sun button toggles between the dark theme (default) and the light one, for bright environments.",
+        "m.s7a.h": "Units (°C/°F, km/h/mph)",
+        "m.s7a.p": "Switch temperature (°C / °F) and wind speed (km/h / mph) via the topbar controls or by clicking directly on the wind stat card. Your choice is saved and updates the entire forecast immediately.",
+        "m.s7b.h": "Light / dark theme & auto-detection",
+        "m.s7b.p": "SolMeteo automatically detects your system's preferred color scheme (light or dark mode). You can also use the moon/sun button in the topbar to manually toggle and persist your preference.",
         "m.s7c.h": "Recent cities",
         "m.s7c.p": "The last visited cities appear as <strong>chips</strong> below the search bar. Tap one to load it again.",
         "m.s7d.h": "Air quality",
@@ -827,7 +827,26 @@
       });
     });
 
-    document.getElementById("manualVersion").textContent = "2.5.3";
+    function applyTheme() {
+      let theme = localStorage.getItem("skycast:theme");
+      if (!theme) {
+        theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+      }
+      document.documentElement.dataset.theme = theme;
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute("content", theme === "light" ? "#eef2f9" : "#0b1020");
+    }
+
+    if (window.matchMedia) {
+      window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", () => {
+        if (!localStorage.getItem("skycast:theme")) {
+          applyTheme();
+        }
+      });
+    }
+
+    applyTheme();
+    document.getElementById("manualVersion").textContent = "2.6.0";
     apply();
   </script>
 </body>

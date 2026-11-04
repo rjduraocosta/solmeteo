@@ -147,18 +147,20 @@ let weatherData = null;
 let placeName = "";
 let selectedDay = 0;
 let unitCelsius = true;
+let unitWind = "kmh";
 
 const PV_KEY = "skycast:pv";
 const RECENTS_KEY = "skycast:recents";
 const THEME_KEY = "skycast:theme";
 const UNIT_KEY = "skycast:unit";
+const WIND_UNIT_KEY = "skycast:wind_unit";
 const PV_PALETTE = ["#38bdf8", "#818cf8", "#34d399", "#fb7185"];
 const PV_TOTAL_COLOR = "#fbbf24";
 const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.5.3";
+const APP_VERSION = "2.6.0";
 
 const LANG_KEY = "skycast:lang";
 const I18N = {
@@ -259,6 +261,8 @@ const I18N = {
     "aqi.veryPoor": "Muito mau",
     "aqi.na": "—",
     "unit.aria": "Unidades de temperatura",
+    "unit.wind.aria": "Unidades de velocidade do vento",
+    "stat.wind.toggle": "Alternar unidade de velocidade do vento (km/h / mph)",
     "theme.title": "Alternar modo claro / escuro",
     "theme.aria": "Alternar tema",
     "recents.label": "Recentes:",
@@ -368,6 +372,8 @@ const I18N = {
     "aqi.veryPoor": "Very poor",
     "aqi.na": "—",
     "unit.aria": "Temperature units",
+    "unit.wind.aria": "Wind speed units",
+    "stat.wind.toggle": "Toggle wind speed units (km/h / mph)",
     "theme.title": "Toggle light / dark mode",
     "theme.aria": "Toggle theme",
     "recents.label": "Recent:",
@@ -789,7 +795,7 @@ function tempDisplay(c) {
 }
 
 function applyUnitButtons() {
-  document.querySelectorAll(".unit__btn").forEach((b) => {
+  document.querySelectorAll(".unit__btn:not(.wind__btn)").forEach((b) => {
     b.classList.toggle("active", b.getAttribute("data-unit") === (unitCelsius ? "c" : "f"));
   });
 }
@@ -799,18 +805,49 @@ function setUnit(next) {
   unitCelsius = isC;
   localStorage.setItem(UNIT_KEY, isC ? "c" : "f");
   applyUnitButtons();
+  unitWind = localStorage.getItem(WIND_UNIT_KEY) === "mph" ? "mph" : "kmh";
+  applyWindUnitButtons();
   if (weatherData) renderDay(selectedDay);
 }
 
+function windDisplay(kmh) {
+  if (kmh == null || isNaN(kmh)) return "--";
+  if (unitWind === "mph") {
+    return `${Math.round(kmh * 0.621371)} mph`;
+  }
+  return `${Math.round(kmh)} km/h`;
+}
+
+function applyWindUnitButtons() {
+  document.querySelectorAll(".wind__btn").forEach((b) => {
+    b.classList.toggle("active", b.getAttribute("data-wind") === unitWind);
+  });
+}
+
+function setWindUnit(next) {
+  unitWind = next === "mph" ? "mph" : "kmh";
+  localStorage.setItem(WIND_UNIT_KEY, unitWind);
+  applyWindUnitButtons();
+  if (weatherData) renderDay(selectedDay);
+}
+
+function toggleWindUnit() {
+  setWindUnit(unitWind === "kmh" ? "mph" : "kmh");
+}
+
 function applyTheme() {
-  const theme = localStorage.getItem(THEME_KEY) === "light" ? "light" : "dark";
+  let theme = localStorage.getItem(THEME_KEY);
+  if (!theme) {
+    theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  }
   document.documentElement.dataset.theme = theme;
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute("content", theme === "light" ? "#eef2f9" : "#0b1020");
 }
 
 function toggleTheme() {
-  const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+  const current = document.documentElement.dataset.theme === "light" ? "light" : "dark";
+  const next = current === "light" ? "dark" : "light";
   localStorage.setItem(THEME_KEY, next);
   applyTheme();
 }
@@ -839,7 +876,7 @@ function renderHeroCurrent(data, name) {
   const min = data.daily.temperature_2m_min[0];
   els.statMaxMin.textContent = `${tempDisplay(max)}° / ${tempDisplay(min)}°`;
   els.statHumidity.textContent = `${Math.round(c.relative_humidity_2m)}%`;
-  els.statWind.textContent = `${Math.round(c.wind_speed_10m)} km/h ${degToCompass(c.wind_direction_10m)}`;
+  els.statWind.textContent = `${windDisplay(c.wind_speed_10m)} ${degToCompass(c.wind_direction_10m)}`;
   els.statUv.textContent = uvLevel(c.uv_index);
 
   els.sunrise.textContent = formatTime(data.daily.sunrise[0]);
@@ -862,7 +899,7 @@ function renderHeroDay(data, day, name) {
   const min = data.daily.temperature_2m_min[day];
   els.statMaxMin.textContent = `${tempDisplay(max)}° / ${tempDisplay(min)}°`;
   els.statHumidity.textContent = `${Math.round(data.hourly.relative_humidity_2m[idx])}%`;
-  els.statWind.textContent = `${Math.round(data.hourly.wind_speed_10m[idx])} km/h`;
+  els.statWind.textContent = windDisplay(data.hourly.wind_speed_10m[idx]);
   els.statUv.textContent = uvLevel(data.hourly.uv_index[idx] || 0);
 
   els.sunrise.textContent = formatTime(data.daily.sunrise[day]);
@@ -1713,17 +1750,39 @@ els.pvExportBtn.addEventListener("click", exportPvCsv);
 
 (async function init() {
   unitCelsius = localStorage.getItem(UNIT_KEY) !== "f";
+  unitWind = localStorage.getItem(WIND_UNIT_KEY) === "mph" ? "mph" : "kmh";
   document.getElementById("appVersion").textContent = APP_VERSION;
   applyStaticTranslations();
   applyTheme();
   applyUnitButtons();
+  applyWindUnitButtons();
   renderRecents();
   document.querySelectorAll(".lang__btn").forEach((b) => {
     b.addEventListener("click", () => setLang(b.getAttribute("data-lang")));
   });
-  document.querySelectorAll(".unit__btn").forEach((b) => {
+  document.querySelectorAll(".unit__btn:not(.wind__btn)").forEach((b) => {
     b.addEventListener("click", () => setUnit(b.getAttribute("data-unit")));
   });
+  document.querySelectorAll(".wind__btn").forEach((b) => {
+    b.addEventListener("click", () => setWindUnit(b.getAttribute("data-wind")));
+  });
+  const statWindBox = document.getElementById("statWindBox");
+  if (statWindBox) {
+    statWindBox.addEventListener("click", toggleWindUnit);
+    statWindBox.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleWindUnit();
+      }
+    });
+  }
+  if (window.matchMedia) {
+    window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", () => {
+      if (!localStorage.getItem(THEME_KEY)) {
+        applyTheme();
+      }
+    });
+  }
   els.themeBtn.addEventListener("click", toggleTheme);
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(() => {});

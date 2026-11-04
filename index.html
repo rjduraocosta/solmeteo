@@ -49,6 +49,12 @@
         <button type="button" class="unit__btn" data-unit="f" aria-label="Fahrenheit">°F</button>
       </div>
 
+      <!-- Wind switch (km/h / mph) -->
+      <div class="unit-switch" role="group" aria-label="Unidades de velocidade do vento" data-i18n-aria="unit.wind.aria">
+        <button type="button" class="unit__btn wind__btn active" data-wind="kmh" aria-label="km/h">km/h</button>
+        <button type="button" class="unit__btn wind__btn" data-wind="mph" aria-label="mph">mph</button>
+      </div>
+
       <!-- Theme toggle (Dark / Light) -->
       <button class="theme-toggle" id="themeBtn" type="button" title="Alternar modo claro / escuro" aria-label="Alternar tema"
         data-i18n-title="theme.title" data-i18n-aria="theme.aria">
@@ -117,7 +123,7 @@
             <span class="stat__label" data-i18n="stat.humidity">Humidade</span>
             <span class="stat__value" id="statHumidity">--%</span>
           </div>
-          <div class="stat">
+          <div class="stat stat--clickable" id="statWindBox" tabindex="0" role="button" title="Alternar unidade de velocidade do vento" data-i18n-title="stat.wind.toggle">
             <span class="stat__label" data-i18n="stat.wind">Vento</span>
             <span class="stat__value" id="statWind">-- km/h</span>
           </div>
@@ -332,7 +338,7 @@
     <footer class="footer">
       <span><span data-i18n="footer.source">Fonte:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
       <span><a href="manual.html" data-i18n="footer.manual">Manual de utilização</a></span>
-      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.5.3</span></span>
+      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.6.0</span></span>
     </footer>
   </main>
 

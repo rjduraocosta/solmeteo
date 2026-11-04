@@ -615,6 +615,19 @@ body {
   color: var(--accent);
 }
 
+.stat--clickable {
+  cursor: pointer;
+  user-select: none;
+}
+.stat--clickable:hover {
+  border-color: var(--accent);
+  box-shadow: 0 6px 18px -4px rgba(56, 189, 248, 0.25);
+}
+.stat--clickable:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .hero__side {
   display: flex;
   flex-direction: column;
