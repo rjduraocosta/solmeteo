@@ -1483,3 +1483,72 @@ body {
     grid-auto-columns: minmax(64px, 1fr);
   }
 }
+/* ---------- Power Curve & PV View Modes ---------- */
+.chart__title-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.chart__values-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chart__tag--power {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.pv-view-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(8px);
+}
+
+.pv-view-btn {
+  border: 0;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--font);
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 4px 7px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.pv-view-btn:hover {
+  color: var(--text);
+}
+
+.pv-view-btn.active {
+  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  color: #0b1020;
+  font-weight: 800;
+}
+
+.pv-mini__peak {
+  color: #38bdf8;
+  font-weight: 600;
+  font-size: 0.74rem;
+}

@@ -309,8 +309,18 @@
 
       <div class="chart chart--wide">
         <div class="chart__head">
-          <span class="chart__label" data-i18n="pv.total">Produção total estimada</span>
-          <span class="chart__value chart__value--pv" id="pvDayTotal">— kWh</span>
+          <div class="chart__title-group">
+            <span class="chart__label" data-i18n="pv.total">Produção total estimada</span>
+            <div class="pv-view-switch" role="group" aria-label="Modo de visualização do gráfico solar" data-i18n-aria="pv.mode.aria">
+              <button type="button" class="pv-view-btn active" data-mode="both" data-i18n="pv.mode.both">Ambos</button>
+              <button type="button" class="pv-view-btn" data-mode="bars" data-i18n="pv.mode.kwh">kWh</button>
+              <button type="button" class="pv-view-btn" data-mode="curve" data-i18n="pv.mode.kw">kW</button>
+            </div>
+          </div>
+          <div class="chart__values-group">
+            <span class="chart__tag chart__tag--power" id="pvPeakPower" title="Potência de pico instantânea estimada" data-i18n-title="pv.peak.title" hidden>Pico: — kW</span>
+            <span class="chart__value chart__value--pv" id="pvDayTotal">— kWh</span>
+          </div>
         </div>
         <div class="chart__canvas" id="pvChart"></div>
         <div class="chart__axis" id="pvAxis"></div>
@@ -338,7 +348,7 @@
     <footer class="footer">
       <span><span data-i18n="footer.source">Fonte:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
       <span><a href="manual.html" data-i18n="footer.manual">Manual de utilização</a></span>
-      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.6.0</span></span>
+      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.7.0</span></span>
     </footer>
   </main>
 

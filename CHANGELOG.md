@@ -2,13 +2,25 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.6.0**
+Current Version: **2.7.0**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.7.0] — 2026-11-04
+
+### Added
+- **Instantaneous Peak Power Curve (kW)**: Added continuous cubic Bézier power curve superimposed on the solar production chart with automated peak point annotation (halo, ring, and kW value).
+- **Solar Visualization Switcher (Both / kWh / kW)**: Added compact view mode controls (`.pv-view-switch`) allowing users to toggle between energy accumulation bars (kWh), continuous power generation curve (kW), or a combined overlay view. State persists in `localStorage["skycast:pv_view"]`.
+- **Peak Power Metric in Solar Header**: Integrated `#pvPeakPower` pill badge in the chart header indicating maximum instantaneous power (kW) and timestamp of the peak.
+- **Individual Array Peak Power**: Extended multi-array mini-charts to display each orientation's individual peak power in kW alongside its daily kWh total.
+- **Bilingual User Manual Section 5.5**: Documented power curves, inverter clipping prevention, and multi-orientation generation profiles in both Portuguese and English (`manual.html`).
+- **Service Worker Cache Invalidation**: Incremented cache identifier to `solmeteo-v2.7.0`.
 
 ---
 

@@ -454,6 +454,15 @@
       </div>
     </div>
 
+    <h3><span>5.5 </span><span data-i18n="m.s5.5">Curva de Potência Instantânea (kW) vs Energia (kWh)</span></h3>
+    <div class="card">
+      <p class="lede" data-i18n-html="m.s5.5.p1">O gráfico principal permite alternar entre <strong>Ambos</strong>, <strong>kWh</strong> (energia horária) e <strong>kW</strong> (potência instantânea). A curva azul contínua assinala a hora e o valor exato do pico de potência estimado.</p>
+      <ul class="tips">
+        <li><span class="dot dot--sky"></span><span data-i18n-html="m.s5.5.p2"><strong>Pico do inversor &amp; Clipping:</strong> Saber a potência máxima em kW ajuda a verificar se a produção ultrapassa o limite do inversor ou microinversores.</span></li>
+        <li><span class="dot dot--gold"></span><span data-i18n-html="m.s5.5.p3"><strong>Múltiplas orientações:</strong> Telhados Este/Oeste têm picos desfasados ao longo do dia, distribuindo a curva de potência sem sobrecarregar a rede ao meio-dia.</span></li>
+      </ul>
+    </div>
+
     <!-- ============================== FAQ ============================== -->
     <h2><span class="num">6</span><span data-i18n="m.s6">Perguntas frequentes</span></h2>
     <div class="card">
@@ -520,7 +529,7 @@
 
 <footer class="footer">
       <span><span data-i18n="m.footer.src">Fonte meteorológica:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
-      <span>SolMeteo · <span data-i18n="m.version">Versão</span> <span id="manualVersion">2.6.0</span></span>
+      <span>SolMeteo · <span data-i18n="m.version">Versão</span> <span id="manualVersion">2.7.0</span></span>
     </footer>
   </main>
 
@@ -628,6 +637,10 @@
         "m.fig.derate.cap": "Os módulos perdem ~0,4% por cada °C acima de 25 °C; ao frio podem até produzir acima do valor de catálogo.",
         "m.s5.4.l1": "<strong>Incluído no rendimento (fixo)</strong> — é o comportamento por omissão: o efeito térmico é um valor fixo dentro do rendimento.",
         "m.s5.4.l2": "<strong>Temperatura real (hora a hora)</strong> — usa a temperatura prevista do dia. Com esta opção, o campo Rendimento passa a referir-se às outras perdas (inversor, cabos, sujidade) e o fator térmico é somado automaticamente.",
+        "m.s5.5": "Curva de Potência Instantânea (kW) vs Energia (kWh)",
+        "m.s5.5.p1": "O gráfico principal permite alternar entre <strong>Ambos</strong>, <strong>kWh</strong> (energia horária) e <strong>kW</strong> (potência instantânea). A curva azul contínua assinala a hora e o valor exato do pico de potência estimado.",
+        "m.s5.5.p2": "<strong>Pico do inversor &amp; Clipping:</strong> Saber a potência máxima em kW ajuda a verificar se a produção ultrapassa o limite do inversor ou microinversores.",
+        "m.s5.5.p3": "<strong>Múltiplas orientações:</strong> Telhados Este/Oeste têm picos desfasados ao longo do dia, distribuindo a curva de potência sem sobrecarregar a rede ao meio-dia.",
         "m.s6": "Perguntas frequentes",
         "m.faq1.h": "A morada de rua influencia a estimativa?",
         "m.faq1.p": "Não. A produção solar depende das <strong>coordenadas da cidade</strong> (latitude/longitude). Sombras de prédios ou árvores à volta da morada não são modeladas.",
@@ -760,6 +773,10 @@
         "m.fig.derate.cap": "Modules lose ~0.4% per °C above 25 °C; in the cold they can even produce above the catalogue value.",
         "m.s5.4.l1": "<strong>Included in efficiency (fixed)</strong> — the default behaviour: the thermal factor is a fixed value within efficiency.",
         "m.s5.4.l2": "<strong>Real temperature (hourly)</strong> — uses the day's forecast temperature. With this option, the efficiency field refers only to the other losses (inverter, cables, soiling) and the thermal factor is added automatically.",
+        "m.s5.5": "Instantaneous Power Curve (kW) vs Energy (kWh)",
+        "m.s5.5.p1": "The main chart lets you toggle between <strong>Both</strong>, <strong>kWh</strong> (hourly energy), and <strong>kW</strong> (instantaneous power). The continuous cyan curve highlights the exact time and value of the peak power.",
+        "m.s5.5.p2": "<strong>Inverter Peak &amp; Clipping:</strong> Knowing the peak power in kW helps verify if production exceeds the threshold of your inverter or microinverters.",
+        "m.s5.5.p3": "<strong>Multi-orientation Arrays:</strong> East/West roof slopes produce offset peaks throughout the day, smoothing out the generation curve without overloading at solar noon.",
         "m.s6": "Frequently asked questions",
         "m.faq1.h": "Does the street address affect the estimate?",
         "m.faq1.p": "No. Solar production depends on the <strong>city coordinates</strong> (latitude/longitude). Shadows from nearby buildings or trees are not modelled.",
@@ -846,7 +863,7 @@
     }
 
     applyTheme();
-    document.getElementById("manualVersion").textContent = "2.6.0";
+    document.getElementById("manualVersion").textContent = "2.7.0";
     apply();
   </script>
 </body>
