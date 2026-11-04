@@ -2,13 +2,22 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.9.1**
+Current Version: **2.9.2**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.9.2] — 2026-11-04
+
+### Added
+- **Cyclic Steady-State Convergence (Spin-up Loop for BESS)**: Implemented periodic boundary convergence for residential battery simulation based on the HTW Berlin / NREL SAM energy engineering standard. Instead of arbitrarily assuming a fixed cold-start state of charge (e.g. 25%), the model runs a 2-pass warm-up cycle across the forecast days to calculate the natural equilibrium state of charge with which the battery enters midnight of Day 1.
+- **Elimination of Artificial Midnight Grid Imports**: High-capacity solar storage setups no longer experience phantom grid imports during early morning hours on sunny days; self-sufficiency and financial metrics now reflect realistic continuous operation.
+- **Updated User Manual (Section 5.6)**: Documented the cyclic steady-state spin-up loop in Portuguese and English.
 
 ---
 

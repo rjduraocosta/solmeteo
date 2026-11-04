@@ -189,7 +189,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.9.1";
+const APP_VERSION = "2.9.2";
 
 const LANG_KEY = "skycast:lang";
 const I18N = {
@@ -1603,14 +1603,38 @@ function simulateBatteryAndConsumption(production, settings, initialSoc, dateStr
     1.6, 1.8, 1.7, 1.4, 1.0, 0.7
   ];
 
-  let soc = initialSoc != null
-    ? Math.min(cap, Math.max(minSocKwh, initialSoc))
-    : (cap > 0 ? Math.max(minSocKwh, cap * 0.25) : 0);
-
   const batteryMaxKw = cap > 0 ? Math.min(Math.max(cap * 0.5, 2.5), 5.0) : 0;
   const effRoundtrip = 0.92;
   const effCharge = Math.sqrt(effRoundtrip);
   const effDischarge = Math.sqrt(effRoundtrip);
+
+  let soc;
+  if (initialSoc != null) {
+    soc = Math.min(cap, Math.max(minSocKwh, initialSoc));
+  } else if (cap > 0) {
+    // Standalone single-day spin-up convergence
+    let tempSoc = cap * 0.5;
+    for (let iter = 0; iter < 2; iter++) {
+      for (let i = 0; i < 24; i++) {
+        const genKwh = production[i] || 0;
+        const loadKwh = (dailyKwh / 24) * (hourlyProfile[i] || 1.0);
+        if (genKwh >= loadKwh) {
+          const surplus = genKwh - loadKwh;
+          const room = cap - tempSoc;
+          const grossTaken = Math.min(surplus, batteryMaxKw || 3.0, room / effCharge);
+          tempSoc = Math.min(cap, tempSoc + Math.max(0, grossTaken * effCharge));
+        } else {
+          const deficit = loadKwh - genKwh;
+          const usableSoc = Math.max(0, tempSoc - minSocKwh);
+          const discharge = Math.min(deficit, batteryMaxKw || 3.0, usableSoc * effDischarge);
+          tempSoc = Math.max(minSocKwh, tempSoc - (discharge / effDischarge));
+        }
+      }
+    }
+    soc = tempSoc;
+  } else {
+    soc = 0;
+  }
 
   let totalSolar = 0;
   let totalLoad = 0;
@@ -1735,12 +1759,15 @@ function simulateForecastBattery(data, settings) {
   const cap = Math.max(0, settings.batteryCap || 0);
   const battMinSoc = Math.min(100, Math.max(0, settings.battMinSoc != null ? Number(settings.battMinSoc) : 20));
   const minSocKwh = cap * (battMinSoc / 100);
-  let currentSoc = cap > 0 ? Math.max(minSocKwh, cap * 0.25) : 0;
 
-  const results = [];
+  // 1. Pre-calculate hourly PV generation and date strings for each forecast day
+  const dailyProds = [];
+  const dailyDates = [];
   for (let d = 0; d < days; d++) {
     const start = d * 24;
     const prod24 = [];
+    const dateStr = (data.hourly.time[start] || "").slice(0, 10);
+    dailyDates.push(dateStr);
     for (let i = 0; i < 24; i++) {
       const idx = start + i;
       const t = data.hourly.time[idx];
@@ -1749,7 +1776,6 @@ function simulateForecastBattery(data, settings) {
         continue;
       }
       const hour = Number(t.slice(11, 13));
-      const dateStr = t.slice(0, 10);
       let hourProd = 0;
       for (const g of groups) {
         const poa = pvHourEstimate(
@@ -1773,9 +1799,29 @@ function simulateForecastBattery(data, settings) {
       }
       prod24.push(hourProd);
     }
+    dailyProds.push(prod24);
+  }
 
-    const dateStr = (data.hourly.time[start] || "").slice(0, 10);
-    const sim = simulateBatteryAndConsumption(prod24, settings, currentSoc, dateStr);
+  // 2. Cyclic Steady-State Convergence (Spin-up Loop):
+  // Instead of an arbitrary fixed SoC (such as 25%), run a 2-pass warm-up cycle
+  // across the multi-day forecast sequence to establish the natural periodic
+  // state of charge entering midnight of Day 0, eliminating cold-start boundary artifacts.
+  let currentSoc = minSocKwh;
+  if (cap > 0 && dailyProds.length > 0) {
+    let warmSoc = cap * 0.5;
+    for (let iter = 0; iter < 2; iter++) {
+      for (let d = 0; d < days; d++) {
+        const s = simulateBatteryAndConsumption(dailyProds[d], settings, warmSoc, dailyDates[d]);
+        warmSoc = s.finalSoc;
+      }
+    }
+    currentSoc = warmSoc;
+  }
+
+  // 3. Multi-day continuous simulation carryover
+  const results = [];
+  for (let d = 0; d < days; d++) {
+    const sim = simulateBatteryAndConsumption(dailyProds[d], settings, currentSoc, dailyDates[d]);
     currentSoc = sim.finalSoc;
     results.push(sim);
   }
