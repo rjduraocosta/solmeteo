@@ -293,7 +293,7 @@
               <span class="pv-tip__text" data-i18n-html="pv.tip.battery">Capacidade útil de armazenamento em bateria residencial. Define <strong>0</strong> se o teu sistema não tiver bateria. Valores comuns: 5 ou 10 kWh.</span>
             </span>
           </span>
-          <input type="number" id="pvBattery" min="0" max="100" step="0.1" inputmode="decimal" placeholder="0" />
+          <input type="number" id="pvBattery" min="0" max="100" step="0.01" inputmode="decimal" placeholder="0" />
         </label>
         <label class="pv-field">
           <span class="pv-field__head">
@@ -303,7 +303,7 @@
               <span class="pv-tip__text" data-i18n-html="pv.tip.baseload">Potência contínua consumida pela habitação (frigorífico, standby, etc.). Um valor de 350 W corresponde a ~8,4 kWh por dia.</span>
             </span>
           </span>
-          <input type="number" id="pvBaseLoad" min="0" max="20000" step="50" inputmode="numeric" placeholder="350" />
+          <input type="number" id="pvBaseLoad" min="0" max="20000" step="1" inputmode="numeric" placeholder="350" />
         </label>
         <label class="pv-field">
           <span class="pv-field__head">
