@@ -42,11 +42,10 @@ Whenever a version bump occurs:
 * Append the release notes to the top of `CHANGELOG.md`.
 * Record the release under the **Version Log** in `progress.md`.
 
-### Rule 4: Git Branching & Safe Deployment
-* **Never commit new features or breaking changes directly to `main`**.
-* Feature work must occur on a dedicated topic branch (e.g., `feat/<name>`), pushed immediately to remote (`git push -u origin <branch>`).
-* GitHub Pages publishes exclusively from `main`. Merge to `main` (`git merge --no-ff`) is executed **only upon explicit user authorization**.
-* Keep branches active after merge until the user explicitly requests their deletion.
+### Rule 4: Direct Main Workflow & Continuous Deployment
+* All development, enhancements, and bugfixes occur directly on the `main` branch.
+* **Do NOT create separate topic or feature branches** (`feat/*`, `fix/*`). Maintain a single, clean `main` branch locally and on remote.
+* Because commits to `main` automatically publish to GitHub Pages, all pre-flight quality checks (Rule 5 and Rule 7) and bilingual synchronization (Rule 2 and Rule 6) must strictly pass prior to committing and pushing directly to `main`.
 
 ### Rule 5: Quality Assurance & Pre-Flight Verification
 * Always execute `node --check script.js` (and `node --check sw.js`) before finalizing changes.
@@ -74,7 +73,8 @@ Whenever a version bump occurs:
 ## 3. Absolute Prohibitions (Anti-Patterns)
 
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to introduce build systems, Babel transforms, TypeScript compilation steps, or external package dependencies for the client-side app.
-* **NUNCA / IT IS STRICTLY FORBIDDEN** to push or merge to the `main` branch without explicit user approval, as this immediately triggers production GitHub Pages deployment.
+* **NUNCA / IT IS STRICTLY FORBIDDEN** to create separate topic or feature branches without explicit user request — all work proceeds directly on `main`.
+* **NUNCA / IT IS STRICTLY FORBIDDEN** to commit or push to `main` without running automated pre-flight syntax checks, DOM verification, and headless runtime tests.
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to update UI copy or behavior in Portuguese without providing the identical English translation, or vice-versa.
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to bypass or suppress mathematical boundaries (e.g., negative POA values, nighttime solar generation, or non-finite irradiance values).
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to introduce new configuration inputs or settings without documenting them in the Section 5.3 reference table and relevant subsections of manual.html in both Portuguese and English.

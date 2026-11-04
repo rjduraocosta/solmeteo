@@ -23,12 +23,10 @@
    - Verify DOM element IDs and ensure no uncaught exceptions in UI render flow.
 4. **Semantic Versioning & Multi-file Synchronization:**
    - Every version increment must be simultaneously recorded in `script.js` (`APP_VERSION`), `index.html` (`#appVersion`), `manual.html` (`#manualVersion`), `CHANGELOG.md` (top entry), and `progress.md` (Version Log).
-5. **Git Branching & Release Pipeline (No Direct Main Deploys):**
-   - Pull `main` before starting: `git pull origin main`.
-   - Create a dedicated feature branch: `git checkout -b <branch-name>` and immediately publish remotely: `git push -u origin <branch-name>`.
-   - Never push directly to `main`; GitHub Pages deploys automatically on `main` push.
-   - Merge into `main` (`git merge --no-ff <branch-name>`) ONLY when explicitly instructed by the user.
-   - Keep the feature branch active post-merge unless explicitly requested to prune.
+5. **Direct Main Workflow & Continuous Deployment:**
+   - All development, enhancements, and bugfixes occur directly on `main`.
+   - Do NOT create separate topic branches; maintain a single, clean `main` branch locally and on remote.
+   - Pre-flight verification (`node --check`, headless runtime execution tests, DOM ID checks, and bilingual parity) must strictly pass before committing and pushing directly to `main`.
 
 ---
 
