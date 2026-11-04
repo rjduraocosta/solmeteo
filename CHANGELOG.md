@@ -2,13 +2,31 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.9.0**
+Current Version: **2.9.1**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.9.1] — 2026-11-04
+
+### Added
+- **Direct Tariff Access Chip**: Prominent interactive tariff badge (`#pvTariffChip`) in the solar panel actions bar displaying active tariff configuration (`Tarifa: Simples (0.182 €/kWh)` or `Tarifa: Bi-horária (0.210/0.115 € · Diário/Semanal)`) with one-click direct access that automatically opens, smoothly scrolls to, highlights, and focuses the tariff configuration section.
+- **Structured Configuration Categories**: Reorganized the solar setup form (`#pvConfig`) into 4 clear visual semantic sections:
+  1. *Painéis Solares & Orientações* (up to 4 orientations);
+  2. *Tarifário de Eletricidade & Rede* (Tariff selector, simple/bi-hourly rates, ERSE cycles, feed-in price);
+  3. *Bateria & Consumo Residencial* (capacity, DoD reserve limit, household daily load);
+  4. *Rendimento & Modelo Térmico* (system efficiency and cell temperature derating model).
+- **Comprehensive Bilingual User Manual Synchronization**: Fully updated Section 5.3 reference table in `manual.html` with all 15 configuration parameters and Section 5.6 with official Portuguese ERSE Daily & Weekly cycle schedules, maintaining 100% PT/EN key parity (185 keys).
+- **Strict Governance Directives**: Codified Rule 6 (Mandatory Manual & Help Sync for any setting modification), Rule 7 (Automated Headless Runtime Execution Verification), and Rule 8 (Configuration Discoverability & Direct Access) in `AGENTS.md`.
+
+### Fixed
+- **Tariff UI Discoverability**: Resolved user confusion regarding tariff selection location by introducing the dedicated `#pvTariffChip` shortcut and categorized section layout.
+- **Service Worker Cache Update**: Bumped cache to `solmeteo-v2.9.1` ensuring all browser clients receive updated shell assets.
 
 ---
 

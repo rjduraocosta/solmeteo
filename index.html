@@ -223,167 +223,194 @@
           <span class="panel__sub pv-settings-summary" id="pvSummary">—</span>
         </div>
         <div class="pv-actions">
+          <button class="chip chip--tariff" id="pvTariffChip" type="button" title="Alterar tarifário de eletricidade" data-i18n-title="pv.tariff.chiptitle">Tarifa: Simples</button>
           <button class="chip" id="pvExportBtn" type="button" title="Exportar dados do dia para CSV" data-i18n-title="pv.export.title" data-i18n="pv.export">Exportar CSV</button>
           <button class="chip" id="pvConfigBtn" type="button" aria-expanded="false" data-i18n="pv.btn">Configurar sistema</button>
         </div>
       </div>
 
       <form class="pv-config" id="pvConfig" hidden>
-        <div class="pv-groups">
-          <div class="pv-group pv-group--head">
-            <span class="pv-group__tag pv-group__tag--head"></span>
-            <span data-i18n="pv.head.power">Pot&ecirc;ncia (kWp)</span>
-            <span data-i18n="pv.head.tilt">Inclina&ccedil;&atilde;o (&deg;)</span>
-            <span data-i18n="pv.head.az">Orienta&ccedil;&atilde;o (&deg;)</span>
-            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre múltiplas orientações" data-i18n-aria="pv.tip.groups.aria">
-              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.groups">Apoia at&eacute; <strong>4 orienta&ccedil;&otilde;es</strong> (ex.: telhados com pain&eacute;is em v&aacute;rias &aacute;guas). Cada linha &eacute; um grupo com a sua pot&ecirc;ncia (kWp), inclina&ccedil;&atilde;o e orienta&ccedil;&atilde;o.<br/><strong>Linhas com 0 kWp s&atilde;o ignoradas</strong> e n&atilde;o aparecem nos gr&aacute;ficos.<br/>Sugest&atilde;o de inclina&ccedil;&atilde;o: &asymp; latitude (39&deg; em Lisboa). Orienta&ccedil;&atilde;o: 0&deg; N &middot; 90&deg; E &middot; 180&deg; S &middot; 270&deg; O.</span>
-            </span>
-          </div>
-          <div class="pv-group">
-            <span class="pv-group__tag" style="background: #38bdf8">1</span>
-            <input type="number" id="pvKp0" min="0" max="1000" step="0.01" inputmode="decimal" placeholder="0" />
-            <input type="number" id="pvTilt0" min="0" max="90" step="1" inputmode="numeric" placeholder="0" />
-            <input type="number" id="pvAz0" min="0" max="360" step="1" inputmode="numeric" placeholder="0" />
-          </div>
-          <div class="pv-group">
-            <span class="pv-group__tag" style="background: #818cf8">2</span>
-            <input type="number" id="pvKp1" min="0" max="1000" step="0.01" inputmode="decimal" placeholder="0" />
-            <input type="number" id="pvTilt1" min="0" max="90" step="1" inputmode="numeric" placeholder="0" />
-            <input type="number" id="pvAz1" min="0" max="360" step="1" inputmode="numeric" placeholder="0" />
-          </div>
-          <div class="pv-group">
-            <span class="pv-group__tag" style="background: #34d399">3</span>
-            <input type="number" id="pvKp2" min="0" max="1000" step="0.01" inputmode="decimal" placeholder="0" />
-            <input type="number" id="pvTilt2" min="0" max="90" step="1" inputmode="numeric" placeholder="0" />
-            <input type="number" id="pvAz2" min="0" max="360" step="1" inputmode="numeric" placeholder="0" />
-          </div>
-          <div class="pv-group">
-            <span class="pv-group__tag" style="background: #fb7185">4</span>
-            <input type="number" id="pvKp3" min="0" max="1000" step="0.01" inputmode="decimal" placeholder="0" />
-            <input type="number" id="pvTilt3" min="0" max="90" step="1" inputmode="numeric" placeholder="0" />
-            <input type="number" id="pvAz3" min="0" max="360" step="1" inputmode="numeric" placeholder="0" />
+        <!-- Secção 1: Painéis & Orientações -->
+        <div class="pv-config__section">
+          <div class="pv-config__section-title" data-i18n="pv.sec.panels">Painéis Solares &amp; Orientações</div>
+          <div class="pv-groups">
+            <div class="pv-group pv-group--head">
+              <span class="pv-group__tag pv-group__tag--head"></span>
+              <span data-i18n="pv.head.power">Pot&ecirc;ncia (kWp)</span>
+              <span data-i18n="pv.head.tilt">Inclina&ccedil;&atilde;o (&deg;)</span>
+              <span data-i18n="pv.head.az">Orienta&ccedil;&atilde;o (&deg;)</span>
+              <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre múltiplas orientações" data-i18n-aria="pv.tip.groups.aria">
+                <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                <span class="pv-tip__text" data-i18n-html="pv.tip.groups">Apoia at&eacute; <strong>4 orienta&ccedil;&otilde;es</strong> (ex.: telhados com pain&eacute;is em v&aacute;rias &aacute;guas). Cada linha &eacute; um grupo com a sua pot&ecirc;ncia (kWp), inclina&ccedil;&atilde;o e orienta&ccedil;&atilde;o.<br/><strong>Linhas com 0 kWp s&atilde;o ignoradas</strong> e n&atilde;o aparecem nos gr&aacute;ficos.<br/>Sugest&atilde;o de inclina&ccedil;&atilde;o: &asymp; latitude (39&deg; em Lisboa). Orienta&ccedil;&atilde;o: 0&deg; N &middot; 90&deg; E &middot; 180&deg; S &middot; 270&deg; O.</span>
+              </span>
+            </div>
+            <div class="pv-group">
+              <span class="pv-group__tag" style="background: #38bdf8">1</span>
+              <input type="number" id="pvKp0" min="0" max="1000" step="0.01" inputmode="decimal" placeholder="0" />
+              <input type="number" id="pvTilt0" min="0" max="90" step="1" inputmode="numeric" placeholder="0" />
+              <input type="number" id="pvAz0" min="0" max="360" step="1" inputmode="numeric" placeholder="0" />
+            </div>
+            <div class="pv-group">
+              <span class="pv-group__tag" style="background: #818cf8">2</span>
+              <input type="number" id="pvKp1" min="0" max="1000" step="0.01" inputmode="decimal" placeholder="0" />
+              <input type="number" id="pvTilt1" min="0" max="90" step="1" inputmode="numeric" placeholder="0" />
+              <input type="number" id="pvAz1" min="0" max="360" step="1" inputmode="numeric" placeholder="0" />
+            </div>
+            <div class="pv-group">
+              <span class="pv-group__tag" style="background: #34d399">3</span>
+              <input type="number" id="pvKp2" min="0" max="1000" step="0.01" inputmode="decimal" placeholder="0" />
+              <input type="number" id="pvTilt2" min="0" max="90" step="1" inputmode="numeric" placeholder="0" />
+              <input type="number" id="pvAz2" min="0" max="360" step="1" inputmode="numeric" placeholder="0" />
+            </div>
+            <div class="pv-group">
+              <span class="pv-group__tag" style="background: #fb7185">4</span>
+              <input type="number" id="pvKp3" min="0" max="1000" step="0.01" inputmode="decimal" placeholder="0" />
+              <input type="number" id="pvTilt3" min="0" max="90" step="1" inputmode="numeric" placeholder="0" />
+              <input type="number" id="pvAz3" min="0" max="360" step="1" inputmode="numeric" placeholder="0" />
+            </div>
           </div>
         </div>
-        <label class="pv-field">
-          <span class="pv-field__head">
-            <span data-i18n="pv.field.eff">Rendimento (%)</span>
-            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre rendimento" data-i18n-aria="pv.tip.eff.aria">
-              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.eff">Perdas reais do sistema: inversor, cabos, temperatura dos m&oacute;dulos e sujidade. Valor t&iacute;pico: 75&ndash;85%.</span>
-            </span>
-          </span>
-          <input type="number" id="pvEff" min="5" max="100" step="1" required />
-        </label>
-        <label class="pv-field">
-          <span class="pv-field__head">
-            <span data-i18n="pv.field.tarifftype">Tipo de tarifa</span>
-            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tipo de tarifa" data-i18n-aria="pv.tip.tarifftype.aria">
-              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.tarifftype">Escolhe entre <strong>Tarifa Simples</strong> (pre&ccedil;o fixo 24h) ou <strong>Bi-hor&aacute;ria</strong> (pre&ccedil;os diferenciados dia/noite e fins de semana segundo a ERSE).</span>
-            </span>
-          </span>
-          <select id="pvTariffType">
-            <option value="simple" data-i18n="pv.tariff.simple">Simples (fixa 24h)</option>
-            <option value="bi-hourly" data-i18n="pv.tariff.bihourly">Bi-hor&aacute;ria (dia/noite)</option>
-          </select>
-        </label>
-        <label class="pv-field" id="pvTariffSimpleBox">
-          <span class="pv-field__head">
-            <span data-i18n="pv.field.tariff">Tarifa (&euro;/kWh)</span>
-            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tarifa" data-i18n-aria="pv.tip.tariff.aria">
-              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.tariff">Pre&ccedil;o m&eacute;dio da energia para estimar o valor da produ&ccedil;&atilde;o em euros. Valor meramente indicativo &mdash; n&atilde;o substitui o teu contrato de fornecimento.</span>
-            </span>
-          </span>
-          <input type="number" id="pvTariff" min="0" max="5" step="0.001" placeholder="0.182" />
-        </label>
-        <label class="pv-field" id="pvCycleBox" hidden>
-          <span class="pv-field__head">
-            <span data-i18n="pv.field.cycle">Ciclo bi-hor&aacute;rio</span>
-            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre ciclo bi-horário" data-i18n-aria="pv.tip.cycle.aria">
-              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.cycle"><strong>Ciclo Di&aacute;rio:</strong> Vazio das 22h &agrave;s 08h todos os dias.<br/><strong>Ciclo Semanal:</strong> Dias &uacute;teis (vazio 00h&ndash;07h), S&aacute;bado (vazio 00h&ndash;09h, 14h&ndash;20h, 22h&ndash;24h), Domingo (vazio 24h).</span>
-            </span>
-          </span>
-          <select id="pvTariffCycle">
-            <option value="daily" data-i18n="pv.cycle.daily">Ciclo Di&aacute;rio</option>
-            <option value="weekly" data-i18n="pv.cycle.weekly">Ciclo Semanal</option>
-          </select>
-        </label>
-        <label class="pv-field" id="pvTariffPeakBox" hidden>
-          <span class="pv-field__head">
-            <span data-i18n="pv.field.tariffpeak">Tarifa Dia / Fora Vazio (&euro;/kWh)</span>
-            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tarifa fora de vazio" data-i18n-aria="pv.tip.tariffpeak.aria">
-              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.tariffpeak">Pre&ccedil;o da eletricidade nas horas diurnas (fora de vazio). Tipicamente 0,18 a 0,25 &euro;/kWh.</span>
-            </span>
-          </span>
-          <input type="number" id="pvTariffPeak" min="0" max="5" step="0.001" placeholder="0.210" />
-        </label>
-        <label class="pv-field" id="pvTariffOffPeakBox" hidden>
-          <span class="pv-field__head">
-            <span data-i18n="pv.field.tariffoffpeak">Tarifa Noite / Vazio (&euro;/kWh)</span>
-            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tarifa de vazio" data-i18n-aria="pv.tip.tariffoffpeak.aria">
-              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.tariffoffpeak">Pre&ccedil;o da eletricidade nas horas econ&oacute;micas (vazio). Tipicamente 0,10 a 0,13 &euro;/kWh.</span>
-            </span>
-          </span>
-          <input type="number" id="pvTariffOffPeak" min="0" max="5" step="0.001" placeholder="0.115" />
-        </label>
-        <label class="pv-field">
-          <span class="pv-field__head">
-            <span data-i18n="pv.field.battery">Bateria (kWh)</span>
-            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre capacidade da bateria" data-i18n-aria="pv.tip.battery.aria">
-              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.battery">Capacidade útil de armazenamento em bateria residencial. Define <strong>0</strong> se o teu sistema não tiver bateria. Valores comuns: 5 ou 10 kWh.</span>
-            </span>
-          </span>
-          <input type="number" id="pvBattery" min="0" max="100" step="0.01" inputmode="decimal" placeholder="0" />
-        </label>
-        <label class="pv-field">
-          <span class="pv-field__head">
-            <span data-i18n="pv.field.battminsoc">Reserva m&iacute;n. (%)</span>
-            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre reserva mínima da bateria" data-i18n-aria="pv.tip.battminsoc.aria">
-              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.battminsoc">N&iacute;vel m&iacute;nimo de carga (SoC) abaixo do qual a bateria cessa a descarga para proteger as c&eacute;lulas e manter reserva de emerg&ecirc;ncia (0% a 100%). Padr&atilde;o: 20%.</span>
-            </span>
-          </span>
-          <input type="number" id="pvBattMinSoc" min="0" max="100" step="1" inputmode="numeric" placeholder="20" />
-        </label>
-        <label class="pv-field">
-          <span class="pv-field__head">
-            <span data-i18n="pv.field.baseload">Consumo diário (kWh)</span>
-            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre consumo diário da casa" data-i18n-aria="pv.tip.baseload.aria">
-              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.baseload">Consumo diário total da habitação em kWh (ex.: fatura mensal a dividir por 30 dias). Valores típicos: 8 a 15 kWh/dia.</span>
-            </span>
-          </span>
-          <input type="number" id="pvDailyKwh" min="0" max="500" step="0.1" inputmode="decimal" placeholder="10.0" />
-        </label>
-        <label class="pv-field">
-          <span class="pv-field__head">
-            <span data-i18n="pv.field.export">Inje&ccedil;&atilde;o (&euro;/kWh)</span>
-            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tarifa de injeção" data-i18n-aria="pv.tip.export.aria">
-              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.export">Remuneração paga pelo excedente solar injetado na rede elétrica. Tipicamente cerca de 0,04 a 0,07 €/kWh.</span>
-            </span>
-          </span>
-          <input type="number" id="pvExportTariff" min="0" max="5" step="0.001" inputmode="decimal" placeholder="0.050" />
-        </label>
-        <label class="pv-field">
-          <span class="pv-field__head">
-            <span data-i18n="pv.field.thermal">Efeito t&eacute;rmico</span>
-            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre efeito térmico" data-i18n-aria="pv.tip.thermal.aria">
-              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.thermal"><strong>Inclu&iacute;do no rendimento</strong> &mdash; o fator t&eacute;rmico &eacute; um valor fixo dentro do rendimento (t&iacute;pico 75&ndash;85%).<br/><strong>Temperatura real</strong> &mdash; usa a temperatura do dia &agrave; hora a hora: os m&oacute;dulos perdem ~0,4% por cada &deg;C acima de 25&deg;C (NOCT 45&deg;C). Com esta op&ccedil;&atilde;o, o rendimento refere-se apenas a outras perdas (inversor, cabos, sujidade &mdash; t&iacute;pico 90&ndash;95%); o efeito da temperatura &eacute; somado automaticamente, individualmente por orienta&ccedil;&atilde;o.</span>
-            </span>
-          </span>
-          <select id="pvThermal">
-            <option value="fixed" data-i18n="pv.thermal.fixed">Inclu&iacute;do no rendimento (fixo)</option>
-            <option value="temp" data-i18n="pv.thermal.temp">Temperatura real (hora a hora)</option>
-          </select>
-        </label>
+
+        <!-- Secção 2: Tarifário de Eletricidade & Rede -->
+        <div class="pv-config__section" id="pvTariffSection">
+          <div class="pv-config__section-title" data-i18n="pv.sec.tariff">Tarifário de Eletricidade &amp; Rede</div>
+          <div class="pv-config__grid">
+            <label class="pv-field">
+              <span class="pv-field__head">
+                <span data-i18n="pv.field.tarifftype">Tipo de tarifa</span>
+                <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tipo de tarifa" data-i18n-aria="pv.tip.tarifftype.aria">
+                  <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                  <span class="pv-tip__text" data-i18n-html="pv.tip.tarifftype">Escolhe entre <strong>Tarifa Simples</strong> (pre&ccedil;o fixo 24h) ou <strong>Bi-hor&aacute;ria</strong> (pre&ccedil;os diferenciados dia/noite e fins de semana segundo a ERSE).</span>
+                </span>
+              </span>
+              <select id="pvTariffType">
+                <option value="simple" data-i18n="pv.tariff.simple">Simples (fixa 24h)</option>
+                <option value="bi-hourly" data-i18n="pv.tariff.bihourly">Bi-hor&aacute;ria (dia/noite)</option>
+              </select>
+            </label>
+            <label class="pv-field" id="pvTariffSimpleBox">
+              <span class="pv-field__head">
+                <span data-i18n="pv.field.tariff">Tarifa (&euro;/kWh)</span>
+                <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tarifa" data-i18n-aria="pv.tip.tariff.aria">
+                  <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                  <span class="pv-tip__text" data-i18n-html="pv.tip.tariff">Pre&ccedil;o m&eacute;dio da energia para estimar o valor da produ&ccedil;&atilde;o em euros. Valor meramente indicativo &mdash; n&atilde;o substitui o teu contrato de fornecimento.</span>
+                </span>
+              </span>
+              <input type="number" id="pvTariff" min="0" max="5" step="0.001" placeholder="0.182" />
+            </label>
+            <label class="pv-field" id="pvCycleBox" hidden>
+              <span class="pv-field__head">
+                <span data-i18n="pv.field.cycle">Ciclo bi-hor&aacute;rio</span>
+                <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre ciclo bi-horário" data-i18n-aria="pv.tip.cycle.aria">
+                  <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                  <span class="pv-tip__text" data-i18n-html="pv.tip.cycle"><strong>Ciclo Di&aacute;rio:</strong> Vazio das 22h &agrave;s 08h todos os dias.<br/><strong>Ciclo Semanal:</strong> Dias &uacute;teis (vazio 00h&ndash;07h), S&aacute;bado (vazio 00h&ndash;09h, 14h&ndash;20h, 22h&ndash;24h), Domingo (vazio 24h).</span>
+                </span>
+              </span>
+              <select id="pvTariffCycle">
+                <option value="daily" data-i18n="pv.cycle.daily">Ciclo Di&aacute;rio</option>
+                <option value="weekly" data-i18n="pv.cycle.weekly">Ciclo Semanal</option>
+              </select>
+            </label>
+            <label class="pv-field" id="pvTariffPeakBox" hidden>
+              <span class="pv-field__head">
+                <span data-i18n="pv.field.tariffpeak">Tarifa Dia / Fora Vazio (&euro;/kWh)</span>
+                <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tarifa fora de vazio" data-i18n-aria="pv.tip.tariffpeak.aria">
+                  <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                  <span class="pv-tip__text" data-i18n-html="pv.tip.tariffpeak">Pre&ccedil;o da eletricidade nas horas diurnas (fora de vazio). Tipicamente 0,18 a 0,25 &euro;/kWh.</span>
+                </span>
+              </span>
+              <input type="number" id="pvTariffPeak" min="0" max="5" step="0.001" placeholder="0.210" />
+            </label>
+            <label class="pv-field" id="pvTariffOffPeakBox" hidden>
+              <span class="pv-field__head">
+                <span data-i18n="pv.field.tariffoffpeak">Tarifa Noite / Vazio (&euro;/kWh)</span>
+                <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tarifa de vazio" data-i18n-aria="pv.tip.tariffoffpeak.aria">
+                  <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                  <span class="pv-tip__text" data-i18n-html="pv.tip.tariffoffpeak">Pre&ccedil;o da eletricidade nas horas econ&oacute;micas (vazio). Tipicamente 0,10 a 0,13 &euro;/kWh.</span>
+                </span>
+              </span>
+              <input type="number" id="pvTariffOffPeak" min="0" max="5" step="0.001" placeholder="0.115" />
+            </label>
+            <label class="pv-field">
+              <span class="pv-field__head">
+                <span data-i18n="pv.field.export">Inje&ccedil;&atilde;o (&euro;/kWh)</span>
+                <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tarifa de injeção" data-i18n-aria="pv.tip.export.aria">
+                  <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                  <span class="pv-tip__text" data-i18n-html="pv.tip.export">Remuneração paga pelo excedente solar injetado na rede elétrica. Tipicamente cerca de 0,04 a 0,07 €/kWh.</span>
+                </span>
+              </span>
+              <input type="number" id="pvExportTariff" min="0" max="5" step="0.001" inputmode="decimal" placeholder="0.050" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Secção 3: Bateria & Consumo Residencial -->
+        <div class="pv-config__section">
+          <div class="pv-config__section-title" data-i18n="pv.sec.battery">Bateria &amp; Consumo Residencial</div>
+          <div class="pv-config__grid">
+            <label class="pv-field">
+              <span class="pv-field__head">
+                <span data-i18n="pv.field.battery">Bateria (kWh)</span>
+                <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre capacidade da bateria" data-i18n-aria="pv.tip.battery.aria">
+                  <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                  <span class="pv-tip__text" data-i18n-html="pv.tip.battery">Capacidade útil de armazenamento em bateria residencial. Define <strong>0</strong> se o teu sistema não tiver bateria. Valores comuns: 5 ou 10 kWh.</span>
+                </span>
+              </span>
+              <input type="number" id="pvBattery" min="0" max="100" step="0.01" inputmode="decimal" placeholder="0" />
+            </label>
+            <label class="pv-field">
+              <span class="pv-field__head">
+                <span data-i18n="pv.field.battminsoc">Reserva m&iacute;n. (%)</span>
+                <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre reserva mínima da bateria" data-i18n-aria="pv.tip.battminsoc.aria">
+                  <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                  <span class="pv-tip__text" data-i18n-html="pv.tip.battminsoc">N&iacute;vel m&iacute;nimo de carga (SoC) abaixo do qual a bateria cessa a descarga para proteger as c&eacute;lulas e manter reserva de emerg&ecirc;ncia (0% a 100%). Padr&atilde;o: 20%.</span>
+                </span>
+              </span>
+              <input type="number" id="pvBattMinSoc" min="0" max="100" step="1" inputmode="numeric" placeholder="20" />
+            </label>
+            <label class="pv-field">
+              <span class="pv-field__head">
+                <span data-i18n="pv.field.baseload">Consumo diário (kWh)</span>
+                <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre consumo diário da casa" data-i18n-aria="pv.tip.baseload.aria">
+                  <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                  <span class="pv-tip__text" data-i18n-html="pv.tip.baseload">Consumo diário total da habitação em kWh (ex.: fatura mensal a dividir por 30 dias). Valores típicos: 8 a 15 kWh/dia.</span>
+                </span>
+              </span>
+              <input type="number" id="pvDailyKwh" min="0" max="500" step="0.1" inputmode="decimal" placeholder="10.0" />
+            </label>
+          </div>
+        </div>
+
+        <!-- Secção 4: Rendimento & Efeito Térmico -->
+        <div class="pv-config__section">
+          <div class="pv-config__section-title" data-i18n="pv.sec.efficiency">Rendimento &amp; Modelo Térmico</div>
+          <div class="pv-config__grid">
+            <label class="pv-field">
+              <span class="pv-field__head">
+                <span data-i18n="pv.field.eff">Rendimento (%)</span>
+                <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre rendimento" data-i18n-aria="pv.tip.eff.aria">
+                  <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                  <span class="pv-tip__text" data-i18n-html="pv.tip.eff">Perdas reais do sistema: inversor, cabos, temperatura dos m&oacute;dulos e sujidade. Valor t&iacute;pico: 75&ndash;85%.</span>
+                </span>
+              </span>
+              <input type="number" id="pvEff" min="5" max="100" step="1" required />
+            </label>
+            <label class="pv-field">
+              <span class="pv-field__head">
+                <span data-i18n="pv.field.thermal">Efeito t&eacute;rmico</span>
+                <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre efeito térmico" data-i18n-aria="pv.tip.thermal.aria">
+                  <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                  <span class="pv-tip__text" data-i18n-html="pv.tip.thermal"><strong>Inclu&iacute;do no rendimento</strong> &mdash; o fator t&eacute;rmico &eacute; um valor fixo dentro do rendimento (t&iacute;pico 75&ndash;85%).<br/><strong>Temperatura real</strong> &mdash; usa a temperatura do dia &agrave; hora a hora: os m&oacute;dulos perdem ~0,4% por cada &deg;C acima de 25&deg;C (NOCT 45&deg;C). Com esta op&ccedil;&atilde;o, o rendimento refere-se apenas a outras perdas (inversor, cabos, sujidade &mdash; t&iacute;pico 90&ndash;95%); o efeito da temperatura &eacute; somado automaticamente, individualmente por orienta&ccedil;&atilde;o.</span>
+                </span>
+              </span>
+              <select id="pvThermal">
+                <option value="fixed" data-i18n="pv.thermal.fixed">Inclu&iacute;do no rendimento (fixo)</option>
+                <option value="temp" data-i18n="pv.thermal.temp">Temperatura real (hora a hora)</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
         <div class="pv-config__actions">
           <button type="submit" class="chip chip--primary" data-i18n="pv.save">Guardar</button>
           <button type="button" class="chip" id="pvReset" data-i18n="pv.reset">Repor automático</button>
@@ -475,7 +502,7 @@
     <footer class="footer">
       <span><span data-i18n="footer.source">Fonte:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
       <span><a href="manual.html" data-i18n="footer.manual">Manual de utilização</a></span>
-      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.9.0</span></span>
+      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.9.1</span></span>
     </footer>
   </main>
 

@@ -4,7 +4,7 @@
 * **Application:** SolMeteo (Solar & Meteorological Forecast PWA)
 * **Architecture:** Static single-page application (Vanilla JS, CSS3, HTML5) with zero dependencies.
 * **Data Sources:** Open-Meteo APIs (Forecast, Geocoding, Air Quality) + IP geolocation fallback.
-* **Current Version:** `2.9.0` (Production live on `main`)
+* **Current Version:** `2.9.1` (Production live on `main`)
 * **Live Deployment:** GitHub Pages (`https://rjduraocosta.github.io/solmeteo/`) from `main` branch.
 
 ---
@@ -36,6 +36,7 @@
 
 | Version | Milestone Date | Summary of Changes |
 | :--- | :--- | :--- |
+| **v2.9.1** | 2026-11-04 | Direct tariff access chip, categorized PV configuration sections, complete manual table (15 fields) & ERSE timetable sync, and governance rules 6-8 in AGENTS.md. |
 | **v2.9.0** | 2026-11-04 | Bi-hourly tariff modeling (ERSE daily & weekly cycles), hourly economic evaluation, clarified self-consumption & battery metric breakdown. |
 | **v2.8.0** | 2026-11-04 | Battery storage simulation, baseload modeling, energy balance dashboard, self-consumption partition bar, manual section 5.6. |
 | **v2.7.0** | 2026-11-04 | Instantaneous power curve (kW), view mode toggle (Both/kWh/kW), peak power badge, per-array peak kW, and manual section 5.5. |

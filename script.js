@@ -112,6 +112,7 @@ const els = {
   pvPanel: document.getElementById("pvPanel"),
   pvSpan: document.getElementById("pvSpan"),
   pvSummary: document.getElementById("pvSummary"),
+  pvTariffChip: document.getElementById("pvTariffChip"),
   pvConfigBtn: document.getElementById("pvConfigBtn"),
   pvConfig: document.getElementById("pvConfig"),
   pvGroups: [0, 1, 2, 3].map((i) => ({
@@ -188,7 +189,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.9.0";
+const APP_VERSION = "2.9.1";
 
 const LANG_KEY = "skycast:lang";
 const I18N = {
@@ -324,6 +325,15 @@ const I18N = {
     "pv.field.tarifftype": "Tipo de tarifa",
     "pv.tip.tarifftype.aria": "Ajuda sobre tipo de tarifa",
     "pv.tip.tarifftype": "Escolhe entre <strong>Tarifa Simples</strong> (preço fixo 24h) ou <strong>Bi-horária</strong> (preços diferenciados dia/noite e fins de semana segundo a ERSE).",
+    "pv.tariff.chiptitle": "Alterar tarifário de eletricidade",
+    "pv.tariff.badge_simple": "Tarifa Simples",
+    "pv.tariff.badge_bihourly": "Tarifa Bi-horária",
+    "pv.cycle.short_daily": "Diário",
+    "pv.cycle.short_weekly": "Semanal",
+    "pv.sec.panels": "Painéis Solares & Orientações",
+    "pv.sec.tariff": "Tarifário de Eletricidade & Rede",
+    "pv.sec.battery": "Bateria & Consumo Residencial",
+    "pv.sec.efficiency": "Rendimento & Modelo Térmico",
     "pv.tariff.simple": "Simples (fixa 24h)",
     "pv.tariff.bihourly": "Bi-horária (dia/noite)",
     "pv.field.cycle": "Ciclo bi-horário",
@@ -483,6 +493,15 @@ const I18N = {
     "pv.field.tarifftype": "Tariff type",
     "pv.tip.tarifftype.aria": "Help on tariff type",
     "pv.tip.tarifftype": "Choose between <strong>Flat Tariff</strong> (fixed 24h rate) or <strong>Bi-hourly Tariff</strong> (differentiated peak/off-peak rates according to ERSE regulations).",
+    "pv.tariff.chiptitle": "Change electricity tariff",
+    "pv.tariff.badge_simple": "Flat Tariff",
+    "pv.tariff.badge_bihourly": "Bi-Hourly Tariff",
+    "pv.cycle.short_daily": "Daily",
+    "pv.cycle.short_weekly": "Weekly",
+    "pv.sec.panels": "Solar Panels & Orientations",
+    "pv.sec.tariff": "Electricity Tariff & Grid",
+    "pv.sec.battery": "Battery & Household Consumption",
+    "pv.sec.efficiency": "Efficiency & Thermal Model",
     "pv.tariff.simple": "Flat (fixed 24h)",
     "pv.tariff.bihourly": "Bi-hourly (day/night)",
     "pv.field.cycle": "Bi-hourly cycle",
@@ -1453,6 +1472,14 @@ function pvConfigPreview() {
     : `${fmtTariff(s.tariff)} €/kWh`;
   els.pvSummary.textContent =
     `${fmtDec(total)} kWp ${names ? "[" + names + "]" : ""} · ${s.eff}% · ${tariffStr} · ${thermal}${battInfo}`;
+  if (els.pvTariffChip) {
+    if (s.tariffType === "bi-hourly") {
+      const cycleName = s.tariffCycle === "weekly" ? t("pv.cycle.short_weekly") : t("pv.cycle.short_daily");
+      els.pvTariffChip.textContent = `${t("pv.tariff.badge_bihourly")} (${fmtTariff(s.tariffPeak)} / ${fmtTariff(s.tariffOffPeak)} € · ${cycleName})`;
+    } else {
+      els.pvTariffChip.textContent = `${t("pv.tariff.badge_simple")} (${fmtTariff(s.tariff)} €/kWh)`;
+    }
+  }
 }
 
 function fmtTariff(v) {
@@ -2170,6 +2197,23 @@ function buildPvChart(production, opts = {}) {
       ${peakMarker}
     </svg>
   `;
+}
+
+if (els.pvTariffChip) {
+  els.pvTariffChip.addEventListener("click", () => {
+    els.pvConfig.hidden = false;
+    els.pvConfigBtn.setAttribute("aria-expanded", "true");
+    pvFillForm();
+    const sec = document.getElementById("pvTariffSection");
+    if (sec) {
+      sec.scrollIntoView({ behavior: "smooth", block: "center" });
+      sec.classList.add("highlight-pulse");
+      setTimeout(() => sec.classList.remove("highlight-pulse"), 1600);
+    }
+    if (els.pvTariffType) {
+      els.pvTariffType.focus();
+    }
+  });
 }
 
 if (els.pvTariffType) {

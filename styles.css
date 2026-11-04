@@ -1054,15 +1054,74 @@ body {
 }
 
 .pv-config {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   padding: 16px;
   margin-bottom: 16px;
   background: var(--panel-strong);
   border: 1px solid var(--border);
   border-radius: 16px;
   animation: dropdown 0.18s ease both;
+}
+
+.pv-config__section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+[data-theme="light"] .pv-config__section {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.07);
+}
+
+.pv-config__section.highlight-pulse {
+  border-color: rgba(56, 189, 248, 0.9) !important;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.35) !important;
+}
+
+.pv-config__section-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pv-config__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+}
+
+.chip--tariff {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.38);
+  color: #fbbf24;
+  font-weight: 500;
+}
+.chip--tariff:hover {
+  background: rgba(245, 158, 11, 0.22);
+  border-color: rgba(245, 158, 11, 0.65);
+}
+
+[data-theme="light"] .chip--tariff {
+  background: rgba(217, 119, 6, 0.1);
+  border-color: rgba(217, 119, 6, 0.35);
+  color: #b45309;
+}
+[data-theme="light"] .chip--tariff:hover {
+  background: rgba(217, 119, 6, 0.18);
+  border-color: rgba(217, 119, 6, 0.55);
 }
 
 .pv-groups {
