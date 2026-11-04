@@ -142,6 +142,14 @@ const els = {
   statAqi: document.getElementById("statAqi"),
   statAqiBox: document.getElementById("statAqiBox"),
   themeBtn: document.getElementById("themeBtn"),
+  pvTariffType: document.getElementById("pvTariffType"),
+  pvTariffSimpleBox: document.getElementById("pvTariffSimpleBox"),
+  pvCycleBox: document.getElementById("pvCycleBox"),
+  pvTariffCycle: document.getElementById("pvTariffCycle"),
+  pvTariffPeakBox: document.getElementById("pvTariffPeakBox"),
+  pvTariffPeak: document.getElementById("pvTariffPeak"),
+  pvTariffOffPeakBox: document.getElementById("pvTariffOffPeakBox"),
+  pvTariffOffPeak: document.getElementById("pvTariffOffPeak"),
   pvBattery: document.getElementById("pvBattery"),
   pvBattMinSoc: document.getElementById("pvBattMinSoc"),
   pvDailyKwh: document.getElementById("pvDailyKwh"),
@@ -313,12 +321,31 @@ const I18N = {
     "pv.field.export": "Injeção (€/kWh)",
     "pv.tip.export.aria": "Ajuda sobre tarifa de injeção",
     "pv.tip.export": "Remuneração paga pelo excedente solar injetado na rede elétrica. Tipicamente cerca de 0,04 a 0,07 €/kWh.",
+    "pv.field.tarifftype": "Tipo de tarifa",
+    "pv.tip.tarifftype.aria": "Ajuda sobre tipo de tarifa",
+    "pv.tip.tarifftype": "Escolhe entre <strong>Tarifa Simples</strong> (preço fixo 24h) ou <strong>Bi-horária</strong> (preços diferenciados dia/noite e fins de semana segundo a ERSE).",
+    "pv.tariff.simple": "Simples (fixa 24h)",
+    "pv.tariff.bihourly": "Bi-horária (dia/noite)",
+    "pv.field.cycle": "Ciclo bi-horário",
+    "pv.tip.cycle.aria": "Ajuda sobre ciclo bi-horário",
+    "pv.tip.cycle": "<strong>Ciclo Diário:</strong> Vazio das 22h às 08h todos os dias.<br/><strong>Ciclo Semanal:</strong> Dias úteis (vazio 00h–07h), Sábado (vazio 00h–09h, 14h–20h, 22h–24h), Domingo (vazio 24h).",
+    "pv.cycle.daily": "Ciclo Diário",
+    "pv.cycle.weekly": "Ciclo Semanal",
+    "pv.field.tariffpeak": "Tarifa Dia / Fora Vazio (€/kWh)",
+    "pv.tip.tariffpeak.aria": "Ajuda sobre tarifa fora de vazio",
+    "pv.tip.tariffpeak": "Preço da eletricidade nas horas diurnas (fora de vazio). Tipicamente 0,18 a 0,25 €/kWh.",
+    "pv.field.tariffoffpeak": "Tarifa Noite / Vazio (€/kWh)",
+    "pv.tip.tariffoffpeak.aria": "Ajuda sobre tarifa de vazio",
+    "pv.tip.tariffoffpeak": "Preço da eletricidade nas horas económicas (vazio). Tipicamente 0,10 a 0,13 €/kWh.",
+    "pv.cmp.bihourly": "Produção total das {0} orientações: <strong>{1} kWh</strong> · economia ≈ <strong>{2} €</strong> com tarifa bi-horária ({3} € dia / {4} € noite) — {5}",
     "pv.balance.title": "Autoconsumo & Bateria",
     "pv.balance.sub": "Balanço das 24h",
-    "pv.metric.self": "Autoconsumo Solar",
+    "pv.metric.self": "Autoconsumo Total",
     "pv.metric.self.sub": "{0}% autossuficiente",
-    "pv.metric.batt": "Bateria (Ciclo)",
+    "pv.metric.self.detail": "{0} kWh sol + {1} kWh bat · {2}% autossuficiente",
+    "pv.metric.batt": "Bateria (Descarga)",
     "pv.metric.batt.soc": "SoC final: {0}%",
+    "pv.metric.batt.detail": "Carregou {0} kWh · SoC: {1}%",
     "pv.metric.export": "Injetado na Rede",
     "pv.metric.import": "Importado da Rede",
     "pv.metric.cost": "Custo: {0} €",
@@ -453,12 +480,31 @@ const I18N = {
     "pv.field.export": "Grid feed-in (€/kWh)",
     "pv.tip.export.aria": "Help on grid feed-in tariff",
     "pv.tip.export": "Remuneration rate for solar surplus injected back into the grid. Typically ~0.04 to 0.07 €/kWh.",
+    "pv.field.tarifftype": "Tariff type",
+    "pv.tip.tarifftype.aria": "Help on tariff type",
+    "pv.tip.tarifftype": "Choose between <strong>Flat Tariff</strong> (fixed 24h rate) or <strong>Bi-hourly Tariff</strong> (differentiated peak/off-peak rates according to ERSE regulations).",
+    "pv.tariff.simple": "Flat (fixed 24h)",
+    "pv.tariff.bihourly": "Bi-hourly (day/night)",
+    "pv.field.cycle": "Bi-hourly cycle",
+    "pv.tip.cycle.aria": "Help on bi-hourly cycle",
+    "pv.tip.cycle": "<strong>Daily Cycle:</strong> Off-peak from 22:00 to 08:00 every day.<br/><strong>Weekly Cycle:</strong> Weekdays (off-peak 00h–07h), Saturday (off-peak 00h–09h, 14h–20h, 22h–24h), Sunday (off-peak 24h).",
+    "pv.cycle.daily": "Daily Cycle",
+    "pv.cycle.weekly": "Weekly Cycle",
+    "pv.field.tariffpeak": "Peak Tariff / Day (€/kWh)",
+    "pv.tip.tariffpeak.aria": "Help on peak tariff",
+    "pv.tip.tariffpeak": "Electricity price during daytime peak hours. Typically 0.18 to 0.25 €/kWh.",
+    "pv.field.tariffoffpeak": "Off-Peak Tariff / Night (€/kWh)",
+    "pv.tip.tariffoffpeak.aria": "Help on off-peak tariff",
+    "pv.tip.tariffoffpeak": "Electricity price during economy off-peak hours. Typically 0.10 to 0.13 €/kWh.",
+    "pv.cmp.bihourly": "Total production from {0} orientations: <strong>{1} kWh</strong> · savings ≈ <strong>{2} €</strong> with bi-hourly tariff ({3} € day / {4} € night) — {5}",
     "pv.balance.title": "Self-Consumption & Battery",
     "pv.balance.sub": "24h Energy Balance",
-    "pv.metric.self": "Solar Self-Consumed",
+    "pv.metric.self": "Total Self-Consumed",
     "pv.metric.self.sub": "{0}% self-sufficient",
-    "pv.metric.batt": "Battery (Cycle)",
+    "pv.metric.self.detail": "{0} kWh sol + {1} kWh batt · {2}% self-sufficient",
+    "pv.metric.batt": "Battery (Discharge)",
     "pv.metric.batt.soc": "Final SoC: {0}%",
+    "pv.metric.batt.detail": "Charged {0} kWh · SoC: {1}%",
     "pv.metric.export": "Injected to Grid",
     "pv.metric.import": "Imported from Grid",
     "pv.metric.cost": "Cost: {0} €",
@@ -1324,7 +1370,11 @@ function pvDefaults(lat) {
   const tilt = Math.min(60, Math.max(5, Math.round(Math.abs(lat))));
   return {
     eff: 80,
+    tariffType: "simple",
+    tariffCycle: "daily",
     tariff: 0.15,
+    tariffPeak: 0.19,
+    tariffOffPeak: 0.11,
     thermal: "fixed",
     batteryCap: 0,
     battMinSoc: 20,
@@ -1370,7 +1420,11 @@ function loadPvSettings(lat) {
     }
     return {
       eff: Number(s.eff) || def.eff,
+      tariffType: s.tariffType === "bi-hourly" ? "bi-hourly" : "simple",
+      tariffCycle: s.tariffCycle === "weekly" ? "weekly" : "daily",
       tariff: s.tariff != null ? Number(s.tariff) : def.tariff,
+      tariffPeak: s.tariffPeak != null ? Number(s.tariffPeak) : (s.tariff != null ? Number(s.tariff) : def.tariffPeak),
+      tariffOffPeak: s.tariffOffPeak != null ? Number(s.tariffOffPeak) : def.tariffOffPeak,
       thermal: s.thermal === "temp" ? "temp" : "fixed",
       batteryCap: Math.max(0, Number(s.batteryCap) || 0),
       battMinSoc: s.battMinSoc != null ? Math.min(100, Math.max(0, Number(s.battMinSoc))) : def.battMinSoc,
@@ -1394,12 +1448,23 @@ function pvConfigPreview() {
   const names = active.map((g) => `${fmtDec(g.kwp)} kWp · ${compassName(g.az)} ${g.az}° · ${g.tilt}°`).join(" + ");
   const thermal = s.thermal === "temp" ? t("pv.thermal.saved.real") : t("pv.thermal.saved.fixed");
   const battInfo = s.batteryCap > 0 ? ` · ${fmtDec(s.batteryCap)} kWh bat (${s.battMinSoc != null ? s.battMinSoc : 20}% res)` : "";
+  const tariffStr = s.tariffType === "bi-hourly"
+    ? `${fmtTariff(s.tariffPeak)}/${fmtTariff(s.tariffOffPeak)} €/kWh (${s.tariffCycle === "weekly" ? "sem" : "dia"})`
+    : `${fmtTariff(s.tariff)} €/kWh`;
   els.pvSummary.textContent =
-    `${fmtDec(total)} kWp ${names ? "[" + names + "]" : ""} · ${s.eff}% · ${fmtTariff(s.tariff)} €/kWh · ${thermal}${battInfo}`;
+    `${fmtDec(total)} kWp ${names ? "[" + names + "]" : ""} · ${s.eff}% · ${tariffStr} · ${thermal}${battInfo}`;
 }
 
 function fmtTariff(v) {
   return Number(v).toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
+}
+
+function updateTariffVisibility(type) {
+  const isBi = type === "bi-hourly";
+  if (els.pvTariffSimpleBox) els.pvTariffSimpleBox.hidden = isBi;
+  if (els.pvCycleBox) els.pvCycleBox.hidden = !isBi;
+  if (els.pvTariffPeakBox) els.pvTariffPeakBox.hidden = !isBi;
+  if (els.pvTariffOffPeakBox) els.pvTariffOffPeakBox.hidden = !isBi;
 }
 
 function pvFillForm() {
@@ -1411,7 +1476,14 @@ function pvFillForm() {
     r.az.value = g.az;
   });
   els.pvEff.value = s.eff;
-  els.pvTariff.value = s.tariff;
+  if (els.pvTariffType) {
+    els.pvTariffType.value = s.tariffType || "simple";
+    updateTariffVisibility(els.pvTariffType.value);
+  }
+  if (els.pvTariffCycle) els.pvTariffCycle.value = s.tariffCycle || "daily";
+  if (els.pvTariff) els.pvTariff.value = s.tariff;
+  if (els.pvTariffPeak) els.pvTariffPeak.value = s.tariffPeak != null ? s.tariffPeak : 0.19;
+  if (els.pvTariffOffPeak) els.pvTariffOffPeak.value = s.tariffOffPeak != null ? s.tariffOffPeak : 0.11;
   els.pvThermal.value = s.thermal;
   if (els.pvBattery) els.pvBattery.value = s.batteryCap || 0;
   if (els.pvBattMinSoc) els.pvBattMinSoc.value = s.battMinSoc != null ? s.battMinSoc : 20;
@@ -1465,12 +1537,35 @@ function pvTempDerate(tamb, poa) {
 }
 
 
-function simulateBatteryAndConsumption(production, settings, initialSoc) {
+function getHourlyTariff(settings, dateStr, hour) {
+  if (settings.tariffType !== "bi-hourly") {
+    return settings.tariff || 0.15;
+  }
+  let isOffPeak = false;
+  if (settings.tariffCycle === "weekly" && dateStr) {
+    const [y, m, d] = dateStr.split("-").map(Number);
+    const dow = new Date(Date.UTC(y, m - 1, d)).getUTCDay(); // 0 = Sun, 6 = Sat
+    if (dow === 0) {
+      isOffPeak = true; // Sunday 24h
+    } else if (dow === 6) {
+      isOffPeak = hour < 9 || (hour >= 14 && hour < 20) || hour >= 22;
+    } else {
+      isOffPeak = hour < 7;
+    }
+  } else {
+    // Daily cycle: 22h-08h
+    isOffPeak = hour >= 22 || hour < 8;
+  }
+  return isOffPeak
+    ? (settings.tariffOffPeak != null ? settings.tariffOffPeak : 0.11)
+    : (settings.tariffPeak != null ? settings.tariffPeak : 0.19);
+}
+
+function simulateBatteryAndConsumption(production, settings, initialSoc, dateStr) {
   const cap = Math.max(0, settings.batteryCap || 0);
   const battMinSoc = Math.min(100, Math.max(0, settings.battMinSoc != null ? Number(settings.battMinSoc) : 20));
   const minSocKwh = cap * (battMinSoc / 100);
   const dailyKwh = Math.max(0, settings.dailyKwh != null ? settings.dailyKwh : 10);
-  const tariff = settings.tariff || 0.15;
   const exportTariff = settings.exportPrice != null ? settings.exportPrice : 0.05;
 
   // Typical residential hourly load weighting (averages 1.0x)
@@ -1556,13 +1651,26 @@ function simulateBatteryAndConsumption(production, settings, initialSoc) {
     };
   });
 
+  let totalSavingsDirect = 0;
+  let totalSavingsBattery = 0;
+  let totalGridCost = 0;
+  let totalExportRevenue = 0;
+
+  hourly.forEach((h) => {
+    const rate = getHourlyTariff(settings, dateStr, h.hour);
+    totalSavingsDirect += h.direct * rate;
+    totalSavingsBattery += h.discharge * rate;
+    totalGridCost += h.gridImport * rate;
+    totalExportRevenue += h.gridExport * exportTariff;
+  });
+
   const totalSelfConsumed = totalSelfDirect + totalBatteryDischarge;
   const selfConsumptionRate = totalSolar > 0 ? Math.min(100, (totalSelfConsumed / totalSolar) * 100) : 0;
   const selfSufficiencyRate = totalLoad > 0 ? Math.min(100, (totalSelfConsumed / totalLoad) * 100) : 0;
-  const savingsDirect = totalSelfConsumed * tariff;
-  const exportRevenue = totalGridExport * exportTariff;
+  const savingsDirect = totalSavingsDirect + totalSavingsBattery;
+  const exportRevenue = totalExportRevenue;
   const totalFinancialBenefit = savingsDirect + exportRevenue;
-  const gridCost = totalGridImport * tariff;
+  const gridCost = totalGridCost;
 
   return {
     cap,
@@ -1688,7 +1796,7 @@ function renderPv(data, day) {
 
   const sumProd = times.map((_, i) => perGroup.reduce((a, pg) => a + pg.prod[i], 0));
   const total = sumProd.reduce((a, b) => a + b, 0);
-  const euros = total * settings.tariff;
+  const euros = times.map((t, i) => sumProd[i] * getHourlyTariff(settings, t.slice(0, 10), Number(t.slice(11, 13)))).reduce((a, b) => a + b, 0);
   const thermalNote =
     settings.thermal === "temp"
       ? t("pv.thermal.real")
@@ -1730,24 +1838,47 @@ function renderPv(data, day) {
     }
   }
   els.pvChart.innerHTML = buildPvChart(sumProd, { h: 170, color: PV_TOTAL_COLOR, id: "pvGradTotal", mode: pvViewMode, times });
-  els.pvEcon.innerHTML = t("pv.cmp", [
-    perGroup.length || 0,
-    total.toFixed(1),
-    euros.toFixed(2),
-    settings.tariff.toFixed(3),
-    thermalNote,
-  ]);
+  if (settings.tariffType === "bi-hourly") {
+    els.pvEcon.innerHTML = t("pv.cmp.bihourly", [
+      perGroup.length || 0,
+      total.toFixed(1),
+      euros.toFixed(2),
+      (settings.tariffPeak != null ? settings.tariffPeak : 0.19).toFixed(3),
+      (settings.tariffOffPeak != null ? settings.tariffOffPeak : 0.11).toFixed(3),
+      thermalNote,
+    ]);
+  } else {
+    els.pvEcon.innerHTML = t("pv.cmp", [
+      perGroup.length || 0,
+      total.toFixed(1),
+      euros.toFixed(2),
+      settings.tariff.toFixed(3),
+      thermalNote,
+    ]);
+  }
   // Battery & Self-consumption simulation (continuous multi-day cycle)
   const forecastSims = simulateForecastBattery(data, settings);
-  const sim = (forecastSims && forecastSims[day]) ? forecastSims[day] : simulateBatteryAndConsumption(sumProd, settings);
+  const curDateStr = (times[0] || "").slice(0, 10);
+  const sim = (forecastSims && forecastSims[day]) ? forecastSims[day] : simulateBatteryAndConsumption(sumProd, settings, null, curDateStr);
   if (els.pvBalanceCard) {
     if (els.pvSelfVal) els.pvSelfVal.textContent = `${sim.totalSelfConsumed.toFixed(1)} kWh`;
-    if (els.pvSelfPct) els.pvSelfPct.textContent = t("pv.metric.self.sub", [Math.round(sim.selfSufficiencyRate)]);
+    if (els.pvSelfPct) {
+      els.pvSelfPct.textContent = t("pv.metric.self.detail", [
+        sim.totalSelfDirect.toFixed(1),
+        sim.totalBatteryDischarge.toFixed(1),
+        Math.round(sim.selfSufficiencyRate),
+      ]);
+    }
     
     if (els.pvBattVal) {
       if (sim.cap > 0) {
         els.pvBattVal.textContent = `${sim.totalBatteryDischarge.toFixed(1)} kWh`;
-        if (els.pvBattSoc) els.pvBattSoc.textContent = t("pv.metric.batt.soc", [Math.round((sim.finalSoc / sim.cap) * 100)]);
+        if (els.pvBattSoc) {
+          els.pvBattSoc.textContent = t("pv.metric.batt.detail", [
+            sim.totalBatteryCharge.toFixed(1),
+            Math.round((sim.finalSoc / sim.cap) * 100),
+          ]);
+        }
       } else {
         els.pvBattVal.textContent = t("pv.balance.nobatt");
         if (els.pvBattSoc) els.pvBattSoc.textContent = "0.0 kWh";
@@ -2064,14 +2195,19 @@ els.pvConfig.addEventListener("submit", (e) => {
   const raw = {
     groups,
     eff: parseFloat(els.pvEff.value),
-    tariff: parseFloat(els.pvTariff.value),
+    tariffType: els.pvTariffType ? els.pvTariffType.value : "simple",
+    tariffCycle: els.pvTariffCycle ? els.pvTariffCycle.value : "daily",
+    tariff: els.pvTariff && els.pvTariff.value ? parseFloat(els.pvTariff.value) : 0.15,
+    tariffPeak: els.pvTariffPeak && els.pvTariffPeak.value ? parseFloat(els.pvTariffPeak.value) : 0.19,
+    tariffOffPeak: els.pvTariffOffPeak && els.pvTariffOffPeak.value ? parseFloat(els.pvTariffOffPeak.value) : 0.11,
     thermal: els.pvThermal.value === "temp" ? "temp" : "fixed",
     batteryCap: els.pvBattery ? Math.max(0, parseFloat(els.pvBattery.value) || 0) : 0,
     battMinSoc: els.pvBattMinSoc ? Math.min(100, Math.max(0, parseFloat(els.pvBattMinSoc.value) || 0)) : 20,
     dailyKwh: els.pvDailyKwh ? Math.max(0, parseFloat(els.pvDailyKwh.value) || 0) : 10,
     exportPrice: els.pvExportTariff ? Math.max(0, parseFloat(els.pvExportTariff.value) || 0) : 0.05,
   };
-  const bad = [raw.eff, raw.tariff, ...groups.flatMap((g) => [g.kwp, g.tilt, g.az])]
+  const tariffCheck = raw.tariffType === "bi-hourly" ? [raw.tariffPeak, raw.tariffOffPeak] : [raw.tariff];
+  const bad = [raw.eff, ...tariffCheck, ...groups.flatMap((g) => [g.kwp, g.tilt, g.az])]
     .some((v) => isNaN(v) || v < 0);
   if (bad) {
     showToast(t("pv.toast.bad"));
