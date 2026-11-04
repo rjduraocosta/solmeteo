@@ -4,7 +4,7 @@
 * **Application:** SolMeteo (Solar & Meteorological Forecast PWA)
 * **Architecture:** Static single-page application (Vanilla JS, CSS3, HTML5) with zero dependencies.
 * **Data Sources:** Open-Meteo APIs (Forecast, Geocoding, Air Quality) + IP geolocation fallback.
-* **Current Version:** `2.8.0` (Working on branch `feat/battery-and-self-consumption`)
+* **Current Version:** `2.8.0` (Production live on `main`)
 * **Live Deployment:** GitHub Pages (`https://rjduraocosta.github.io/solmeteo/`) from `main` branch.
 
 ---
