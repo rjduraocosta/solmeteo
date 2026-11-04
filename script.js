@@ -142,6 +142,22 @@ const els = {
   statAqi: document.getElementById("statAqi"),
   statAqiBox: document.getElementById("statAqiBox"),
   themeBtn: document.getElementById("themeBtn"),
+  pvBattery: document.getElementById("pvBattery"),
+  pvBaseLoad: document.getElementById("pvBaseLoad"),
+  pvExportTariff: document.getElementById("pvExportTariff"),
+  pvBalanceCard: document.getElementById("pvBalanceCard"),
+  pvSelfVal: document.getElementById("pvSelfVal"),
+  pvSelfPct: document.getElementById("pvSelfPct"),
+  pvBattVal: document.getElementById("pvBattVal"),
+  pvBattSoc: document.getElementById("pvBattSoc"),
+  pvExportVal: document.getElementById("pvExportVal"),
+  pvExportEuros: document.getElementById("pvExportEuros"),
+  pvImportVal: document.getElementById("pvImportVal"),
+  pvImportCost: document.getElementById("pvImportCost"),
+  pvBalanceBenefit: document.getElementById("pvBalanceBenefit"),
+  pvSegSelf: document.getElementById("pvSegSelf"),
+  pvSegBatt: document.getElementById("pvSegBatt"),
+  pvSegExport: document.getElementById("pvSegExport"),
 };
 
 let weatherData = null;
@@ -163,7 +179,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.7.0";
+const APP_VERSION = "2.8.0";
 
 const LANG_KEY = "skycast:lang";
 const I18N = {
@@ -284,6 +300,25 @@ const I18N = {
     "pv.mode.kwh": "kWh (Energia)",
     "pv.mode.kw": "kW (Potência)",
     "pv.aria.power": "Curva de potência instantânea em kW",
+    "pv.field.battery": "Bateria (kWh)",
+    "pv.tip.battery.aria": "Ajuda sobre capacidade da bateria",
+    "pv.tip.battery": "Capacidade útil de armazenamento em bateria residencial. Define <strong>0</strong> se o teu sistema não tiver bateria. Valores comuns: 5 ou 10 kWh.",
+    "pv.field.baseload": "Consumo base (W)",
+    "pv.tip.baseload.aria": "Ajuda sobre consumo base",
+    "pv.tip.baseload": "Potência contínua consumida pela habitação (frigorífico, standby, etc.). Um valor de 350 W corresponde a ~8,4 kWh por dia.",
+    "pv.field.export": "Injeção (€/kWh)",
+    "pv.tip.export.aria": "Ajuda sobre tarifa de injeção",
+    "pv.tip.export": "Remuneração paga pelo excedente solar injetado na rede elétrica. Tipicamente cerca de 0,04 a 0,07 €/kWh.",
+    "pv.balance.title": "Autoconsumo & Bateria",
+    "pv.balance.sub": "Balanço das 24h",
+    "pv.metric.self": "Autoconsumo Solar",
+    "pv.metric.self.sub": "{0}% autossuficiente",
+    "pv.metric.batt": "Bateria (Ciclo)",
+    "pv.metric.batt.soc": "SoC final: {0}%",
+    "pv.metric.export": "Injetado na Rede",
+    "pv.metric.import": "Importado da Rede",
+    "pv.metric.cost": "Custo: {0} €",
+    "pv.balance.nobatt": "Sem bateria",
   },
   en: {
     locale: "en-GB",
@@ -402,6 +437,25 @@ const I18N = {
     "pv.mode.kwh": "kWh (Energy)",
     "pv.mode.kw": "kW (Power)",
     "pv.aria.power": "Instantaneous power curve in kW",
+    "pv.field.battery": "Battery (kWh)",
+    "pv.tip.battery.aria": "Help on battery capacity",
+    "pv.tip.battery": "Usable residential battery storage capacity. Set to <strong>0</strong> if your system has no battery. Typical values: 5 or 10 kWh.",
+    "pv.field.baseload": "Base load (W)",
+    "pv.tip.baseload.aria": "Help on base electrical consumption",
+    "pv.tip.baseload": "Continuous power consumed by your home (refrigerator, standby devices, router). 350 W corresponds to ~8.4 kWh/day.",
+    "pv.field.export": "Grid feed-in (€/kWh)",
+    "pv.tip.export.aria": "Help on grid feed-in tariff",
+    "pv.tip.export": "Remuneration rate for solar surplus injected back into the grid. Typically ~0.04 to 0.07 €/kWh.",
+    "pv.balance.title": "Self-Consumption & Battery",
+    "pv.balance.sub": "24h Energy Balance",
+    "pv.metric.self": "Solar Self-Consumed",
+    "pv.metric.self.sub": "{0}% self-sufficient",
+    "pv.metric.batt": "Battery (Cycle)",
+    "pv.metric.batt.soc": "Final SoC: {0}%",
+    "pv.metric.export": "Injected to Grid",
+    "pv.metric.import": "Imported from Grid",
+    "pv.metric.cost": "Cost: {0} €",
+    "pv.balance.nobatt": "No battery",
   },
 };
 
@@ -1265,6 +1319,9 @@ function pvDefaults(lat) {
     eff: 80,
     tariff: 0.15,
     thermal: "fixed",
+    batteryCap: 0,
+    baseLoad: 350,
+    exportPrice: 0.05,
     groups: [
       { kwp: 5, tilt, az: lat >= 0 ? 180 : 0 },
       { kwp: 0, tilt: 0, az: 0 },
@@ -1307,6 +1364,9 @@ function loadPvSettings(lat) {
       eff: Number(s.eff) || def.eff,
       tariff: s.tariff != null ? Number(s.tariff) : def.tariff,
       thermal: s.thermal === "temp" ? "temp" : "fixed",
+      batteryCap: Math.max(0, Number(s.batteryCap) || 0),
+      baseLoad: Math.max(0, s.baseLoad != null ? Number(s.baseLoad) : def.baseLoad),
+      exportPrice: Math.max(0, s.exportPrice != null ? Number(s.exportPrice) : def.exportPrice),
       groups,
     };
   } catch {
@@ -1343,6 +1403,9 @@ function pvFillForm() {
   els.pvEff.value = s.eff;
   els.pvTariff.value = s.tariff;
   els.pvThermal.value = s.thermal;
+  if (els.pvBattery) els.pvBattery.value = s.batteryCap || 0;
+  if (els.pvBaseLoad) els.pvBaseLoad.value = s.baseLoad != null ? s.baseLoad : 350;
+  if (els.pvExportTariff) els.pvExportTariff.value = s.exportPrice != null ? s.exportPrice : 0.05;
 }
 
 function equationOfTime(dayOfYear) {
@@ -1388,6 +1451,122 @@ function pvTempDerate(tamb, poa) {
   const cellTemp = tamb + 25 * (poa / 800);
   const derate = 1 - 0.004 * (cellTemp - 25);
   return Math.max(0, derate);
+}
+
+
+function simulateBatteryAndConsumption(production, settings) {
+  const cap = Math.max(0, settings.batteryCap || 0);
+  const baseW = Math.max(0, settings.baseLoad != null ? settings.baseLoad : 350);
+  const tariff = settings.tariff || 0.15;
+  const exportTariff = settings.exportPrice != null ? settings.exportPrice : 0.05;
+
+  // Typical residential hourly load weighting (averages 1.0x)
+  const hourlyProfile = [
+    0.6, 0.5, 0.5, 0.5, 0.6, 0.8,
+    1.3, 1.5, 1.2, 0.9, 0.8, 0.9,
+    1.1, 1.0, 0.9, 0.9, 1.0, 1.2,
+    1.6, 1.8, 1.7, 1.4, 1.0, 0.7
+  ];
+
+  let soc = cap > 0 ? cap * 0.25 : 0; // Starts at 25% charge
+  const batteryMaxKw = Math.min(cap * 0.5, 3.6);
+  const effRoundtrip = 0.92;
+  const effCharge = Math.sqrt(effRoundtrip);
+  const effDischarge = Math.sqrt(effRoundtrip);
+
+  let totalSolar = 0;
+  let totalLoad = 0;
+  let totalSelfDirect = 0;
+  let totalBatteryCharge = 0;
+  let totalBatteryDischarge = 0;
+  let totalGridExport = 0;
+  let totalGridImport = 0;
+
+  const hourly = production.map((genKwh, i) => {
+    totalSolar += genKwh;
+    const loadKwh = (baseW / 1000) * (hourlyProfile[i] || 1.0);
+    totalLoad += loadKwh;
+
+    let direct = 0;
+    let charge = 0;
+    let discharge = 0;
+    let gridExport = 0;
+    let gridImport = 0;
+
+    if (genKwh >= loadKwh) {
+      direct = loadKwh;
+      const surplus = genKwh - loadKwh;
+      if (cap > 0) {
+        const room = cap - soc;
+        const maxCharge = batteryMaxKw || 3.0;
+        const potentialCharge = Math.min(surplus * effCharge, room, maxCharge);
+        charge = Math.max(0, potentialCharge);
+        soc += charge;
+        gridExport = Math.max(0, surplus - (charge / effCharge));
+      } else {
+        gridExport = surplus;
+      }
+    } else {
+      direct = genKwh;
+      const deficit = loadKwh - genKwh;
+      if (cap > 0 && soc > 0.01) {
+        const maxDischarge = batteryMaxKw || 3.0;
+        const potentialDischarge = Math.min(deficit, soc * effDischarge, maxDischarge);
+        discharge = Math.max(0, potentialDischarge);
+        soc = Math.max(0, soc - (discharge / effDischarge));
+        gridImport = Math.max(0, deficit - discharge);
+      } else {
+        gridImport = deficit;
+      }
+    }
+
+    totalSelfDirect += direct;
+    totalBatteryCharge += charge;
+    totalBatteryDischarge += discharge;
+    totalGridExport += gridExport;
+    totalGridImport += gridImport;
+
+    return {
+      hour: i,
+      solar: genKwh,
+      load: loadKwh,
+      direct,
+      charge,
+      discharge,
+      gridExport,
+      gridImport,
+      soc
+    };
+  });
+
+  const totalSelfConsumed = totalSelfDirect + totalBatteryDischarge;
+  const selfConsumptionRate = totalSolar > 0 ? Math.min(100, (totalSelfConsumed / totalSolar) * 100) : 0;
+  const selfSufficiencyRate = totalLoad > 0 ? Math.min(100, (totalSelfConsumed / totalLoad) * 100) : 0;
+  const savingsDirect = totalSelfConsumed * tariff;
+  const exportRevenue = totalGridExport * exportTariff;
+  const totalFinancialBenefit = savingsDirect + exportRevenue;
+  const gridCost = totalGridImport * tariff;
+
+  return {
+    cap,
+    baseW,
+    totalSolar,
+    totalLoad,
+    totalSelfDirect,
+    totalSelfConsumed,
+    totalBatteryCharge,
+    totalBatteryDischarge,
+    totalGridExport,
+    totalGridImport,
+    selfConsumptionRate,
+    selfSufficiencyRate,
+    savingsDirect,
+    exportRevenue,
+    totalFinancialBenefit,
+    gridCost,
+    finalSoc: soc,
+    hourly
+  };
 }
 
 function renderPv(data, day) {
@@ -1480,6 +1659,44 @@ function renderPv(data, day) {
     settings.tariff.toFixed(3),
     thermalNote,
   ]);
+  // Battery & Self-consumption simulation
+  const sim = simulateBatteryAndConsumption(sumProd, settings);
+  if (els.pvBalanceCard) {
+    if (els.pvSelfVal) els.pvSelfVal.textContent = `${sim.totalSelfConsumed.toFixed(1)} kWh`;
+    if (els.pvSelfPct) els.pvSelfPct.textContent = t("pv.metric.self.sub", [Math.round(sim.selfSufficiencyRate)]);
+    
+    if (els.pvBattVal) {
+      if (sim.cap > 0) {
+        els.pvBattVal.textContent = `${sim.totalBatteryDischarge.toFixed(1)} kWh`;
+        if (els.pvBattSoc) els.pvBattSoc.textContent = t("pv.metric.batt.soc", [Math.round((sim.finalSoc / sim.cap) * 100)]);
+      } else {
+        els.pvBattVal.textContent = t("pv.balance.nobatt");
+        if (els.pvBattSoc) els.pvBattSoc.textContent = "0.0 kWh";
+      }
+    }
+
+    if (els.pvExportVal) els.pvExportVal.textContent = `${sim.totalGridExport.toFixed(1)} kWh`;
+    if (els.pvExportEuros) els.pvExportEuros.textContent = `+${sim.exportRevenue.toFixed(2)} €`;
+
+    if (els.pvImportVal) els.pvImportVal.textContent = `${sim.totalGridImport.toFixed(1)} kWh`;
+    if (els.pvImportCost) els.pvImportCost.textContent = t("pv.metric.cost", [sim.gridCost.toFixed(2)]);
+
+    if (els.pvBalanceBenefit) els.pvBalanceBenefit.textContent = `+${sim.totalFinancialBenefit.toFixed(2)} €`;
+
+    // Partition bar
+    const totalPartition = sim.totalSelfDirect + sim.totalBatteryDischarge + sim.totalGridExport || 1;
+    const pctSelf = Math.max(3, (sim.totalSelfDirect / totalPartition) * 100);
+    const pctBatt = sim.cap > 0 ? Math.max(0, (sim.totalBatteryDischarge / totalPartition) * 100) : 0;
+    const pctExport = Math.max(0, 100 - pctSelf - pctBatt);
+
+    if (els.pvSegSelf) els.pvSegSelf.style.width = `${pctSelf.toFixed(1)}%`;
+    if (els.pvSegBatt) {
+      els.pvSegBatt.style.width = `${pctBatt.toFixed(1)}%`;
+      els.pvSegBatt.hidden = sim.cap <= 0;
+    }
+    if (els.pvSegExport) els.pvSegExport.style.width = `${pctExport.toFixed(1)}%`;
+  }
+
   renderPvWeekly(pvTotalsByDay(data, settings), settings);
   pvConfigPreview();
 }
@@ -1752,6 +1969,9 @@ els.pvConfig.addEventListener("submit", (e) => {
     eff: parseFloat(els.pvEff.value),
     tariff: parseFloat(els.pvTariff.value),
     thermal: els.pvThermal.value === "temp" ? "temp" : "fixed",
+    batteryCap: els.pvBattery ? Math.max(0, parseFloat(els.pvBattery.value) || 0) : 0,
+    baseLoad: els.pvBaseLoad ? Math.max(0, parseFloat(els.pvBaseLoad.value) || 0) : 350,
+    exportPrice: els.pvExportTariff ? Math.max(0, parseFloat(els.pvExportTariff.value) || 0) : 0.05,
   };
   const bad = [raw.eff, raw.tariff, ...groups.flatMap((g) => [g.kwp, g.tilt, g.az])]
     .some((v) => isNaN(v) || v < 0);

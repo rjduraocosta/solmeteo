@@ -1552,3 +1552,144 @@ body {
   font-weight: 600;
   font-size: 0.74rem;
 }
+
+/* ---------- Energy Balance & Battery Card ---------- */
+.pv-balance {
+  margin-top: 14px;
+  background: var(--panel-strong);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  backdrop-filter: blur(14px);
+}
+
+.pv-balance__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pv-balance__title-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pv-balance__tag {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.02em;
+}
+
+.pv-balance__sub {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+.pv-balance__benefit {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #34d399;
+  font-variant-numeric: tabular-nums;
+}
+
+.pv-balance__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 720px) {
+  .pv-balance__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.pv-metric {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: transform 0.15s ease, border-color 0.2s ease;
+}
+
+.pv-metric:hover {
+  transform: translateY(-2px);
+}
+
+.pv-metric--self {
+  border-color: rgba(52, 211, 153, 0.25);
+}
+
+.pv-metric--batt {
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.pv-metric--export {
+  border-color: rgba(251, 191, 36, 0.25);
+}
+
+.pv-metric--import {
+  border-color: rgba(251, 113, 133, 0.25);
+}
+
+.pv-metric__label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+}
+
+.pv-metric__val {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.pv-metric--self .pv-metric__val { color: #34d399; }
+.pv-metric--batt .pv-metric__val { color: #38bdf8; }
+.pv-metric--export .pv-metric__val { color: #fbbf24; }
+.pv-metric--import .pv-metric__val { color: #fb7185; }
+
+.pv-metric__sub {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.pv-partition {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  overflow: hidden;
+  gap: 2px;
+}
+
+.pv-partition__seg {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.pv-partition__seg--self {
+  background: linear-gradient(90deg, #34d399, #10b981);
+}
+
+.pv-partition__seg--batt {
+  background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+}
+
+.pv-partition__seg--export {
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+}

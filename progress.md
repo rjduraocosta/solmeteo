@@ -4,7 +4,7 @@
 * **Application:** SolMeteo (Solar & Meteorological Forecast PWA)
 * **Architecture:** Static single-page application (Vanilla JS, CSS3, HTML5) with zero dependencies.
 * **Data Sources:** Open-Meteo APIs (Forecast, Geocoding, Air Quality) + IP geolocation fallback.
-* **Current Version:** `2.7.0` (Working on branch `feat/instant-power-curve`)
+* **Current Version:** `2.8.0` (Working on branch `feat/battery-and-self-consumption`)
 * **Live Deployment:** GitHub Pages (`https://rjduraocosta.github.io/solmeteo/`) from `main` branch.
 
 ---
@@ -36,6 +36,7 @@
 
 | Version | Milestone Date | Summary of Changes |
 | :--- | :--- | :--- |
+| **v2.8.0** | 2026-11-04 | Battery storage simulation, baseload modeling, energy balance dashboard, self-consumption partition bar, manual section 5.6. |
 | **v2.7.0** | 2026-11-04 | Instantaneous power curve (kW), view mode toggle (Both/kWh/kW), peak power badge, per-array peak kW, and manual section 5.5. |
 | **v2.6.0** | 2026-11-04 | System theme auto-detection (`prefers-color-scheme`), wind speed unit toggle (km/h ↔ mph) with topbar & card touch, manual sync, and SW cache update. |
 | **v2.5.3** | 2026-09-24 | Device-specific PWA installation guide (Android, iOS Safari, Desktop) in bilingual manual. |
@@ -78,7 +79,7 @@
 - [x] Step 2: Instantaneous power curve (kW) vs hourly energy (kWh), peak power badge, view mode toggle, per-array peak kW.
 
 ### ⏳ Pending & Upcoming Tasks
-- [ ] Step 3: Battery simulation / self-consumption and grid export modeling.
+- [x] Step 3: Battery simulation, baseload modeling, energy balance dashboard, partition bar, manual section 5.6.
 - [ ] Step 4: UV index health advisory cards & severe weather alerts.
 - [ ] Step 5: Interactive visual compass alignment for PV array azimuth input.
 - [ ] Cross-browser regression and mobile rendering audit.

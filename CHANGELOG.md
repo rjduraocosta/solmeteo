@@ -2,13 +2,25 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.7.0**
+Current Version: **2.8.0**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.8.0] — 2026-11-04
+
+### Added
+- **Residential Battery Storage & Self-Consumption Simulation**: Comprehensive 24-hour physical simulation engine modeling solar production, household baseload, direct self-consumption, battery charge/discharge cycles (~92% roundtrip efficiency), grid export, and grid import.
+- **Energy Balance Dashboard Card (`.pv-balance`)**: Displays direct self-consumption (kWh), self-sufficiency rate (%), battery cycle & final SoC (%), grid export revenue (+€), and grid import cost (€).
+- **Segmented Energy Partition Bar**: Visual multi-segment progress bar showing the distribution between self-consumed solar, battery storage, and exported energy.
+- **Battery & Baseload Configuration Fields**: Configurable battery capacity (kWh), household continuous baseload (W), and feed-in remuneration tariff (€/kWh) inside the system settings form.
+- **Bilingual User Manual Section 5.6**: Fully synchronized guide covering residential self-consumption, battery sizing, and grid injection economics in Portuguese and English (`manual.html`).
+- **Service Worker Cache Busting**: Updated cache identifier to `solmeteo-v2.8.0`.
 
 ---
 

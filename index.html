@@ -287,6 +287,36 @@
         </label>
         <label class="pv-field">
           <span class="pv-field__head">
+            <span data-i18n="pv.field.battery">Bateria (kWh)</span>
+            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre capacidade da bateria" data-i18n-aria="pv.tip.battery.aria">
+              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.battery">Capacidade útil de armazenamento em bateria residencial. Define <strong>0</strong> se o teu sistema não tiver bateria. Valores comuns: 5 ou 10 kWh.</span>
+            </span>
+          </span>
+          <input type="number" id="pvBattery" min="0" max="100" step="0.1" inputmode="decimal" placeholder="0" />
+        </label>
+        <label class="pv-field">
+          <span class="pv-field__head">
+            <span data-i18n="pv.field.baseload">Consumo base (W)</span>
+            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre consumo base" data-i18n-aria="pv.tip.baseload.aria">
+              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.baseload">Potência contínua consumida pela habitação (frigorífico, standby, etc.). Um valor de 350 W corresponde a ~8,4 kWh por dia.</span>
+            </span>
+          </span>
+          <input type="number" id="pvBaseLoad" min="0" max="20000" step="50" inputmode="numeric" placeholder="350" />
+        </label>
+        <label class="pv-field">
+          <span class="pv-field__head">
+            <span data-i18n="pv.field.export">Inje&ccedil;&atilde;o (&euro;/kWh)</span>
+            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre tarifa de injeção" data-i18n-aria="pv.tip.export.aria">
+              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.export">Remuneração paga pelo excedente solar injetado na rede elétrica. Tipicamente cerca de 0,04 a 0,07 €/kWh.</span>
+            </span>
+          </span>
+          <input type="number" id="pvExportTariff" min="0" max="5" step="0.001" inputmode="decimal" placeholder="0.050" />
+        </label>
+        <label class="pv-field">
+          <span class="pv-field__head">
             <span data-i18n="pv.field.thermal">Efeito t&eacute;rmico</span>
             <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre efeito térmico" data-i18n-aria="pv.tip.thermal.aria">
               <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
@@ -327,6 +357,47 @@
       </div>
       <p class="pv-econ" id="pvEcon">—</p>
 
+      <!-- Energy Balance & Battery Simulation Card -->
+      <div class="pv-balance" id="pvBalanceCard">
+        <div class="pv-balance__head">
+          <div class="pv-balance__title-box">
+            <span class="pv-balance__tag" data-i18n="pv.balance.title">Autoconsumo &amp; Bateria</span>
+            <span class="pv-balance__sub" data-i18n="pv.balance.sub">Balanço das 24h</span>
+          </div>
+          <span class="pv-balance__benefit" id="pvBalanceBenefit" title="Benefício financeiro total (poupança direta + injeção)">+0.00 €</span>
+        </div>
+
+        <div class="pv-balance__grid">
+          <div class="pv-metric pv-metric--self">
+            <span class="pv-metric__label" data-i18n="pv.metric.self">Autoconsumo Solar</span>
+            <span class="pv-metric__val" id="pvSelfVal">0.0 kWh</span>
+            <span class="pv-metric__sub" id="pvSelfPct">0% autossuficiente</span>
+          </div>
+          <div class="pv-metric pv-metric--batt" id="pvBattBox">
+            <span class="pv-metric__label" data-i18n="pv.metric.batt">Bateria (Ciclo)</span>
+            <span class="pv-metric__val" id="pvBattVal">0.0 kWh</span>
+            <span class="pv-metric__sub" id="pvBattSoc">SoC final: 0%</span>
+          </div>
+          <div class="pv-metric pv-metric--export">
+            <span class="pv-metric__label" data-i18n="pv.metric.export">Injetado na Rede</span>
+            <span class="pv-metric__val" id="pvExportVal">0.0 kWh</span>
+            <span class="pv-metric__sub" id="pvExportEuros">+0.00 €</span>
+          </div>
+          <div class="pv-metric pv-metric--import">
+            <span class="pv-metric__label" data-i18n="pv.metric.import">Importado da Rede</span>
+            <span class="pv-metric__val" id="pvImportVal">0.0 kWh</span>
+            <span class="pv-metric__sub" id="pvImportCost">Custo: 0.00 €</span>
+          </div>
+        </div>
+
+        <!-- Stacked Energy Partition Bar -->
+        <div class="pv-partition" id="pvPartitionBar" role="img" aria-label="Partição de energia solar">
+          <div class="pv-partition__seg pv-partition__seg--self" id="pvSegSelf" style="width: 50%" title="Autoconsumo"></div>
+          <div class="pv-partition__seg pv-partition__seg--batt" id="pvSegBatt" style="width: 25%" title="Bateria"></div>
+          <div class="pv-partition__seg pv-partition__seg--export" id="pvSegExport" style="width: 25%" title="Injeção na rede"></div>
+        </div>
+      </div>
+
       <!-- Weekly PV Summary -->
       <div class="pv-weekly" id="pvWeeklyBox">
         <div class="pv-weekly__head">
@@ -348,7 +419,7 @@
     <footer class="footer">
       <span><span data-i18n="footer.source">Fonte:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
       <span><a href="manual.html" data-i18n="footer.manual">Manual de utilização</a></span>
-      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.7.0</span></span>
+      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.8.0</span></span>
     </footer>
   </main>
 
