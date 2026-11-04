@@ -21,3 +21,4 @@ Although SolMeteo has no custom backend, client-side exposure to third-party end
 ## 4. Absolute Prohibitions
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to execute an on-demand audit workflow during routine development without explicit user request.
 * **É ESTRITAMENTE PROIBIDO** disable or relax CSP headers or allow unencrypted HTTP calls across any part of the application.
+

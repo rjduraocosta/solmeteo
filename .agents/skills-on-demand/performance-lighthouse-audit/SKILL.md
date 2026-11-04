@@ -21,3 +21,4 @@ Rendering 4 distinct SVG charts with 24 data points, multiple gradients, and hov
 ## 4. Absolute Prohibitions
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to execute this audit or bloat routine tasks with memory profiling unless explicitly triggered by the user.
 * **É ESTRITAMENTE PROIBIDO** optimize performance by degrading the mathematical resolution or sampling interval of the solar forecast charts.
+

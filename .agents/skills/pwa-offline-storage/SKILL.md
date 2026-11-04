@@ -21,3 +21,4 @@ Stale service worker caches can permanently prevent users from receiving applica
 ## 4. Absolute Prohibitions
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to cache dynamic Open-Meteo API requests inside the service worker cache without TTL checks.
 * **É ESTRITAMENTE PROIBIDO** unregister or bypass service worker registration without a documented fallback mechanism.
+

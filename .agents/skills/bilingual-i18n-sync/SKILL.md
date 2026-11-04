@@ -21,3 +21,4 @@ SolMeteo is strictly bilingual (PT/EN). Adding a translation key in Portuguese w
 ## 4. Absolute Prohibitions
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to commit changes where a UI string or manual section is available in one language but missing in the other.
 * **É ESTRITAMENTE PROIBIDO** shadow or overwrite the internationalization helper function `t()` with local loop or time variables.
+

@@ -22,3 +22,4 @@ SolMeteo delivers accurate solar yield estimations without a backend. Mathematic
 ## 4. Absolute Prohibitions
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to allow negative or NaN irradiance/kWh values to propagate to charts or user totals.
 * **É ESTRITAMENTE PROIBIDO** round or truncate intermediate trigonometric values (hour angles, solar declination, azimuth, elevation) prior to final display rendering.
+

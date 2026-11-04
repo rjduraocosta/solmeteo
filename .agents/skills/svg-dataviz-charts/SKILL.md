@@ -21,3 +21,4 @@ All data visualization in SolMeteo is rendered using native vector SVGs without 
 ## 4. Absolute Prohibitions
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to introduce heavy external charting libraries (such as Chart.js, D3, or Highcharts).
 * **É ESTRITAMENTE PROIBIDO** hardcode fixed pixel widths on SVG chart roots; SVGs must adapt dynamically via `viewBox` and CSS `width: 100%`.
+

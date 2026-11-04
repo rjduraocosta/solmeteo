@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Status: Production](https://img.shields.io/badge/Status-Active-emerald.svg)](https://github.com/rjduraocosta/solmeteo)
-[![Version](https://img.shields.io/badge/Version-2.5.3-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-2.6.0-blue)](CHANGELOG.md)
 
 SolMeteo is a commercial-grade, zero-dependency Progressive Web Application (PWA) delivering real-time weather forecasts and precision solar photovoltaic (PV) yield estimations. It operates entirely client-side, integrating directly with Open-Meteo open APIs without requiring API keys or proprietary backend services.
 
@@ -111,3 +111,4 @@ At every release, the version identifier must be synchronized across:
 * `manual.html` (Footer `#manualVersion`)
 * `CHANGELOG.md` (Top-level entry)
 * `progress.md` (Version Log)
+

@@ -61,3 +61,4 @@ Whenever a version bump occurs:
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to push or merge to the `main` branch without explicit user approval, as this immediately triggers production GitHub Pages deployment.
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to update UI copy or behavior in Portuguese without providing the identical English translation, or vice-versa.
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to bypass or suppress mathematical boundaries (e.g., negative POA values, nighttime solar generation, or non-finite irradiance values).
+

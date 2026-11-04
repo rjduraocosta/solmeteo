@@ -21,3 +21,4 @@ The application's core strength is zero build steps, instant load performance, a
 ## 4. Absolute Prohibitions
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to introduce npm packages, client-side build tools (Webpack/Vite), JSX, or framework runtime libraries.
 * **É ESTRITAMENTE PROIBIDO** use `innerHTML` with unsanitized user or network inputs that could introduce cross-site scripting vulnerabilities.
+

@@ -2,13 +2,23 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.5.3**
+Current Version: **2.6.0**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.6.0] — 2026-11-04
+
+### Added
+- **System Theme Auto-Detection (`prefers-color-scheme`)**: SolMeteo now automatically matches the operating system's dark or light appearance on initial load and listens dynamically to system preference changes. The manual toggle button remains available and persists user overrides in `localStorage`.
+- **Wind Speed Unit Switcher (km/h ↔ mph)**: Added dedicated unit selector in the top bar and made the hero wind stat card interactive (`tabindex="0"`, click/enter/space to toggle). State is saved under `skycast:wind_unit`.
+- **Bilingual Documentation & Parity**: Synchronized user manual in both Portuguese and English (`manual.html`), adding guidance on auto-theme detection and dual unit controls.
+- **Service Worker Cache Busting**: Updated cache identifier to `solmeteo-v2.6.0` to force immediate app shell update.
 
 ---
 

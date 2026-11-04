@@ -21,3 +21,4 @@ Because the project does not use a bundler or TypeScript compiler, silent syntax
 ## 4. Absolute Prohibitions
 * **NUNCA / IT IS STRICTLY FORBIDDEN** to declare an iteration complete if `node --check` returns any syntax error or warning.
 * **É ESTRITAMENTE PROIBIDO** commit code referencing DOM elements without verifying their existence in `index.html`.
+

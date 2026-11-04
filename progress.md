@@ -4,7 +4,7 @@
 * **Application:** SolMeteo (Solar & Meteorological Forecast PWA)
 * **Architecture:** Static single-page application (Vanilla JS, CSS3, HTML5) with zero dependencies.
 * **Data Sources:** Open-Meteo APIs (Forecast, Geocoding, Air Quality) + IP geolocation fallback.
-* **Current Version:** `2.5.3` (Governance & Agent Skills Setup in progress on `feat/governance-and-skills-setup`)
+* **Current Version:** `2.6.0` (Working on branch `feat/theme-and-wind-units`)
 * **Live Deployment:** GitHub Pages (`https://rjduraocosta.github.io/solmeteo/`) from `main` branch.
 
 ---
@@ -36,6 +36,7 @@
 
 | Version | Milestone Date | Summary of Changes |
 | :--- | :--- | :--- |
+| **v2.6.0** | 2026-11-04 | System theme auto-detection (`prefers-color-scheme`), wind speed unit toggle (km/h ↔ mph) with topbar & card touch, manual sync, and SW cache update. |
 | **v2.5.3** | 2026-09-24 | Device-specific PWA installation guide (Android, iOS Safari, Desktop) in bilingual manual. |
 | **v2.5.2** | 2026-09-24 | Resolved remaining "Sky Cast" logo references, exported CSV prefix, and slug naming. |
 | **v2.5.1** | 2026-09-24 | Cache busting for PWA service worker (`solmeteo-v2`) to prevent stale shell caching. |
@@ -49,7 +50,7 @@
 | **v2.3.1** | 2026-09-24 | Flexbox wrapping fix for solar panel header chips on mobile viewports. |
 | **v2.3.0** | 2026-09-24 | Major feature release: reverse geocoding, 20-min TTL cache, °C/°F, themes, recents, EAQI, weekly PV. |
 | **v2.2.1** | 2026-09-24 | Critical fix for variable shadowing `t()` in `renderHourly`; kWp decimal formatter. |
-| **v2.2.0** | 2026-09-24 | Synchronized app versioning in footer and manual; added `CHANGELOG.md`. |
+| **v2.2.0** | 2026-09-23 | Synchronized app versioning in footer and manual; added `CHANGELOG.md`. |
 | **v2.1.0** | 2026-09-24 | Full bilingual internationalization (PT/EN) across application and user manual. |
 | **v2.0.0** | 2026-09-24 | Multi-orientation PV array engine (up to 4 groups), thermal derating (NOCT 45°C), interactive manual. |
 | **v1.0.0** | 2026-09-24 | Initial production release with core Open-Meteo weather and single-orientation PV modeling. |
@@ -70,13 +71,16 @@
 - [x] Dedicated topic branch workflow and GitHub Pages production separation.
 - [x] Triad governance files created: `README.md` (EN), `AGENTS.md` (EN), `progress.md` (EN).
 - [x] Dynamic Workspace Skills definitions structured under `.agents/skills/` and `.agents/skills-on-demand/`.
+- [x] Automated `prefers-color-scheme` theme detection on initial load + dynamic system listener.
+- [x] Wind speed unit toggle (km/h vs mph) with topbar switcher and clickable stat card.
+- [x] Version bump to `2.6.0` synchronized across 5 core files and changelog.
 
 ### ⏳ Pending & Upcoming Tasks
-- [ ] Implement and verify workspace skill definitions (`.agents/skills/` and `.agents/skills-on-demand/`).
-- [ ] User-driven enhancement implementation on feature branch.
+- [ ] Step 2: Instantaneous power curve (kW) vs hourly energy (kWh) in solar panel.
+- [ ] Step 3: Battery simulation / self-consumption and grid export modeling.
+- [ ] Step 4: UV index health advisory cards & severe weather alerts.
+- [ ] Step 5: Interactive visual compass alignment for PV array azimuth input.
 - [ ] Cross-browser regression and mobile rendering audit.
-- [ ] Optional: Wind speed unit toggle (km/h vs mph).
-- [ ] Optional: Automated `prefers-color-scheme` detection on first visit.
 
 ---
 
