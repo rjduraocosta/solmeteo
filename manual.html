@@ -470,6 +470,8 @@
         <li><span class="dot dot--emerald"></span><span data-i18n-html="m.s5.6.p2"><strong>Autoconsumo Direto:</strong> A energia consumida instantaneamente pela casa quando o sol está a produzir, poupando a 100% o valor da tarifa contratada.</span></li>
         <li><span class="dot dot--sky"></span><span data-i18n-html="m.s5.6.p3"><strong>Armazenamento em Bateria (kWh):</strong> O excedente solar carrega a bateria durante o dia (com eficiência de ~92%); à noite, a bateria descarrega para cobrir o consumo residencial.</span></li>
         <li><span class="dot dot--gold"></span><span data-i18n-html="m.s5.6.p4"><strong>Injeção na Rede &amp; Excedente:</strong> Quando a bateria atinge os 100%, o excedente é injetado na rede e valorizado pela tarifa de injeção configurada.</span></li>
+        <li><span class="dot dot--rose"></span><span data-i18n-html="m.s5.6.p5"><strong>Reserva M&iacute;nima (DoD / 0% a 100%):</strong> Define a percentagem m&iacute;nima abaixo da qual a bateria cessa a descarga (padr&atilde;o de 20% para prote&ccedil;&atilde;o e emerg&ecirc;ncia). Atingido o limite, o consumo passa automaticamente para a rede p&uacute;blica.</span></li>
+        <li><span class="dot dot--indigo"></span><span data-i18n-html="m.s5.6.p6"><strong>Ciclo Multi-Dia Cont&iacute;nuo:</strong> A simula&ccedil;&atilde;o &eacute; cont&iacute;nua ao longo dos 7 dias da previs&atilde;o: o n&iacute;vel de carga (SoC) com que a bateria termina a noite transita com exatid&atilde;o para o dia seguinte.</span></li>
       </ul>
     </div>
 
@@ -652,10 +654,12 @@
         "m.s5.5.p2": "<strong>Pico do inversor &amp; Clipping:</strong> Saber a potência máxima em kW ajuda a verificar se a produção ultrapassa o limite do inversor ou microinversores.",
         "m.s5.5.p3": "<strong>Múltiplas orientações:</strong> Telhados Este/Oeste têm picos desfasados ao longo do dia, distribuindo a curva de potência sem sobrecarregar a rede ao meio-dia.",
         "m.s5.6": "Simulação de Bateria e Autoconsumo Residencial",
-        "m.s5.6.p1": "O SolMeteo simula hora a hora o fluxo energético entre os teus painéis solares, a tua casa, a bateria e a rede elétrica pública.",
+        "m.s5.6.p1": "O SolMeteo simula hora a hora o fluxo energético entre os teus painéis solares, o consumo diário da tua casa (em kWh/dia), a bateria e a rede elétrica pública.",
         "m.s5.6.p2": "<strong>Autoconsumo Direto:</strong> A energia consumida instantaneamente pela casa quando o sol está a produzir, poupando a 100% o valor da tarifa contratada.",
         "m.s5.6.p3": "<strong>Armazenamento em Bateria (kWh):</strong> O excedente solar carrega a bateria durante o dia (com eficiência de ~92%); à noite, a bateria descarrega para cobrir o consumo residencial.",
         "m.s5.6.p4": "<strong>Injeção na Rede &amp; Excedente:</strong> Quando a bateria atinge os 100%, o excedente é injetado na rede e valorizado pela tarifa de injeção configurada.",
+        "m.s5.6.p5": "<strong>Reserva Mínima (DoD / 0% a 100%):</strong> Define a percentagem mínima abaixo da qual a bateria cessa a descarga (padrão de 20% para proteção e emergência). Atingido o limite, o consumo passa automaticamente para a rede pública.",
+        "m.s5.6.p6": "<strong>Ciclo Multi-Dia Contínuo:</strong> A simulação é contínua ao longo dos 7 dias da previsão: o nível de carga (SoC) com que a bateria termina a noite transita com exatidão para o dia seguinte.",
         "m.s6": "Perguntas frequentes",
         "m.faq1.h": "A morada de rua influencia a estimativa?",
         "m.faq1.p": "Não. A produção solar depende das <strong>coordenadas da cidade</strong> (latitude/longitude). Sombras de prédios ou árvores à volta da morada não são modeladas.",
@@ -793,10 +797,12 @@
         "m.s5.5.p2": "<strong>Inverter Peak &amp; Clipping:</strong> Knowing the peak power in kW helps verify if production exceeds the threshold of your inverter or microinverters.",
         "m.s5.5.p3": "<strong>Multi-orientation Arrays:</strong> East/West roof slopes produce offset peaks throughout the day, smoothing out the generation curve without overloading at solar noon.",
         "m.s5.6": "Battery Storage Simulation & Self-Consumption",
-        "m.s5.6.p1": "SolMeteo models the hourly energy flow between your solar panels, household loads, residential battery, and the utility grid.",
+        "m.s5.6.p1": "SolMeteo models the hourly energy flow between your solar panels, your daily household electrical consumption (in kWh/day), residential battery, and the utility grid.",
         "m.s5.6.p2": "<strong>Direct Self-Consumption:</strong> Clean energy consumed immediately by home appliances, saving 100% of your retail electricity tariff.",
         "m.s5.6.p3": "<strong>Battery Storage (kWh):</strong> Daytime surplus charges your home battery (~92% roundtrip efficiency); at night, it discharges to power your home.",
         "m.s5.6.p4": "<strong>Grid Export &amp; Surplus:</strong> Once the battery reaches 100% capacity, excess generation is exported to the grid at your configured feed-in tariff.",
+        "m.s5.6.p5": "<strong>Minimum Reserve (DoD / 0% to 100%):</strong> Configures the minimum threshold below which the battery halts discharge (standard 20% for cell health and backup). Once reached, home loads are seamlessly imported from the grid.",
+        "m.s5.6.p6": "<strong>Continuous Multi-Day Cycle:</strong> The simulation carries over seamlessly across the 7-day forecast: the battery state of charge (SoC) at midnight transitions accurately into the next morning.",
         "m.s6": "Frequently asked questions",
         "m.faq1.h": "Does the street address affect the estimate?",
         "m.faq1.p": "No. Solar production depends on the <strong>city coordinates</strong> (latitude/longitude). Shadows from nearby buildings or trees are not modelled.",

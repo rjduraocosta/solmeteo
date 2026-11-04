@@ -297,13 +297,23 @@
         </label>
         <label class="pv-field">
           <span class="pv-field__head">
-            <span data-i18n="pv.field.baseload">Consumo base (W)</span>
-            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre consumo base" data-i18n-aria="pv.tip.baseload.aria">
+            <span data-i18n="pv.field.battminsoc">Reserva m&iacute;n. (%)</span>
+            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre reserva mínima da bateria" data-i18n-aria="pv.tip.battminsoc.aria">
               <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              <span class="pv-tip__text" data-i18n-html="pv.tip.baseload">Potência contínua consumida pela habitação (frigorífico, standby, etc.). Um valor de 350 W corresponde a ~8,4 kWh por dia.</span>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.battminsoc">N&iacute;vel m&iacute;nimo de carga (SoC) abaixo do qual a bateria cessa a descarga para proteger as c&eacute;lulas e manter reserva de emerg&ecirc;ncia (0% a 100%). Padr&atilde;o: 20%.</span>
             </span>
           </span>
-          <input type="number" id="pvBaseLoad" min="0" max="20000" step="1" inputmode="numeric" placeholder="350" />
+          <input type="number" id="pvBattMinSoc" min="0" max="100" step="1" inputmode="numeric" placeholder="20" />
+        </label>
+        <label class="pv-field">
+          <span class="pv-field__head">
+            <span data-i18n="pv.field.baseload">Consumo diário (kWh)</span>
+            <span class="pv-tip" tabindex="0" aria-label="Ajuda sobre consumo diário da casa" data-i18n-aria="pv.tip.baseload.aria">
+              <svg class="pv-tip__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+              <span class="pv-tip__text" data-i18n-html="pv.tip.baseload">Consumo diário total da habitação em kWh (ex.: fatura mensal a dividir por 30 dias). Valores típicos: 8 a 15 kWh/dia.</span>
+            </span>
+          </span>
+          <input type="number" id="pvDailyKwh" min="0" max="500" step="0.1" inputmode="decimal" placeholder="10.0" />
         </label>
         <label class="pv-field">
           <span class="pv-field__head">

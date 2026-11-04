@@ -143,7 +143,8 @@ const els = {
   statAqiBox: document.getElementById("statAqiBox"),
   themeBtn: document.getElementById("themeBtn"),
   pvBattery: document.getElementById("pvBattery"),
-  pvBaseLoad: document.getElementById("pvBaseLoad"),
+  pvBattMinSoc: document.getElementById("pvBattMinSoc"),
+  pvDailyKwh: document.getElementById("pvDailyKwh"),
   pvExportTariff: document.getElementById("pvExportTariff"),
   pvBalanceCard: document.getElementById("pvBalanceCard"),
   pvSelfVal: document.getElementById("pvSelfVal"),
@@ -303,9 +304,12 @@ const I18N = {
     "pv.field.battery": "Bateria (kWh)",
     "pv.tip.battery.aria": "Ajuda sobre capacidade da bateria",
     "pv.tip.battery": "Capacidade útil de armazenamento em bateria residencial. Define <strong>0</strong> se o teu sistema não tiver bateria. Valores comuns: 5 ou 10 kWh.",
-    "pv.field.baseload": "Consumo base (W)",
-    "pv.tip.baseload.aria": "Ajuda sobre consumo base",
-    "pv.tip.baseload": "Potência contínua consumida pela habitação (frigorífico, standby, etc.). Um valor de 350 W corresponde a ~8,4 kWh por dia.",
+    "pv.field.battminsoc": "Reserva mín. (%)",
+    "pv.tip.battminsoc.aria": "Ajuda sobre reserva mínima da bateria",
+    "pv.tip.battminsoc": "Nível mínimo de carga (SoC) abaixo do qual a bateria cessa a descarga para proteger as células e manter reserva de emergência (0% a 100%). Padrão: 20%.",
+    "pv.field.baseload": "Consumo diário (kWh)",
+    "pv.tip.baseload.aria": "Ajuda sobre consumo diário da casa",
+    "pv.tip.baseload": "Consumo diário total da habitação em kWh (ex.: fatura mensal a dividir por 30 dias). Valores típicos: 8 a 15 kWh/dia.",
     "pv.field.export": "Injeção (€/kWh)",
     "pv.tip.export.aria": "Ajuda sobre tarifa de injeção",
     "pv.tip.export": "Remuneração paga pelo excedente solar injetado na rede elétrica. Tipicamente cerca de 0,04 a 0,07 €/kWh.",
@@ -440,9 +444,12 @@ const I18N = {
     "pv.field.battery": "Battery (kWh)",
     "pv.tip.battery.aria": "Help on battery capacity",
     "pv.tip.battery": "Usable residential battery storage capacity. Set to <strong>0</strong> if your system has no battery. Typical values: 5 or 10 kWh.",
-    "pv.field.baseload": "Base load (W)",
-    "pv.tip.baseload.aria": "Help on base electrical consumption",
-    "pv.tip.baseload": "Continuous power consumed by your home (refrigerator, standby devices, router). 350 W corresponds to ~8.4 kWh/day.",
+    "pv.field.battminsoc": "Min. reserve (%)",
+    "pv.tip.battminsoc.aria": "Help on minimum battery reserve",
+    "pv.tip.battminsoc": "Minimum state of charge (SoC) threshold below which the battery stops discharging to protect cell lifespan and preserve emergency backup (0% to 100%). Default: 20%.",
+    "pv.field.baseload": "Daily consumption (kWh)",
+    "pv.tip.baseload.aria": "Help on household daily consumption",
+    "pv.tip.baseload": "Total daily electrical consumption of your home in kWh (e.g. monthly bill divided by 30 days). Typical values: 8 to 15 kWh/day.",
     "pv.field.export": "Grid feed-in (€/kWh)",
     "pv.tip.export.aria": "Help on grid feed-in tariff",
     "pv.tip.export": "Remuneration rate for solar surplus injected back into the grid. Typically ~0.04 to 0.07 €/kWh.",
@@ -1320,7 +1327,8 @@ function pvDefaults(lat) {
     tariff: 0.15,
     thermal: "fixed",
     batteryCap: 0,
-    baseLoad: 350,
+    battMinSoc: 20,
+    dailyKwh: 10,
     exportPrice: 0.05,
     groups: [
       { kwp: 5, tilt, az: lat >= 0 ? 180 : 0 },
@@ -1365,7 +1373,8 @@ function loadPvSettings(lat) {
       tariff: s.tariff != null ? Number(s.tariff) : def.tariff,
       thermal: s.thermal === "temp" ? "temp" : "fixed",
       batteryCap: Math.max(0, Number(s.batteryCap) || 0),
-      baseLoad: Math.max(0, s.baseLoad != null ? Number(s.baseLoad) : def.baseLoad),
+      battMinSoc: s.battMinSoc != null ? Math.min(100, Math.max(0, Number(s.battMinSoc))) : def.battMinSoc,
+      dailyKwh: Math.max(0, s.dailyKwh != null ? Number(s.dailyKwh) : (s.baseLoad != null ? (Number(s.baseLoad) * 24) / 1000 : def.dailyKwh)),
       exportPrice: Math.max(0, s.exportPrice != null ? Number(s.exportPrice) : def.exportPrice),
       groups,
     };
@@ -1384,8 +1393,9 @@ function pvConfigPreview() {
   const total = active.reduce((a, g) => a + g.kwp, 0);
   const names = active.map((g) => `${fmtDec(g.kwp)} kWp · ${compassName(g.az)} ${g.az}° · ${g.tilt}°`).join(" + ");
   const thermal = s.thermal === "temp" ? t("pv.thermal.saved.real") : t("pv.thermal.saved.fixed");
+  const battInfo = s.batteryCap > 0 ? ` · ${fmtDec(s.batteryCap)} kWh bat (${s.battMinSoc != null ? s.battMinSoc : 20}% res)` : "";
   els.pvSummary.textContent =
-    `${fmtDec(total)} kWp ${names ? "[" + names + "]" : ""} · ${s.eff}% · ${fmtTariff(s.tariff)} €/kWh · ${thermal}`;
+    `${fmtDec(total)} kWp ${names ? "[" + names + "]" : ""} · ${s.eff}% · ${fmtTariff(s.tariff)} €/kWh · ${thermal}${battInfo}`;
 }
 
 function fmtTariff(v) {
@@ -1404,7 +1414,8 @@ function pvFillForm() {
   els.pvTariff.value = s.tariff;
   els.pvThermal.value = s.thermal;
   if (els.pvBattery) els.pvBattery.value = s.batteryCap || 0;
-  if (els.pvBaseLoad) els.pvBaseLoad.value = s.baseLoad != null ? s.baseLoad : 350;
+  if (els.pvBattMinSoc) els.pvBattMinSoc.value = s.battMinSoc != null ? s.battMinSoc : 20;
+  if (els.pvDailyKwh) els.pvDailyKwh.value = Number(s.dailyKwh != null ? s.dailyKwh : 10).toFixed(1);
   if (els.pvExportTariff) els.pvExportTariff.value = s.exportPrice != null ? s.exportPrice : 0.05;
 }
 
@@ -1454,9 +1465,11 @@ function pvTempDerate(tamb, poa) {
 }
 
 
-function simulateBatteryAndConsumption(production, settings) {
+function simulateBatteryAndConsumption(production, settings, initialSoc) {
   const cap = Math.max(0, settings.batteryCap || 0);
-  const baseW = Math.max(0, settings.baseLoad != null ? settings.baseLoad : 350);
+  const battMinSoc = Math.min(100, Math.max(0, settings.battMinSoc != null ? Number(settings.battMinSoc) : 20));
+  const minSocKwh = cap * (battMinSoc / 100);
+  const dailyKwh = Math.max(0, settings.dailyKwh != null ? settings.dailyKwh : 10);
   const tariff = settings.tariff || 0.15;
   const exportTariff = settings.exportPrice != null ? settings.exportPrice : 0.05;
 
@@ -1468,8 +1481,11 @@ function simulateBatteryAndConsumption(production, settings) {
     1.6, 1.8, 1.7, 1.4, 1.0, 0.7
   ];
 
-  let soc = cap > 0 ? cap * 0.25 : 0; // Starts at 25% charge
-  const batteryMaxKw = Math.min(cap * 0.5, 3.6);
+  let soc = initialSoc != null
+    ? Math.min(cap, Math.max(minSocKwh, initialSoc))
+    : (cap > 0 ? Math.max(minSocKwh, cap * 0.25) : 0);
+
+  const batteryMaxKw = cap > 0 ? Math.min(Math.max(cap * 0.5, 2.5), 5.0) : 0;
   const effRoundtrip = 0.92;
   const effCharge = Math.sqrt(effRoundtrip);
   const effDischarge = Math.sqrt(effRoundtrip);
@@ -1484,7 +1500,7 @@ function simulateBatteryAndConsumption(production, settings) {
 
   const hourly = production.map((genKwh, i) => {
     totalSolar += genKwh;
-    const loadKwh = (baseW / 1000) * (hourlyProfile[i] || 1.0);
+    const loadKwh = (dailyKwh / 24) * (hourlyProfile[i] || 1.0);
     totalLoad += loadKwh;
 
     let direct = 0;
@@ -1496,24 +1512,25 @@ function simulateBatteryAndConsumption(production, settings) {
     if (genKwh >= loadKwh) {
       direct = loadKwh;
       const surplus = genKwh - loadKwh;
-      if (cap > 0) {
+      if (cap > 0 && soc < cap) {
         const room = cap - soc;
-        const maxCharge = batteryMaxKw || 3.0;
-        const potentialCharge = Math.min(surplus * effCharge, room, maxCharge);
-        charge = Math.max(0, potentialCharge);
-        soc += charge;
-        gridExport = Math.max(0, surplus - (charge / effCharge));
+        const maxChargeGross = batteryMaxKw || 3.0;
+        const grossTaken = Math.min(surplus, maxChargeGross, room / effCharge);
+        charge = Math.max(0, grossTaken * effCharge);
+        soc = Math.min(cap, soc + charge);
+        gridExport = Math.max(0, surplus - grossTaken);
       } else {
         gridExport = surplus;
       }
     } else {
       direct = genKwh;
       const deficit = loadKwh - genKwh;
-      if (cap > 0 && soc > 0.01) {
-        const maxDischarge = batteryMaxKw || 3.0;
-        const potentialDischarge = Math.min(deficit, soc * effDischarge, maxDischarge);
+      const usableSoc = Math.max(0, soc - minSocKwh);
+      if (cap > 0 && usableSoc > 0.001) {
+        const maxDischargeNet = batteryMaxKw || 3.0;
+        const potentialDischarge = Math.min(deficit, maxDischargeNet, usableSoc * effDischarge);
         discharge = Math.max(0, potentialDischarge);
-        soc = Math.max(0, soc - (discharge / effDischarge));
+        soc = Math.max(minSocKwh, soc - (discharge / effDischarge));
         gridImport = Math.max(0, deficit - discharge);
       } else {
         gridImport = deficit;
@@ -1549,7 +1566,9 @@ function simulateBatteryAndConsumption(production, settings) {
 
   return {
     cap,
-    baseW,
+    battMinSoc,
+    minSocKwh,
+    dailyKwh,
     totalSolar,
     totalLoad,
     totalSelfDirect,
@@ -1564,9 +1583,67 @@ function simulateBatteryAndConsumption(production, settings) {
     exportRevenue,
     totalFinancialBenefit,
     gridCost,
+    startSoc: initialSoc != null ? initialSoc : soc,
     finalSoc: soc,
     hourly
   };
+}
+
+function simulateForecastBattery(data, settings) {
+  const days = Math.min(7, Math.floor((data.hourly.time || []).length / 24));
+  const utcOffsetH = (data.utc_offset_seconds || 0) / 3600;
+  const groups = settings.groups.filter((g) => g.kwp > 0);
+  const ghi = data.hourly.shortwave_radiation || [];
+  const dni = data.hourly.direct_normal_irradiance || [];
+  const dif = data.hourly.diffuse_radiation || [];
+
+  const cap = Math.max(0, settings.batteryCap || 0);
+  const battMinSoc = Math.min(100, Math.max(0, settings.battMinSoc != null ? Number(settings.battMinSoc) : 20));
+  const minSocKwh = cap * (battMinSoc / 100);
+  let currentSoc = cap > 0 ? Math.max(minSocKwh, cap * 0.25) : 0;
+
+  const results = [];
+  for (let d = 0; d < days; d++) {
+    const start = d * 24;
+    const prod24 = [];
+    for (let i = 0; i < 24; i++) {
+      const idx = start + i;
+      const t = data.hourly.time[idx];
+      if (!t) {
+        prod24.push(0);
+        continue;
+      }
+      const hour = Number(t.slice(11, 13));
+      const dateStr = t.slice(0, 10);
+      let hourProd = 0;
+      for (const g of groups) {
+        const poa = pvHourEstimate(
+          dni[idx] || 0,
+          ghi[idx] || 0,
+          dif[idx] || 0,
+          data.latitude,
+          data.longitude,
+          dateStr,
+          hour,
+          utcOffsetH,
+          g.tilt,
+          g.az
+        );
+        let kwh = (poa / 1000) * g.kwp * (settings.eff / 100);
+        if (settings.thermal === "temp" && poa > 0) {
+          const tamb = data.hourly.temperature_2m?.[idx];
+          kwh *= pvTempDerate(tamb != null ? tamb : 20, poa);
+        }
+        hourProd += kwh > 0 ? kwh : 0;
+      }
+      prod24.push(hourProd);
+    }
+
+    const sim = simulateBatteryAndConsumption(prod24, settings, currentSoc);
+    currentSoc = sim.finalSoc;
+    results.push(sim);
+  }
+  return results;
 }
 
 function renderPv(data, day) {
@@ -1659,8 +1736,9 @@ function renderPv(data, day) {
     settings.tariff.toFixed(3),
     thermalNote,
   ]);
-  // Battery & Self-consumption simulation
-  const sim = simulateBatteryAndConsumption(sumProd, settings);
+  // Battery & Self-consumption simulation (continuous multi-day cycle)
+  const forecastSims = simulateForecastBattery(data, settings);
+  const sim = (forecastSims && forecastSims[day]) ? forecastSims[day] : simulateBatteryAndConsumption(sumProd, settings);
   if (els.pvBalanceCard) {
     if (els.pvSelfVal) els.pvSelfVal.textContent = `${sim.totalSelfConsumed.toFixed(1)} kWh`;
     if (els.pvSelfPct) els.pvSelfPct.textContent = t("pv.metric.self.sub", [Math.round(sim.selfSufficiencyRate)]);
@@ -1970,7 +2048,8 @@ els.pvConfig.addEventListener("submit", (e) => {
     tariff: parseFloat(els.pvTariff.value),
     thermal: els.pvThermal.value === "temp" ? "temp" : "fixed",
     batteryCap: els.pvBattery ? Math.max(0, parseFloat(els.pvBattery.value) || 0) : 0,
-    baseLoad: els.pvBaseLoad ? Math.max(0, parseFloat(els.pvBaseLoad.value) || 0) : 350,
+    battMinSoc: els.pvBattMinSoc ? Math.min(100, Math.max(0, parseFloat(els.pvBattMinSoc.value) || 0)) : 20,
+    dailyKwh: els.pvDailyKwh ? Math.max(0, parseFloat(els.pvDailyKwh.value) || 0) : 10,
     exportPrice: els.pvExportTariff ? Math.max(0, parseFloat(els.pvExportTariff.value) || 0) : 0.05,
   };
   const bad = [raw.eff, raw.tariff, ...groups.flatMap((g) => [g.kwp, g.tilt, g.az])]
