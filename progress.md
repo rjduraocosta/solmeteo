@@ -4,7 +4,7 @@
 * **Application:** SolMeteo (Solar & Meteorological Forecast PWA)
 * **Architecture:** Static single-page application (Vanilla JS, CSS3, HTML5) with zero dependencies.
 * **Data Sources:** Open-Meteo APIs (Forecast, Geocoding, Air Quality) + IP geolocation fallback.
-* **Current Version:** `2.8.0` (Production live on `main`)
+* **Current Version:** `2.9.0` (Working on branch `feat/bi-hourly-tariffs-and-clarity`)
 * **Live Deployment:** GitHub Pages (`https://rjduraocosta.github.io/solmeteo/`) from `main` branch.
 
 ---
@@ -36,6 +36,7 @@
 
 | Version | Milestone Date | Summary of Changes |
 | :--- | :--- | :--- |
+| **v2.9.0** | 2026-11-04 | Bi-hourly tariff modeling (ERSE daily & weekly cycles), hourly economic evaluation, clarified self-consumption & battery metric breakdown. |
 | **v2.8.0** | 2026-11-04 | Battery storage simulation, baseload modeling, energy balance dashboard, self-consumption partition bar, manual section 5.6. |
 | **v2.7.0** | 2026-11-04 | Instantaneous power curve (kW), view mode toggle (Both/kWh/kW), peak power badge, per-array peak kW, and manual section 5.5. |
 | **v2.6.0** | 2026-11-04 | System theme auto-detection (`prefers-color-scheme`), wind speed unit toggle (km/h ↔ mph) with topbar & card touch, manual sync, and SW cache update. |
