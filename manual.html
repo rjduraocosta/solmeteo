@@ -386,14 +386,54 @@
             <td data-i18n="m.f.az.t">Sul no hemisfério norte, Norte no sul.</td>
           </tr>
           <tr>
+            <td><strong data-i18n="m.f.tarifftype">Tipo de tarifa</strong></td>
+            <td data-i18n="m.f.tarifftype.p">Escolha entre Tarifa Simples (fixa 24h) ou Bi-horária (preço diferenciado dia/noite).</td>
+            <td data-i18n="m.f.tarifftype.t">Permite simular com exatidão a fatura segundo as regras da ERSE.</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.tariffcycle">Ciclo bi-horário</strong></td>
+            <td data-i18n="m.f.tariffcycle.p">Ciclo de contagem da tarifa bi-horária: Diário ou Semanal.</td>
+            <td data-i18n-html="m.f.tariffcycle.t"><strong>Diário:</strong> vazio 22h–08h todos os dias. <strong>Semanal:</strong> vazio alargado no fim de semana.</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.tariff">Tarifa Simples (€/kWh)</strong></td>
+            <td data-i18n="m.f.tariff.p">Preço da energia para calcular a economia em tarifa simples (24h fixa).</td>
+            <td data-i18n-html="m.f.tariff.t">Aceita pelo menos 3 casas decimais, ex.: <code>0.182</code>.</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.tariffpeak">Tarifa Dia / Fora Vazio (€/kWh)</strong></td>
+            <td data-i18n="m.f.tariffpeak.p">Preço da eletricidade nas horas diurnas (fora de vazio) no tarifário bi-horário.</td>
+            <td data-i18n-html="m.f.tariffpeak.t">Valor comum: <code>0.180</code> a <code>0.250</code>&nbsp;€/kWh.</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.tariffoffpeak">Tarifa Noite / Vazio (€/kWh)</strong></td>
+            <td data-i18n="m.f.tariffoffpeak.p">Preço da eletricidade nas horas de vazio noturno e fins de semana.</td>
+            <td data-i18n-html="m.f.tariffoffpeak.t">Valor comum: <code>0.100</code> a <code>0.130</code>&nbsp;€/kWh.</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.exportprice">Tarifa de Injeção (€/kWh)</strong></td>
+            <td data-i18n="m.f.exportprice.p">Remuneração paga pelo excedente solar injetado na rede pública.</td>
+            <td data-i18n-html="m.f.exportprice.t">Média de mercado: <code>0.040</code> a <code>0.070</code>&nbsp;€/kWh.</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.battery">Bateria (kWh)</strong></td>
+            <td data-i18n="m.f.battery.p">Capacidade útil de armazenamento residencial em kWh.</td>
+            <td data-i18n="m.f.battery.t">Coloca 0 se não tiveres bateria física instalada.</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.minsoc">Reserva mínima (%)</strong></td>
+            <td data-i18n="m.f.minsoc.p">Percentagem mínima de carga abaixo da qual a bateria não descarrega.</td>
+            <td data-i18n="m.f.minsoc.t">Padrão 20% para proteção das células e emergência.</td>
+          </tr>
+          <tr>
+            <td><strong data-i18n="m.f.dailykwh">Consumo diário (kWh/dia)</strong></td>
+            <td data-i18n="m.f.dailykwh.p">Consumo elétrico diário total da habitação.</td>
+            <td data-i18n="m.f.dailykwh.t">Divide o total da tua fatura mensal por 30 (ex.: 300 kWh/mês = 10 kWh/dia).</td>
+          </tr>
+          <tr>
             <td><strong data-i18n="m.f.eff">Rendimento (%)</strong></td>
             <td data-i18n="m.f.eff.p">Perdas do sistema: inversor, cabos, temperatura, sujidade.</td>
             <td data-i18n="m.f.eff.t">Típico 75–85% (sem térmica real) ou 90–95% (com térmica real).</td>
-          </tr>
-          <tr>
-            <td><strong data-i18n="m.f.tariff">Tarifa (€/kWh)</strong></td>
-            <td data-i18n="m.f.tariff.p">Preço da energia para calcular a economia.</td>
-            <td data-i18n-html="m.f.tariff.t">Aceita pelo menos 3 casas decimais, ex.: <code>0.150</code>.</td>
           </tr>
           <tr>
             <td><strong data-i18n="m.f.thermal">Efeito térmico</strong></td>
@@ -474,6 +514,42 @@
         <li><span class="dot dot--indigo"></span><span data-i18n-html="m.s5.6.p6"><strong>Ciclo Multi-Dia Cont&iacute;nuo:</strong> A simula&ccedil;&atilde;o &eacute; cont&iacute;nua ao longo dos 7 dias da previs&atilde;o: o n&iacute;vel de carga (SoC) com que a bateria termina a noite transita com exatid&atilde;o para o dia seguinte.</span></li>
         <li><span class="dot dot--gold"></span><span data-i18n-html="m.s5.6.p7"><strong>Tarifas Bi-hor&aacute;rias (ERSE):</strong> Suporta tarif&aacute;rios simples (24h fixa) ou bi-hor&aacute;rios com distin&ccedil;&atilde;o de <strong>Ciclo Di&aacute;rio</strong> (vazio das 22h &agrave;s 08h) e <strong>Ciclo Semanal</strong> (vazio alargado no fim de semana), calculando a poupan&ccedil;a e o custo de rede com rigor hor&aacute;rio.</span></li>
       </ul>
+
+      <h4 style="margin-top:16px;margin-bottom:8px;font-size:0.95rem;color:var(--text)" data-i18n="m.s5.6.cycles.title">Horários Oficiais do Tarifário Bi-horário (Portugal Continental / ERSE)</h4>
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="m.s5.6.th.ciclo">Ciclo</th>
+            <th data-i18n="m.s5.6.th.dias">Dias da semana</th>
+            <th data-i18n="m.s5.6.th.vazio">Horas de Vazio (Tarifa Económica)</th>
+            <th data-i18n="m.s5.6.th.foravazio">Horas Fora de Vazio (Tarifa Normal)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong data-i18n="m.s5.6.c_daily">Ciclo Diário</strong></td>
+            <td data-i18n="m.s5.6.c_daily_days">Todos os dias (segunda a domingo)</td>
+            <td data-i18n="m.s5.6.c_daily_v">22h00 às 08h00 (10 horas/dia)</td>
+            <td data-i18n="m.s5.6.c_daily_fv">08h00 às 22h00 (14 horas/dia)</td>
+          </tr>
+          <tr>
+            <td rowspan="3"><strong data-i18n="m.s5.6.c_weekly">Ciclo Semanal</strong></td>
+            <td data-i18n="m.s5.6.c_weekly_d1">Segunda a Sexta (dias úteis)</td>
+            <td data-i18n="m.s5.6.c_weekly_v1">00h00 às 07h00 (7 horas/dia)</td>
+            <td data-i18n="m.s5.6.c_weekly_fv1">07h00 às 24h00 (17 horas/dia)</td>
+          </tr>
+          <tr>
+            <td data-i18n="m.s5.6.c_weekly_d2">Sábado</td>
+            <td data-i18n="m.s5.6.c_weekly_v2">00h00–09h00, 14h00–20h00, 22h00–24h00 (17h no total)</td>
+            <td data-i18n="m.s5.6.c_weekly_fv2">09h00–14h00, 20h00–22h00 (7h no total)</td>
+          </tr>
+          <tr>
+            <td data-i18n="m.s5.6.c_weekly_d3">Domingo</td>
+            <td data-i18n="m.s5.6.c_weekly_v3">00h00 às 24h00 (24 horas completas em vazio)</td>
+            <td data-i18n="m.s5.6.c_weekly_fv3">Nenhuma (0h)</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- ============================== FAQ ============================== -->
@@ -542,7 +618,7 @@
 
 <footer class="footer">
       <span><span data-i18n="m.footer.src">Fonte meteorológica:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
-      <span>SolMeteo · <span data-i18n="m.version">Versão</span> <span id="manualVersion">2.9.0</span></span>
+      <span>SolMeteo · <span data-i18n="m.version">Versão</span> <span id="manualVersion">2.9.1</span></span>
     </footer>
   </main>
 
@@ -623,7 +699,50 @@
         "m.f.eff": "Rendimento (%)",
         "m.f.eff.p": "Perdas do sistema: inversor, cabos, temperatura, sujidade.",
         "m.f.eff.t": "Típico 75–85% (sem térmica real) ou 90–95% (com térmica real).",
-        "m.f.tariff": "Tarifa (€/kWh)",
+        "m.f.tarifftype": "Tipo de tarifa",
+        "m.f.tarifftype.p": "Escolha entre Tarifa Simples (fixa 24h) ou Bi-horária (preço diferenciado dia/noite).",
+        "m.f.tarifftype.t": "Permite simular com exatidão a fatura segundo as regras da ERSE.",
+        "m.f.tariffcycle": "Ciclo bi-horário",
+        "m.f.tariffcycle.p": "Ciclo de contagem da tarifa bi-horária: Diário ou Semanal.",
+        "m.f.tariffcycle.t": "<strong>Diário:</strong> vazio 22h–08h todos os dias. <strong>Semanal:</strong> vazio alargado no fim de semana.",
+        "m.f.tariffpeak": "Tarifa Dia / Fora Vazio (€/kWh)",
+        "m.f.tariffpeak.p": "Preço da eletricidade nas horas diurnas (fora de vazio) no tarifário bi-horário.",
+        "m.f.tariffpeak.t": "Valor comum: <code>0.180</code> a <code>0.250</code>&nbsp;€/kWh.",
+        "m.f.tariffoffpeak": "Tarifa Noite / Vazio (€/kWh)",
+        "m.f.tariffoffpeak.p": "Preço da eletricidade nas horas de vazio noturno e fins de semana.",
+        "m.f.tariffoffpeak.t": "Valor comum: <code>0.100</code> a <code>0.130</code>&nbsp;€/kWh.",
+        "m.f.exportprice": "Tarifa de Injeção (€/kWh)",
+        "m.f.exportprice.p": "Remuneração paga pelo excedente solar injetado na rede pública.",
+        "m.f.exportprice.t": "Média de mercado: <code>0.040</code> a <code>0.070</code>&nbsp;€/kWh.",
+        "m.f.battery": "Bateria (kWh)",
+        "m.f.battery.p": "Capacidade útil de armazenamento residencial em kWh.",
+        "m.f.battery.t": "Coloca 0 se não tiveres bateria física instalada.",
+        "m.f.minsoc": "Reserva mínima (%)",
+        "m.f.minsoc.p": "Percentagem mínima de carga abaixo da qual a bateria não descarrega.",
+        "m.f.minsoc.t": "Padrão 20% para proteção das células e emergência.",
+        "m.f.dailykwh": "Consumo diário (kWh/dia)",
+        "m.f.dailykwh.p": "Consumo elétrico diário total da habitação.",
+        "m.f.dailykwh.t": "Divide o total da tua fatura mensal por 30 (ex.: 300 kWh/mês = 10 kWh/dia).",
+        "m.s5.6.cycles.title": "Horários Oficiais do Tarifário Bi-horário (Portugal Continental / ERSE)",
+        "m.s5.6.th.ciclo": "Ciclo",
+        "m.s5.6.th.dias": "Dias da semana",
+        "m.s5.6.th.vazio": "Horas de Vazio (Tarifa Económica)",
+        "m.s5.6.th.foravazio": "Horas Fora de Vazio (Tarifa Normal)",
+        "m.s5.6.c_daily": "Ciclo Diário",
+        "m.s5.6.c_daily_days": "Todos os dias (segunda a domingo)",
+        "m.s5.6.c_daily_v": "22h00 às 08h00 (10 horas/dia)",
+        "m.s5.6.c_daily_fv": "08h00 às 22h00 (14 horas/dia)",
+        "m.s5.6.c_weekly": "Ciclo Semanal",
+        "m.s5.6.c_weekly_d1": "Segunda a Sexta (dias úteis)",
+        "m.s5.6.c_weekly_v1": "00h00 às 07h00 (7 horas/dia)",
+        "m.s5.6.c_weekly_fv1": "07h00 às 24h00 (17 horas/dia)",
+        "m.s5.6.c_weekly_d2": "Sábado",
+        "m.s5.6.c_weekly_v2": "00h00–09h00, 14h00–20h00, 22h00–24h00 (17h no total)",
+        "m.s5.6.c_weekly_fv2": "09h00–14h00, 20h00–22h00 (7h no total)",
+        "m.s5.6.c_weekly_d3": "Domingo",
+        "m.s5.6.c_weekly_v3": "00h00 às 24h00 (24 horas completas em vazio)",
+        "m.s5.6.c_weekly_fv3": "Nenhuma (0h)",
+        "m.f.tariff": "Tarifa Simples (€/kWh)",
         "m.f.tariff.p": "Preço da energia para calcular a economia.",
         "m.f.tariff.t": "Aceita pelo menos 3 casas decimais, ex.: <code>0.150</code>.",
         "m.f.thermal": "Efeito térmico",
@@ -767,7 +886,50 @@
         "m.f.eff": "Efficiency (%)",
         "m.f.eff.p": "System losses: inverter, cables, temperature, soiling.",
         "m.f.eff.t": "Typical 75–85% (without real thermal) or 90–95% (with real thermal).",
-        "m.f.tariff": "Tariff (€/kWh)",
+        "m.f.tarifftype": "Tariff Type",
+        "m.f.tarifftype.p": "Choose between Flat Tariff (fixed 24h) or Bi-hourly (day/night pricing).",
+        "m.f.tarifftype.t": "Allows precise billing simulations aligned with Portuguese ERSE regulations.",
+        "m.f.tariffcycle": "Bi-hourly cycle",
+        "m.f.tariffcycle.p": "Billing cycle definition: Daily or Weekly.",
+        "m.f.tariffcycle.t": "<strong>Daily:</strong> off-peak 22:00–08:00 every day. <strong>Weekly:</strong> extended off-peak across weekends.",
+        "m.f.tariffpeak": "Peak Tariff / Daytime (€/kWh)",
+        "m.f.tariffpeak.p": "Electricity cost during standard daytime hours (outside off-peak periods).",
+        "m.f.tariffpeak.t": "Common range: <code>0.180</code> to <code>0.250</code>&nbsp;€/kWh.",
+        "m.f.tariffoffpeak": "Off-Peak Tariff / Night (€/kWh)",
+        "m.f.tariffoffpeak.p": "Electricity cost during economical night hours and weekend off-peak slots.",
+        "m.f.tariffoffpeak.t": "Common range: <code>0.100</code> to <code>0.130</code>&nbsp;€/kWh.",
+        "m.f.exportprice": "Feed-In Tariff (€/kWh)",
+        "m.f.exportprice.p": "Remuneration rate paid for excess solar energy exported to the power grid.",
+        "m.f.exportprice.t": "Market average: <code>0.040</code> to <code>0.070</code>&nbsp;€/kWh.",
+        "m.f.battery": "Battery (kWh)",
+        "m.f.battery.p": "Usable residential battery energy storage capacity in kWh.",
+        "m.f.battery.t": "Set to 0 if your home system has no battery storage.",
+        "m.f.minsoc": "Minimum Reserve (%)",
+        "m.f.minsoc.p": "Minimum charge percentage below which the battery stops discharging.",
+        "m.f.minsoc.t": "Default 20% for cell health protection and backup reserve.",
+        "m.f.dailykwh": "Daily Consumption (kWh/day)",
+        "m.f.dailykwh.p": "Total daily household electrical consumption in kWh.",
+        "m.f.dailykwh.t": "Divide your monthly utility bill kWh by 30 (e.g. 300 kWh/month = 10 kWh/day).",
+        "m.s5.6.cycles.title": "Official Bi-Hourly Tariff Schedules (ERSE Portugal Standards)",
+        "m.s5.6.th.ciclo": "Cycle",
+        "m.s5.6.th.dias": "Days of the week",
+        "m.s5.6.th.vazio": "Off-Peak Hours (Economy Rate)",
+        "m.s5.6.th.foravazio": "Peak Hours (Standard Rate)",
+        "m.s5.6.c_daily": "Daily Cycle",
+        "m.s5.6.c_daily_days": "Every day (Monday to Sunday)",
+        "m.s5.6.c_daily_v": "22:00 to 08:00 (10 hours/day)",
+        "m.s5.6.c_daily_fv": "08:00 to 22:00 (14 hours/day)",
+        "m.s5.6.c_weekly": "Weekly Cycle",
+        "m.s5.6.c_weekly_d1": "Monday to Friday (weekdays)",
+        "m.s5.6.c_weekly_v1": "00:00 to 07:00 (7 hours/day)",
+        "m.s5.6.c_weekly_fv1": "07:00 to 24:00 (17 hours/day)",
+        "m.s5.6.c_weekly_d2": "Saturday",
+        "m.s5.6.c_weekly_v2": "00:00–09:00, 14:00–20:00, 22:00–24:00 (17h total)",
+        "m.s5.6.c_weekly_fv2": "09:00–14:00, 20:00–22:00 (7h total)",
+        "m.s5.6.c_weekly_d3": "Sunday",
+        "m.s5.6.c_weekly_v3": "00:00 to 24:00 (full 24 hours off-peak)",
+        "m.s5.6.c_weekly_fv3": "None (0h)",
+        "m.f.tariff": "Flat Tariff (€/kWh)",
         "m.f.tariff.p": "Energy price used to compute savings.",
         "m.f.tariff.t": "Accepts at least 3 decimal places, e.g. <code>0.150</code>.",
         "m.f.thermal": "Thermal effect",
