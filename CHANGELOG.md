@@ -2,13 +2,26 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.7.0**
+Current Version: **2.8.0**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.8.0] — 2026-11-04
+
+### Added
+- **Residential Battery Storage & Self-Consumption Simulation**: Comprehensive physical simulation engine modeling solar production, daily household consumption (`dailyKwh`, in kWh/day), direct self-consumption, battery charge/discharge cycles (~92% roundtrip efficiency), grid export, and grid import.
+- **Configurable Minimum Battery Reserve (DoD / 0% to 100%)**: Configurable threshold (`pvBattMinSoc`, default 20%) below which battery discharge ceases to protect cell chemistry and preserve emergency backup.
+- **Continuous Multi-Day Battery State Chaining**: Continuous state of charge (SoC) modeling across the entire 7-day forecast, carrying over midnight battery charge into the next day without artificial resets.
+- **Energy Balance Dashboard Card (`.pv-balance`)**: Displays direct self-consumption (kWh), self-sufficiency rate (%), battery cycle & final SoC (%), grid export revenue (+€), and grid import cost (€).
+- **Segmented Energy Partition Bar**: Visual multi-segment progress bar showing the distribution between self-consumed solar, battery storage, and exported energy.
+- **Bilingual User Manual Section 5.6**: Fully synchronized guide covering residential self-consumption, daily household consumption, battery sizing, minimum reserve, continuous multi-day cycles, and grid injection economics in Portuguese and English (`manual.html`).
+- **Service Worker Cache Busting**: Updated cache identifier to `solmeteo-v2.8.0`.
 
 ---
 
