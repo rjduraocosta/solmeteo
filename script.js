@@ -125,6 +125,7 @@ const els = {
   pvReset: document.getElementById("pvReset"),
   pvCharts: document.getElementById("pvCharts"),
   pvDayTotal: document.getElementById("pvDayTotal"),
+  pvPeakPower: document.getElementById("pvPeakPower"),
   pvChart: document.getElementById("pvChart"),
   pvAxis: document.getElementById("pvAxis"),
   pvEcon: document.getElementById("pvEcon"),
@@ -154,13 +155,15 @@ const RECENTS_KEY = "skycast:recents";
 const THEME_KEY = "skycast:theme";
 const UNIT_KEY = "skycast:unit";
 const WIND_UNIT_KEY = "skycast:wind_unit";
+const PV_VIEW_KEY = "skycast:pv_view";
+let pvViewMode = "both";
 const PV_PALETTE = ["#38bdf8", "#818cf8", "#34d399", "#fb7185"];
 const PV_TOTAL_COLOR = "#fbbf24";
 const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.6.0";
+const APP_VERSION = "2.7.0";
 
 const LANG_KEY = "skycast:lang";
 const I18N = {
@@ -274,6 +277,13 @@ const I18N = {
     "pv.export.title": "Exportar dados do dia para CSV",
     "pv.export.done": "Ficheiro CSV descarregado.",
     "pv.weekly.title": "Previsão semanal (7 dias acumulados)",
+    "pv.peak.tag": "Pico: {0} kW ({1})",
+    "pv.peak.title": "Potência de pico instantânea estimada",
+    "pv.mode.aria": "Modo de visualização do gráfico solar",
+    "pv.mode.both": "Ambos",
+    "pv.mode.kwh": "kWh (Energia)",
+    "pv.mode.kw": "kW (Potência)",
+    "pv.aria.power": "Curva de potência instantânea em kW",
   },
   en: {
     locale: "en-GB",
@@ -385,6 +395,13 @@ const I18N = {
     "pv.export.title": "Export day data to CSV",
     "pv.export.done": "CSV file downloaded.",
     "pv.weekly.title": "Weekly forecast (7-day total)",
+    "pv.peak.tag": "Peak: {0} kW ({1})",
+    "pv.peak.title": "Estimated instantaneous peak power",
+    "pv.mode.aria": "Solar chart visualization mode",
+    "pv.mode.both": "Both",
+    "pv.mode.kwh": "kWh (Energy)",
+    "pv.mode.kw": "kW (Power)",
+    "pv.aria.power": "Instantaneous power curve in kW",
   },
 };
 
@@ -807,6 +824,8 @@ function setUnit(next) {
   applyUnitButtons();
   unitWind = localStorage.getItem(WIND_UNIT_KEY) === "mph" ? "mph" : "kmh";
   applyWindUnitButtons();
+  pvViewMode = localStorage.getItem(PV_VIEW_KEY) || "both";
+  applyPvViewButtons();
   if (weatherData) renderDay(selectedDay);
 }
 
@@ -816,6 +835,19 @@ function windDisplay(kmh) {
     return `${Math.round(kmh * 0.621371)} mph`;
   }
   return `${Math.round(kmh)} km/h`;
+}
+
+function applyPvViewButtons() {
+  document.querySelectorAll(".pv-view-btn").forEach((b) => {
+    b.classList.toggle("active", b.getAttribute("data-mode") === pvViewMode);
+  });
+}
+
+function setPvViewMode(next) {
+  pvViewMode = next || "both";
+  localStorage.setItem(PV_VIEW_KEY, pvViewMode);
+  applyPvViewButtons();
+  if (weatherData) renderPv(weatherData, selectedDay);
 }
 
 function applyWindUnitButtons() {
@@ -1416,7 +1448,7 @@ function renderPv(data, day) {
                 <span class="pv-mini__dot" style="background:${color}"></span>
                 ${compassName(pg.g.az)} ${pg.g.az}° · ${pg.g.tilt}° · ${pg.g.kwp} kWp
               </span>
-              <span class="pv-mini__kwh">${pg.total.toFixed(1)} kWh</span>
+              <span class="pv-mini__kwh">${pg.total.toFixed(1)} kWh <span class="pv-mini__peak">· ${Math.max.apply(null, pg.prod).toFixed(2)} kWpico</span></span>
             </div>
             <div class="chart__canvas">${buildPvChart(pg.prod, { h: 90, color, id: "pvGrad" + k })}</div>
             <div class="chart__axis chart__axis--mini">${axisLabels(times)}</div>
@@ -1430,7 +1462,17 @@ function renderPv(data, day) {
   els.pvAxis.innerHTML = axisLabels(times);
   els.pvSpan.textContent = dayLabel(day);
   els.pvDayTotal.textContent = `${total.toFixed(1)} kWh`;
-  els.pvChart.innerHTML = buildPvChart(sumProd, { h: 170, color: PV_TOTAL_COLOR, id: "pvGradTotal" });
+  const peakVal = sumProd.length ? Math.max.apply(null, sumProd) : 0;
+  const peakIdx = sumProd.indexOf(peakVal);
+  if (els.pvPeakPower) {
+    if (peakVal > 0.05) {
+      els.pvPeakPower.hidden = false;
+      els.pvPeakPower.textContent = t("pv.peak.tag", [peakVal.toFixed(2), formatHourLabel(times[peakIdx])]);
+    } else {
+      els.pvPeakPower.hidden = true;
+    }
+  }
+  els.pvChart.innerHTML = buildPvChart(sumProd, { h: 170, color: PV_TOTAL_COLOR, id: "pvGradTotal", mode: pvViewMode, times });
   els.pvEcon.innerHTML = t("pv.cmp", [
     perGroup.length || 0,
     total.toFixed(1),
@@ -1589,30 +1631,83 @@ function exportPvCsv() {
 function buildPvChart(production, opts = {}) {
   const W = 600;
   const H = opts.h || 170;
-  const pad = 6;
+  const pad = 10;
   const color = opts.color || "#34d399";
   const gid = opts.id || "pvGrad";
+  const mode = opts.mode || (opts.id === "pvGradTotal" ? pvViewMode : "bars");
   const n = production.length || 1;
   const maxV = Math.max.apply(null, production.concat([0.1]));
   const stepX = (W - pad * 2) / n;
-  const bw = Math.min(Math.max(stepX * 0.62, 6), 20);
-  const plotH = H - 14;
+  const bw = Math.min(Math.max(stepX * 0.58, 6), 18);
+  const plotH = H - 24;
 
   let bars = "";
+  const points = [];
+
   production.forEach((v, i) => {
-    const h = v > 0 ? Math.max((v / maxV) * plotH, 2) : 0;
     const cx = pad + stepX * i + stepX / 2;
-    bars += `
-      <rect x="${(cx - bw / 2).toFixed(1)}" y="${(H - 6 - h).toFixed(1)}"
-            width="${bw.toFixed(1)}" height="${h.toFixed(1)}"
-            rx="${Math.min(3, bw / 2).toFixed(1)}" fill="url(#${gid})"/>
-    `;
+    const cy = H - 8 - (Math.max(v, 0) / maxV) * plotH;
+    points.push({ x: cx, y: cy, v });
+
+    if (mode === "bars" || mode === "both") {
+      const h = v > 0 ? Math.max((v / maxV) * plotH, 2) : 0;
+      const opacity = mode === "both" ? "0.62" : "0.95";
+      bars += `
+        <rect x="${(cx - bw / 2).toFixed(1)}" y="${(H - 8 - h).toFixed(1)}"
+              width="${bw.toFixed(1)}" height="${h.toFixed(1)}"
+              rx="${Math.min(3, bw / 2).toFixed(1)}" fill="url(#${gid})" opacity="${opacity}"/>
+      `;
+    }
   });
+
+  let curveEl = "";
+  if (mode === "curve" || mode === "both") {
+    let dLine = "";
+    let dArea = `M ${points[0].x.toFixed(1)} ${H - 8} `;
+    
+    points.forEach((p, i) => {
+      if (i === 0) {
+        dLine += `M ${p.x.toFixed(1)} ${p.y.toFixed(1)} `;
+        dArea += `L ${p.x.toFixed(1)} ${p.y.toFixed(1)} `;
+      } else {
+        const prev = points[i - 1];
+        const cpX = ((prev.x + p.x) / 2).toFixed(1);
+        dLine += `C ${cpX} ${prev.y.toFixed(1)}, ${cpX} ${p.y.toFixed(1)}, ${p.x.toFixed(1)} ${p.y.toFixed(1)} `;
+        dArea += `C ${cpX} ${prev.y.toFixed(1)}, ${cpX} ${p.y.toFixed(1)}, ${p.x.toFixed(1)} ${p.y.toFixed(1)} `;
+      }
+    });
+
+    const lastX = points[points.length - 1].x.toFixed(1);
+    dArea += `L ${lastX} ${H - 8} Z`;
+    const curveStroke = opts.id === "pvGradTotal" ? "#38bdf8" : color;
+
+    curveEl = `
+      ${mode === "curve" ? `<path d="${dArea}" fill="url(#${gid}Area)"/>` : ""}
+      <path d="${dLine}" fill="none" stroke="${curveStroke}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+    `;
+  }
+
+  let peakMarker = "";
+  const peakVal = Math.max.apply(null, production);
+  if (peakVal > 0.05 && (mode === "curve" || mode === "both")) {
+    const peakIdx = production.indexOf(peakVal);
+    const p = points[peakIdx];
+    const markerColor = "#38bdf8";
+    const anchor = p.x <= 40 ? "start" : p.x >= W - 40 ? "end" : "middle";
+    const labelX = anchor === "middle" ? p.x : anchor === "start" ? Math.max(p.x, 10) : Math.min(p.x, W - 10);
+    const labelY = Math.max(p.y - 10, 14);
+
+    peakMarker = `
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="8" fill="${markerColor}" opacity="0.22"/>
+      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="3.6" fill="${markerColor}" stroke="#0b1020" stroke-width="1.3"/>
+      <text x="${labelX.toFixed(1)}" y="${labelY.toFixed(1)}" text-anchor="${anchor}" fill="${markerColor}" font-size="11" font-weight="700">${peakVal.toFixed(2)} kW</text>
+    `;
+  }
 
   let guides = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     .map((i) => {
       const gx = pad + (i / 12) * (W - pad * 2);
-      return `<line x1="${gx.toFixed(1)}" y1="6" x2="${gx.toFixed(1)}" y2="${H - 6}" stroke="#e2e8f0" stroke-opacity="0.05"/>`;
+      return `<line x1="${gx.toFixed(1)}" y1="6" x2="${gx.toFixed(1)}" y2="${H - 8}" stroke="#e2e8f0" stroke-opacity="0.05"/>`;
     })
     .join("");
 
@@ -1623,11 +1718,17 @@ function buildPvChart(production, opts = {}) {
           <stop offset="0%" stop-color="${color}" stop-opacity="0.95"/>
           <stop offset="100%" stop-color="${color}" stop-opacity="0.4"/>
         </linearGradient>
+        <linearGradient id="${gid}Area" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.32"/>
+          <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.02"/>
+        </linearGradient>
       </defs>
       ${guides}
-      <line x1="${pad}" y1="${H - 6}" x2="${W - pad}" y2="${H - 6}"
+      <line x1="${pad}" y1="${H - 8}" x2="${W - pad}" y2="${H - 8}"
             stroke="#3b4a72" stroke-width="1.5" stroke-dasharray="4 4"/>
       ${bars}
+      ${curveEl}
+      ${peakMarker}
     </svg>
   `;
 }
@@ -1765,6 +1866,9 @@ els.pvExportBtn.addEventListener("click", exportPvCsv);
   });
   document.querySelectorAll(".wind__btn").forEach((b) => {
     b.addEventListener("click", () => setWindUnit(b.getAttribute("data-wind")));
+  });
+  document.querySelectorAll(".pv-view-btn").forEach((b) => {
+    b.addEventListener("click", () => setPvViewMode(b.getAttribute("data-mode")));
   });
   const statWindBox = document.getElementById("statWindBox");
   if (statWindBox) {
