@@ -4,7 +4,7 @@
 * **Application:** SolMeteo (Solar & Meteorological Forecast PWA)
 * **Architecture:** Static single-page application (Vanilla JS, CSS3, HTML5) with zero dependencies.
 * **Data Sources:** Open-Meteo APIs (Forecast, Geocoding, Air Quality) + IP geolocation fallback.
-* **Current Version:** `2.12.1` (Production live on `main`)
+* **Current Version:** `2.12.2` (Production live on `main`)
 * **Live Deployment:** GitHub Pages (`https://rjduraocosta.github.io/solmeteo/`) from `main` branch.
 
 ---
@@ -34,6 +34,7 @@
 
 | Version | Milestone Date | Summary of Changes |
 | :--- | :--- | :--- |
+| **v2.12.2**| 2026-11-06 | Mobile portrait viewport optimizations: fixed Hero Sun Arc side-by-side compression, resolved energy balance card overflow with minmax/wrap, and eliminated weekly PV bar label collision by hiding redundant unit on mobile. |
 | **v2.12.1**| 2026-11-06 | Unified UV Index into Hero stats (current + peak hour), removed redundant bottom panel, and implemented on-demand expandable weather alerts banner. |
 | **v2.12.0**| 2026-11-06 | Visual celestial Sun Arc widget (`#sunArcCard`), real-time sun/moon trajectory, solar noon zenith marker, daylight duration, sunset/sunrise countdown, and hemispheric coordinates chip. |
 | **v2.11.2**| 2026-11-06 | Comprehensive technical audit enhancements: mobile viewport ergonomics (320-480px), fluid compass scaling, WCAG AA light mode contrast (>5.0:1), defensive safe localStorage layer, and manual table touch scrolling. |

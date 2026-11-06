@@ -230,7 +230,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.12.1";
+const APP_VERSION = "2.12.2";
 
 const LANG_KEY = "skycast:lang";
 
@@ -2921,7 +2921,7 @@ function renderPvWeekly(totals, settings) {
     col.setAttribute("aria-label", `${dayLabel(i)} · ${v.toFixed(1)} kWh`);
     const value = document.createElement("span");
     value.className = "pv-weekly__bar-value";
-    value.textContent = v.toFixed(1) + " kWh";
+    value.innerHTML = `<span class="pv-weekly__bar-num">${v.toFixed(1)}</span><span class="pv-weekly__bar-unit"> kWh</span>`;
     const track = document.createElement("div");
     track.className = "pv-weekly__bar-track";
     const bar = document.createElement("div");

@@ -2,13 +2,22 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.12.1**
+Current Version: **2.12.2**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.12.2] — 2026-11-06
+
+### Fixed & Enhanced (Mobile Portrait Viewport Optimization)
+- **Hero Celestial Sun Arc Layout**: Fixed container overflow on mobile portrait screens (e.g. iPhone) by switching `.hero__side` to a vertical column stack (`flex-direction: column; align-items: stretch;`). The geographic coordinates and daylight duration chips now span cleanly across the top while the visual celestial Sun Arc is centered with full responsive bounds.
+- **Energy Balance Metric Grid**: Prevented metric cards from exceeding the card boundary on mobile devices. Replaced fixed minimum content width with `minmax(0, 1fr)`, added `min-width: 0; overflow: hidden;` to `.pv-metric`, and enabled controlled word wrapping (`white-space: normal; word-break: break-word`) on long metric subtitles.
+- **Weekly PV Forecast Bar Labels**: Resolved adjacent label collisions (e.g., overlapping `14.6 kWh` strings). Split numeric value and unit into distinct spans (`<span class="pv-weekly__bar-num">` and `<span class="pv-weekly__bar-unit">`), hiding the redundant `kWh` unit label on screens below 600px while centering readable numbers over their respective bars.
 
 ---
 
