@@ -64,6 +64,16 @@ body {
   transition: background 0.35s, color 0.35s;
 }
 
+[data-theme="light"] .pv-metric--self .pv-metric__val { color: #047857; }
+[data-theme="light"] .pv-metric--batt .pv-metric__val { color: #0369a1; }
+[data-theme="light"] .pv-metric--export .pv-metric__val { color: #b45309; }
+[data-theme="light"] .pv-metric--import .pv-metric__val { color: #be123c; }
+[data-theme="light"] .pv-weekly__total { color: #047857; }
+[data-theme="light"] .pv-compass-ring {
+  fill: #f8fafc;
+  stroke: rgba(15, 23, 42, 0.14);
+}
+
 [data-theme="light"] body {
   background:
     radial-gradient(1200px 600px at 80% -10%, #c7deff 0%, transparent 60%),
@@ -1756,7 +1766,7 @@ body {
 /* ---------- Advisory Panel (UV Health & Weather Alerts) ---------- */
 .advisory-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   gap: 16px;
 }
 
@@ -2172,7 +2182,9 @@ body {
 
 .pv-compass-svg {
   width: 210px;
-  height: 210px;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
   touch-action: none;
   cursor: crosshair;
   user-select: none;
@@ -2344,4 +2356,33 @@ body {
 .pv-compass-svg {
   pointer-events: auto;
   cursor: pointer;
+}
+
+@media (max-width: 400px) {
+  .app {
+    padding: 12px 8px 24px;
+    gap: 14px;
+  }
+  .panel {
+    padding: 14px 10px;
+    border-radius: 16px;
+  }
+  .pv-balance__grid {
+    grid-template-columns: 1fr;
+  }
+  .pv-weekly__bars {
+    gap: 3px;
+  }
+  .pv-weekly__bar-value {
+    font-size: 0.56rem;
+    letter-spacing: -0.03em;
+  }
+  .pv-compass-presets {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3px;
+  }
+  .pv-compass-chip {
+    padding: 5px 2px;
+    font-size: 0.65rem;
+  }
 }

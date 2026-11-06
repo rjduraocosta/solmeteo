@@ -230,9 +230,37 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.11.1";
+const APP_VERSION = "2.11.2";
 
 const LANG_KEY = "skycast:lang";
+
+function safeStorageGet(key, fallback = null) {
+  try {
+    const val = localStorage.getItem(key);
+    return val !== null ? val : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function safeStorageSet(key, value) {
+  try {
+    localStorage.setItem(key, value);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function safeStorageRemove(key) {
+  try {
+    localStorage.removeItem(key);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 const I18N = {
   pt: {
     locale: "pt-PT",
@@ -685,11 +713,11 @@ const WMO_LABELS = {
   },
 };
 
-let lang = localStorage.getItem(LANG_KEY);
+let lang = safeStorageGet(LANG_KEY);
 if (!I18N[lang]) lang = "pt";
 const saveLang = (next) => {
   lang = I18N[next] ? next : "pt";
-  localStorage.setItem(LANG_KEY, lang);
+  safeStorageSet(LANG_KEY, lang);
 };
 const t = (key, ...rest) => {
   let s = I18N[lang][key];
@@ -870,7 +898,7 @@ function cacheKey(lat, lon) {
 
 function readWeatherCache(key) {
   try {
-    const raw = localStorage.getItem(WEATHER_CACHE_KEY);
+    const raw = safeStorageGet(WEATHER_CACHE_KEY);
     if (!raw) return null;
     const store = JSON.parse(raw);
     const entry = store[key];
@@ -886,13 +914,13 @@ function writeWeatherCache(key, data) {
     const raw = localStorage.getItem(WEATHER_CACHE_KEY);
     const store = raw ? JSON.parse(raw) : {};
     store[key] = { ts: Date.now(), data };
-    localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify(store));
+    safeStorageSet(WEATHER_CACHE_KEY, JSON.stringify(store));
   } catch {}
 }
 
 function getRecents() {
   try {
-    const raw = localStorage.getItem(RECENTS_KEY);
+    const raw = safeStorageGet(RECENTS_KEY);
     const list = raw ? JSON.parse(raw) : [];
     return Array.isArray(list) ? list.slice(0, 6) : [];
   } catch {
@@ -902,7 +930,7 @@ function getRecents() {
 
 function saveRecents(list) {
   try {
-    localStorage.setItem(RECENTS_KEY, JSON.stringify(list.slice(0, 6)));
+    safeStorageSet(RECENTS_KEY, JSON.stringify(list.slice(0, 6)));
   } catch {}
 }
 
@@ -1088,11 +1116,11 @@ function applyUnitButtons() {
 function setUnit(next) {
   const isC = next === "c";
   unitCelsius = isC;
-  localStorage.setItem(UNIT_KEY, isC ? "c" : "f");
+  safeStorageSet(UNIT_KEY, isC ? "c" : "f");
   applyUnitButtons();
-  unitWind = localStorage.getItem(WIND_UNIT_KEY) === "mph" ? "mph" : "kmh";
+  unitWind = safeStorageGet(WIND_UNIT_KEY) === "mph" ? "mph" : "kmh";
   applyWindUnitButtons();
-  pvViewMode = localStorage.getItem(PV_VIEW_KEY) || "both";
+  pvViewMode = safeStorageGet(PV_VIEW_KEY) || "both";
   applyPvViewButtons();
   if (weatherData) renderDay(selectedDay);
 }
@@ -1113,7 +1141,7 @@ function applyPvViewButtons() {
 
 function setPvViewMode(next) {
   pvViewMode = next || "both";
-  localStorage.setItem(PV_VIEW_KEY, pvViewMode);
+  safeStorageSet(PV_VIEW_KEY, pvViewMode);
   applyPvViewButtons();
   if (weatherData) renderPv(weatherData, selectedDay);
 }
@@ -1126,7 +1154,7 @@ function applyWindUnitButtons() {
 
 function setWindUnit(next) {
   unitWind = next === "mph" ? "mph" : "kmh";
-  localStorage.setItem(WIND_UNIT_KEY, unitWind);
+  safeStorageSet(WIND_UNIT_KEY, unitWind);
   applyWindUnitButtons();
   if (weatherData) renderDay(selectedDay);
 }
@@ -1136,7 +1164,7 @@ function toggleWindUnit() {
 }
 
 function applyTheme() {
-  let theme = localStorage.getItem(THEME_KEY);
+  let theme = safeStorageGet(THEME_KEY);
   if (!theme) {
     theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
   }
@@ -1148,7 +1176,7 @@ function applyTheme() {
 function toggleTheme() {
   const current = document.documentElement.dataset.theme === "light" ? "light" : "dark";
   const next = current === "light" ? "dark" : "light";
-  localStorage.setItem(THEME_KEY, next);
+  safeStorageSet(THEME_KEY, next);
   applyTheme();
 }
 
@@ -1552,7 +1580,7 @@ function pvDefaults(lat) {
 
 function loadPvSettings(lat) {
   const def = pvDefaults(lat);
-  const saved = localStorage.getItem(PV_KEY);
+  const saved = safeStorageGet(PV_KEY);
   if (!saved) return def;
   try {
     const s = JSON.parse(saved);
@@ -1599,7 +1627,7 @@ function loadPvSettings(lat) {
 }
 
 function savePvSettings(s) {
-  localStorage.setItem(PV_KEY, JSON.stringify(s));
+  safeStorageSet(PV_KEY, JSON.stringify(s));
 }
 
 function pvConfigPreview() {
@@ -2985,7 +3013,7 @@ els.pvConfig.addEventListener("submit", (e) => {
 });
 
 els.pvReset.addEventListener("click", () => {
-  localStorage.removeItem(PV_KEY);
+  safeStorageRemove(PV_KEY);
   els.pvConfig.hidden = true;
   els.pvConfigBtn.setAttribute("aria-expanded", "false");
   if (weatherData) renderDay(selectedDay);
@@ -3063,8 +3091,8 @@ els.dayNextBtn.addEventListener("click", () => navDay(1));
 els.pvExportBtn.addEventListener("click", exportPvCsv);
 
 (async function init() {
-  unitCelsius = localStorage.getItem(UNIT_KEY) !== "f";
-  unitWind = localStorage.getItem(WIND_UNIT_KEY) === "mph" ? "mph" : "kmh";
+  unitCelsius = safeStorageGet(UNIT_KEY) !== "f";
+  unitWind = safeStorageGet(WIND_UNIT_KEY) === "mph" ? "mph" : "kmh";
   document.getElementById("appVersion").textContent = APP_VERSION;
   applyStaticTranslations();
   applyTheme();
@@ -3115,7 +3143,7 @@ els.pvExportBtn.addEventListener("click", exportPvCsv);
   }
   if (window.matchMedia) {
     window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", () => {
-      if (!localStorage.getItem(THEME_KEY)) {
+      if (!safeStorageGet(THEME_KEY)) {
         applyTheme();
       }
     });
@@ -3124,7 +3152,7 @@ els.pvExportBtn.addEventListener("click", exportPvCsv);
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(() => {});
   }
-  const saved = localStorage.getItem("skycast:region");
+  const saved = safeStorageGet("skycast:region");
   if (saved) {
     try {
       const p = JSON.parse(saved);

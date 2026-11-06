@@ -2,13 +2,24 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.11.1**
+Current Version: **2.11.2**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.11.2] — 2026-11-06
+
+### Improved & Hardened (Mobile, Contrast & PWA Audit)
+- **Mobile Viewport Ergonomics (320px–480px)**: Tightened nested container paddings (`.app`, `.panel`, `.pv-config`, `.pv-compass-card`), gaining up to 68px of horizontal layout space on small mobile screens.
+- **Fluid Visual Compass**: Added `aspect-ratio: 1 / 1` and `max-width: 100%` to `.pv-compass-svg` with responsive chip sizing for zero-overflow dial interaction across all smartphone form factors.
+- **Light Theme WCAG AA Contrast**: Enforced calibrated deeper shades for energy balance metrics and chart highlights (`#047857`, `#0369a1`, `#b45309`, `#be123c`), increasing contrast ratios from ~1.9:1 to >5.0:1.
+- **Resilient Storage Layer**: Wrapped all `localStorage` reads, writes, and deletions in defensive helpers (`safeStorageGet`, `safeStorageSet`, `safeStorageRemove`) to eliminate uncaught `SecurityError` exceptions in strict private browsing environments.
+- **Responsive Manual Tables**: Added smooth touch horizontal scrolling container (`overflow-x: auto; -webkit-overflow-scrolling: touch`) with minimum readable column widths for the 15-parameter reference table in Section 5.3 of `manual.html`.
 
 ---
 

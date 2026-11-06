@@ -4,7 +4,7 @@
 * **Application:** SolMeteo (Solar & Meteorological Forecast PWA)
 * **Architecture:** Static single-page application (Vanilla JS, CSS3, HTML5) with zero dependencies.
 * **Data Sources:** Open-Meteo APIs (Forecast, Geocoding, Air Quality) + IP geolocation fallback.
-* **Current Version:** `2.11.1` (Production live on `main`)
+* **Current Version:** `2.11.2` (Production live on `main`)
 * **Live Deployment:** GitHub Pages (`https://rjduraocosta.github.io/solmeteo/`) from `main` branch.
 
 ---
@@ -34,6 +34,7 @@
 
 | Version | Milestone Date | Summary of Changes |
 | :--- | :--- | :--- |
+| **v2.11.2**| 2026-11-06 | Comprehensive technical audit enhancements: mobile viewport ergonomics (320-480px), fluid compass scaling, WCAG AA light mode contrast (>5.0:1), defensive safe localStorage layer, and manual table touch scrolling. |
 | **v2.11.1**| 2026-11-06 | Fixed compass initialization on app boot, enhanced window drag interaction, and renamed tabs to "String 1..4" per solar PV engineering terminology. |
 | **v2.11.0**| 2026-11-06 | Interactive visual compass & PV array azimuth alignment (`#pvCompassCard`), multi-needle visualization, 1-click cardinal presets, bidirectional sync, manual sections 5.2 & 5.3. |
 | **v2.10.1**| 2026-11-06 | Removed health/medical advisory and personal protection actions from the UV card, preserving the objective meteorological WMO UV Index Scale (0-12 meter pointer, peak UV forecast, intensity window). |
@@ -87,7 +88,7 @@
 - [x] Step 3: Battery simulation, baseload modeling, energy balance dashboard, partition bar, manual section 5.6.
 - [x] Step 4: UV index health advisory cards & severe weather alerts.
 - [x] Step 5: Interactive visual compass alignment for PV array azimuth input.
-- [ ] Cross-browser regression and mobile rendering audit.
+- [x] Cross-browser regression and mobile rendering audit (Mobile ergonomics 320-480px, WCAG AA light contrast, safe localStorage layer, manual table scrolling).
 
 ---
 

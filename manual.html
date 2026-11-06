@@ -143,7 +143,11 @@
     .kv p { font-size: 0.9rem; color: var(--text); }
     .kv p small { color: var(--text-dim); }
 
-    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .card:has(table), .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    table { width: 100%; min-width: 480px; border-collapse: collapse; font-size: 0.88rem; }
     th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
     th { color: var(--text-faint); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
     td { color: var(--text-dim); }
@@ -625,7 +629,7 @@
 
 <footer class="footer">
       <span><span data-i18n="m.footer.src">Fonte meteorológica:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
-      <span>SolMeteo · <span data-i18n="m.version">Versão</span> <span id="manualVersion">2.11.1</span></span>
+      <span>SolMeteo · <span data-i18n="m.version">Versão</span> <span id="manualVersion">2.11.2</span></span>
     </footer>
   </main>
 
@@ -1017,7 +1021,25 @@
       },
     };
 
-    let lang = localStorage.getItem("skycast:lang");
+    
+    function safeStorageGet(key, fallback = null) {
+      try {
+        const val = localStorage.getItem(key);
+        return val !== null ? val : fallback;
+      } catch {
+        return fallback;
+      }
+    }
+    function safeStorageSet(key, value) {
+      try {
+        localStorage.setItem(key, value);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+
+    let lang = safeStorageGet("skycast:lang");
     if (!I18N[lang]) lang = "pt";
 
     const t = (k) => (I18N[lang][k] != null ? I18N[lang][k] : k);
@@ -1047,13 +1069,13 @@
         const next = b.getAttribute("data-lang");
         if (next === lang) return;
         lang = I18N[next] ? next : "pt";
-        localStorage.setItem("skycast:lang", lang);
+        safeStorageSet("skycast:lang", lang);
         apply();
       });
     });
 
     function applyTheme() {
-      let theme = localStorage.getItem("skycast:theme");
+      let theme = safeStorageGet("skycast:theme");
       if (!theme) {
         theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
       }
@@ -1064,14 +1086,14 @@
 
     if (window.matchMedia) {
       window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", () => {
-        if (!localStorage.getItem("skycast:theme")) {
+        if (!safeStorageGet("skycast:theme")) {
           applyTheme();
         }
       });
     }
 
     applyTheme();
-    document.getElementById("manualVersion").textContent = "2.11.1";
+    document.getElementById("manualVersion").textContent = "2.11.2";
     apply();
   </script>
 </body>
