@@ -2337,3 +2337,11 @@ body {
   border-color: #d97706;
   color: #d97706;
 }
+
+.pv-compass-svg * {
+  pointer-events: none;
+}
+.pv-compass-svg {
+  pointer-events: auto;
+  cursor: pointer;
+}

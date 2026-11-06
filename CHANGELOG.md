@@ -2,13 +2,22 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.11.0**
+Current Version: **2.11.1**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.11.1] — 2026-11-06
+
+### Fixed & Improved
+- **Fixed Interactive Compass Initialization**: Resolved issue where `initPvCompass()` was not invoked during application boot (`init()`), causing tabs, presets, and pointer events to remain unbound.
+- **Improved Pointer / Touch Dragging on Dial**: Attached global window pointer listeners during drag to ensure uninterrupted smooth rotation even when dragging outside the dial radius.
+- **Solar PV Industry Terminology Alignment**: Renamed orientation tabs from "Painel 1..4" to **"String 1"**, **"String 2"**, **"String 3"**, **"String 4"** per solar PV engineering conventions.
 
 ---
 

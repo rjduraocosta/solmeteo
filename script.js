@@ -230,7 +230,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.11.0";
+const APP_VERSION = "2.11.1";
 
 const LANG_KEY = "skycast:lang";
 const I18N = {
@@ -402,10 +402,10 @@ const I18N = {
     "pv.metric.cost": "Custo: {0} €",
     "pv.balance.nobatt": "Sem bateria",
     "pv.compass.title": "Rosa dos Ventos & Orientação dos Painéis",
-    "pv.compass.g1": "Painel 1",
-    "pv.compass.g2": "Painel 2",
-    "pv.compass.g3": "Painel 3",
-    "pv.compass.g4": "Painel 4",
+    "pv.compass.g1": "String 1",
+    "pv.compass.g2": "String 2",
+    "pv.compass.g3": "String 3",
+    "pv.compass.g4": "String 4",
     "pv.compass.opt": "180° (Sul) = Ótimo solar",
     "pv.compass.drag_hint": "Arrasta o mostrador para rodar",
     "cardinal.n": "Norte",
@@ -616,10 +616,10 @@ const I18N = {
     "pv.metric.cost": "Cost: {0} €",
     "pv.balance.nobatt": "No battery",
     "pv.compass.title": "Interactive Compass & Array Azimuth",
-    "pv.compass.g1": "Array 1",
-    "pv.compass.g2": "Array 2",
-    "pv.compass.g3": "Array 3",
-    "pv.compass.g4": "Array 4",
+    "pv.compass.g1": "String 1",
+    "pv.compass.g2": "String 2",
+    "pv.compass.g3": "String 3",
+    "pv.compass.g4": "String 4",
     "pv.compass.opt": "180° (South) = Optimal solar",
     "pv.compass.drag_hint": "Drag dial to rotate",
     "cardinal.n": "North",
@@ -913,6 +913,7 @@ function addRecent(place) {
   list.unshift({ lat, lon, name: place.name || t("place.fallback"), region: place.region || "" });
   saveRecents(list);
   renderRecents();
+  initPvCompass();
 }
 
 function renderRecents() {
@@ -1093,7 +1094,6 @@ function setUnit(next) {
   applyWindUnitButtons();
   pvViewMode = localStorage.getItem(PV_VIEW_KEY) || "both";
   applyPvViewButtons();
-  initPvCompass();
   if (weatherData) renderDay(selectedDay);
 }
 
@@ -1757,13 +1757,17 @@ function updatePvCompass() {
 }
 
 function setCompassAngleFromEvent(e) {
-  if (!els.pvCompassSvg || !els.pvGroups[activeCompassGroup]) return;
+  if (!els.pvCompassSvg || !els.pvGroups || !els.pvGroups[activeCompassGroup]) return;
   const rect = els.pvCompassSvg.getBoundingClientRect();
   const centerX = rect.left + rect.width / 2;
   const centerY = rect.top + rect.height / 2;
 
-  const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : null);
-  const clientY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : null);
+  let clientX = e.clientX;
+  let clientY = e.clientY;
+  if (clientX == null && e.touches && e.touches[0]) {
+    clientX = e.touches[0].clientX;
+    clientY = e.touches[0].clientY;
+  }
   if (clientX == null || clientY == null) return;
 
   const dx = clientX - centerX;
@@ -1784,66 +1788,59 @@ function initPvCompass() {
 
   updateCompassLabels();
 
-  // Tabs click
+  // 1. Tabs click
   document.querySelectorAll(".pv-compass-tab").forEach((tab) => {
     tab.addEventListener("click", () => {
       const g = parseInt(tab.getAttribute("data-group"), 10);
       if (!isNaN(g)) {
         activeCompassGroup = g;
         updatePvCompass();
-        if (els.pvGroups[g] && els.pvGroups[g].az) {
-          els.pvGroups[g].az.focus();
-        }
       }
     });
   });
 
-  // Presets click
+  // 2. Preset Chips click
   document.querySelectorAll(".pv-compass-chip").forEach((chip) => {
-    chip.addEventListener("click", () => {
+    chip.addEventListener("click", (e) => {
+      e.preventDefault();
       const az = parseInt(chip.getAttribute("data-az"), 10);
-      if (!isNaN(az) && els.pvGroups[activeCompassGroup]) {
+      if (!isNaN(az) && els.pvGroups[activeCompassGroup] && els.pvGroups[activeCompassGroup].az) {
         els.pvGroups[activeCompassGroup].az.value = az;
         updatePvCompass();
       }
     });
   });
 
-  // Pointer drag on SVG dial
+  // 3. Pointer drag on SVG dial
   if (els.pvCompassSvg) {
-    const onPointerDown = (e) => {
-      isDraggingCompass = true;
-      try {
-        if (e.setPointerCapture && e.pointerId != null) {
-          e.currentTarget.setPointerCapture(e.pointerId);
-        }
-      } catch {}
-      setCompassAngleFromEvent(e);
-    };
-
     const onPointerMove = (e) => {
       if (!isDraggingCompass) return;
+      if (e.cancelable) e.preventDefault();
       setCompassAngleFromEvent(e);
     };
 
-    const onPointerUp = (e) => {
+    const onPointerUp = () => {
       if (isDraggingCompass) {
         isDraggingCompass = false;
-        try {
-          if (e.releasePointerCapture && e.pointerId != null) {
-            e.currentTarget.releasePointerCapture(e.pointerId);
-          }
-        } catch {}
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerup", onPointerUp);
+        window.removeEventListener("pointercancel", onPointerUp);
       }
     };
 
+    const onPointerDown = (e) => {
+      if (e.cancelable) e.preventDefault();
+      isDraggingCompass = true;
+      setCompassAngleFromEvent(e);
+      window.addEventListener("pointermove", onPointerMove, { passive: false });
+      window.addEventListener("pointerup", onPointerUp);
+      window.addEventListener("pointercancel", onPointerUp);
+    };
+
     els.pvCompassSvg.addEventListener("pointerdown", onPointerDown);
-    els.pvCompassSvg.addEventListener("pointermove", onPointerMove);
-    els.pvCompassSvg.addEventListener("pointerup", onPointerUp);
-    els.pvCompassSvg.addEventListener("pointercancel", onPointerUp);
   }
 
-  // Connect input events of pvGroups to compass
+  // 4. Connect inputs to compass
   els.pvGroups.forEach((g, idx) => {
     if (g.az) {
       g.az.addEventListener("input", () => {
