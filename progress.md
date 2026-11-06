@@ -4,7 +4,7 @@
 * **Application:** SolMeteo (Solar & Meteorological Forecast PWA)
 * **Architecture:** Static single-page application (Vanilla JS, CSS3, HTML5) with zero dependencies.
 * **Data Sources:** Open-Meteo APIs (Forecast, Geocoding, Air Quality) + IP geolocation fallback.
-* **Current Version:** `2.10.0` (Production live on `main`)
+* **Current Version:** `2.10.1` (Production live on `main`)
 * **Live Deployment:** GitHub Pages (`https://rjduraocosta.github.io/solmeteo/`) from `main` branch.
 
 ---
@@ -34,6 +34,7 @@
 
 | Version | Milestone Date | Summary of Changes |
 | :--- | :--- | :--- |
+| **v2.10.1**| 2026-11-06 | Removed health/medical advisory and personal protection actions from the UV card, preserving the objective meteorological WMO UV Index Scale (0-12 meter pointer, peak UV forecast, intensity window). |
 | **v2.10.0**| 2026-11-06 | WHO UV Index health advisory card (5 risk tiers, segmented risk meter, peak UV window, protection actions), automated severe weather alerts (gusts, heavy rain, thunderstorms/hail, extreme heat/freeze), topbar shortcuts, manual sections 4.1 & 4.2. |
 | **v2.9.2** | 2026-11-04 | Battery cyclic steady-state convergence (spin-up loop), eliminating Day 1 boundary artifacts and artificial early-morning grid imports. |
 | **v2.9.1** | 2026-11-04 | Direct tariff access chip, categorized PV configuration sections, complete manual table (15 fields) & ERSE timetable sync, and governance rules 6-8 in AGENTS.md. |

@@ -150,8 +150,6 @@ const els = {
   advisoryUvPeak: document.getElementById("advisoryUvPeak"),
   advisoryUvPill: document.getElementById("advisoryUvPill"),
   uvMeterPointer: document.getElementById("uvMeterPointer"),
-  advisoryUvDesc: document.getElementById("advisoryUvDesc"),
-  advisoryUvActions: document.getElementById("advisoryUvActions"),
   advisoryAlertsCard: document.getElementById("advisoryAlertsCard"),
   advisoryAlertsSub: document.getElementById("advisoryAlertsSub"),
   advisoryAlertsBadge: document.getElementById("advisoryAlertsBadge"),
@@ -203,7 +201,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.10.0";
+const APP_VERSION = "2.10.1";
 
 const LANG_KEY = "skycast:lang";
 const I18N = {
@@ -374,47 +372,35 @@ const I18N = {
     "pv.metric.import": "Importado da Rede",
     "pv.metric.cost": "Custo: {0} €",
     "pv.balance.nobatt": "Sem bateria",
-    "stat.uv.toggle": "Ver recomendações do Índice UV e alertas",
+    "stat.uv.toggle": "Ver Índice UV e alertas meteorológicos",
     "hero.alert.chip": "⚠ {0} Alerta(s)",
-    "advisory.title": "Saúde Solar & Alertas Meteorológicos",
-    "advisory.uv.title": "Índice UV & Exposição Solar",
-    "advisory.uv.peak": "Pico estimado de {0} às {1}",
+    "advisory.title": "Índice UV & Alertas Meteorológicos",
+    "advisory.uv.title": "Escala do Índice UV",
+    "advisory.uv.peak": "Pico previsto de {0} às {1}",
     "advisory.uv.peak_none": "Sem radiação UV significativa hoje",
-    "advisory.uv.window": "Proteção solar recomendada entre as {0} e as {1}",
+    "advisory.uv.window": "Maior intensidade entre as {0} e as {1}",
     "advisory.uv.level.low": "Baixo (0–2)",
     "advisory.uv.level.mod": "Moderado (3–5)",
     "advisory.uv.level.high": "Elevado (6–7)",
     "advisory.uv.level.veryhigh": "Muito Alto (8–10)",
     "advisory.uv.level.extreme": "Extremo (11+)",
-    "advisory.uv.desc.low": "Risco baixo de danos por radiação solar. Pode permanecer ao ar livre com segurança.",
-    "advisory.uv.desc.mod": "Risco moderado de queimaduras solares sem proteção. Procure sombra nas horas centrais e utilize proteção adequada.",
-    "advisory.uv.desc.high": "Risco elevado. Danos rápidos na pele e olhos desprotegidos. Reduza a exposição direta entre as 11h e as 16h.",
-    "advisory.uv.desc.veryhigh": "Risco muito elevado. Queimaduras solares em poucos minutos. Evite exposição direta prolongada e cubra-se bem.",
-    "advisory.uv.desc.extreme": "Risco extremo. Queimaduras graves em minutos de exposição desprotegida. Evite permanecer ao ar livre nas horas centrais.",
-    "advisory.action.glasses": "Óculos de Sol UV400",
-    "advisory.action.sunscreen": "Protetor FPS 30+",
-    "advisory.action.sunscreen50": "Protetor FPS 50+",
-    "advisory.action.hat": "Chapéu de abas largas",
-    "advisory.action.shade": "Procurar sombra",
-    "advisory.action.clothing": "Roupas compridas de proteção",
-    "advisory.action.safe": "Sem precauções especiais",
     "advisory.alerts.title": "Alertas Meteorológicos",
     "advisory.alerts.sub_count": "{0} alerta(s) ativo(s) para hoje",
     "advisory.alerts.sub_none": "Sem avisos meteorológicos ativos para hoje",
     "advisory.alerts.stable": "Estável",
     "advisory.alerts.active": "Atenção ({0})",
     "advisory.alert.wind.title": "Vento Muito Forte / Rajadas",
-    "advisory.alert.wind.desc": "Rajadas estimadas de até {0} ({1} nós). Fixe objetos soltos no exterior.",
+    "advisory.alert.wind.desc": "Rajadas estimadas de até {0} ({1} nós).",
     "advisory.alert.rain.title": "Precipitação Intensa / Acumulada",
-    "advisory.alert.rain.desc": "Precipitação acumulada diária prevista de {0} mm. Risco de acumulação e lençóis de água.",
+    "advisory.alert.rain.desc": "Precipitação acumulada diária prevista de {0} mm.",
     "advisory.alert.storm.title": "Trovoada / Risco de Granizo",
-    "advisory.alert.storm.desc": "Condições atmosféricas instáveis com trovoada e risco de descargas elétricas e granizo.",
+    "advisory.alert.storm.desc": "Condições atmosféricas instáveis com trovoada e possível ocorrência de granizo.",
     "advisory.alert.heat.title": "Calor Extremo / Alerta Térmico",
-    "advisory.alert.heat.desc": "Temperatura máxima de {0} {1}. Mantenha hidratação frequente e evite esforço físico exterior.",
+    "advisory.alert.heat.desc": "Temperatura máxima prevista de {0} {1}.",
     "advisory.alert.frost.title": "Risco de Gelo / Temperatura Negativa",
-    "advisory.alert.frost.desc": "Temperatura mínima prevista de {0} {1}. Risco de formação de gelo na estrada e danos em plantas sensíveis.",
+    "advisory.alert.frost.desc": "Temperatura mínima prevista de {0} {1}.",
     "advisory.alert.aqi.title": "Qualidade do Ar Degradada",
-    "advisory.alert.aqi.desc": "Índice Europeu de Qualidade do Ar (EAQI) elevado. Pessoas sensíveis devem moderar atividade ao ar livre.",
+    "advisory.alert.aqi.desc": "Índice Europeu de Qualidade do Ar (EAQI) elevado.",
     "advisory.alerts.none_title": "Condições Favoráveis",
     "advisory.alerts.none_desc": "Não foram identificados limiares meteorológicos severos para este dia.",
   },
@@ -585,47 +571,35 @@ const I18N = {
     "pv.metric.import": "Imported from Grid",
     "pv.metric.cost": "Cost: {0} €",
     "pv.balance.nobatt": "No battery",
-    "stat.uv.toggle": "View UV Index recommendations & alerts",
+    "stat.uv.toggle": "View UV Index and weather alerts",
     "hero.alert.chip": "⚠ {0} Alert(s)",
-    "advisory.title": "Solar Health & Weather Advisories",
-    "advisory.uv.title": "UV Index & Sun Exposure",
-    "advisory.uv.peak": "Peak estimated at {0} at {1}",
+    "advisory.title": "UV Index & Severe Weather Alerts",
+    "advisory.uv.title": "UV Index Scale",
+    "advisory.uv.peak": "Peak forecast at {0} at {1}",
     "advisory.uv.peak_none": "No significant UV radiation today",
-    "advisory.uv.window": "Sun protection recommended between {0} and {1}",
+    "advisory.uv.window": "Highest intensity between {0} and {1}",
     "advisory.uv.level.low": "Low (0–2)",
     "advisory.uv.level.mod": "Moderate (3–5)",
     "advisory.uv.level.high": "High (6–7)",
     "advisory.uv.level.veryhigh": "Very High (8–10)",
     "advisory.uv.level.extreme": "Extreme (11+)",
-    "advisory.uv.desc.low": "Low risk of UV radiation harm. Safe to stay outdoors with minimal precautions.",
-    "advisory.uv.desc.mod": "Moderate risk of harm from unprotected sun exposure. Seek shade during peak hours and wear protection.",
-    "advisory.uv.desc.high": "High risk of harm. Unprotected skin and eyes will burn quickly. Reduce sun exposure between 11 AM and 4 PM.",
-    "advisory.uv.desc.veryhigh": "Very high risk of harm. Sunburn can occur rapidly. Avoid direct midday sun and wear protective clothing.",
-    "advisory.uv.desc.extreme": "Extreme risk of harm. Severe burns can occur in minutes without protection. Avoid being outdoors around midday.",
-    "advisory.action.glasses": "UV400 Sunglasses",
-    "advisory.action.sunscreen": "SPF 30+ Sunscreen",
-    "advisory.action.sunscreen50": "SPF 50+ Sunscreen",
-    "advisory.action.hat": "Wide-Brimmed Hat",
-    "advisory.action.shade": "Seek shade",
-    "advisory.action.clothing": "Protective long-sleeve clothing",
-    "advisory.action.safe": "No special precautions needed",
     "advisory.alerts.title": "Severe Weather Alerts",
     "advisory.alerts.sub_count": "{0} active alert(s) today",
     "advisory.alerts.sub_none": "No active weather warnings today",
     "advisory.alerts.stable": "Calm",
     "advisory.alerts.active": "Alert ({0})",
     "advisory.alert.wind.title": "High Wind / Gust Warning",
-    "advisory.alert.wind.desc": "Estimated wind gusts up to {0} ({1} kt). Secure loose outdoor objects.",
+    "advisory.alert.wind.desc": "Estimated wind gusts up to {0} ({1} kt).",
     "advisory.alert.rain.title": "Heavy / Torrential Rainfall Warning",
-    "advisory.alert.rain.desc": "Forecast daily rainfall of {0} mm. Risk of pooling water and local flooding.",
+    "advisory.alert.rain.desc": "Forecast daily rainfall of {0} mm.",
     "advisory.alert.storm.title": "Thunderstorm / Hail Warning",
-    "advisory.alert.storm.desc": "Unstable atmospheric conditions with lightning discharges and possible hail.",
+    "advisory.alert.storm.desc": "Unstable atmospheric conditions with thunderstorm and possible hail.",
     "advisory.alert.heat.title": "Extreme Heat Warning",
-    "advisory.alert.heat.desc": "Maximum temperature reaching {0} {1}. Stay hydrated and avoid strenuous outdoor activity.",
+    "advisory.alert.heat.desc": "Maximum temperature forecast of {0} {1}.",
     "advisory.alert.frost.title": "Frost & Freeze Warning",
-    "advisory.alert.frost.desc": "Minimum temperature forecast at {0} {1}. Risk of black ice and damage to frost-sensitive plants.",
+    "advisory.alert.frost.desc": "Minimum temperature forecast of {0} {1}.",
     "advisory.alert.aqi.title": "Degraded Air Quality Warning",
-    "advisory.alert.aqi.desc": "Elevated European Air Quality Index (EAQI). Sensitive groups should reduce outdoor exertion.",
+    "advisory.alert.aqi.desc": "Elevated European Air Quality Index (EAQI).",
     "advisory.alerts.none_title": "Favorable Conditions",
     "advisory.alerts.none_desc": "No severe weather thresholds detected for this day.",
   },
@@ -1996,24 +1970,19 @@ function renderAdvisory(data, day) {
   // 3. Determine UV risk level & pill
   let uvClass = "advisory-pill--low";
   let uvLevelText = t("advisory.uv.level.low");
-  let uvDescText = t("advisory.uv.desc.low");
 
   if (maxUv >= 11) {
     uvClass = "advisory-pill--extreme";
     uvLevelText = t("advisory.uv.level.extreme");
-    uvDescText = t("advisory.uv.desc.extreme");
   } else if (maxUv >= 8) {
     uvClass = "advisory-pill--veryhigh";
     uvLevelText = t("advisory.uv.level.veryhigh");
-    uvDescText = t("advisory.uv.desc.veryhigh");
   } else if (maxUv >= 6) {
     uvClass = "advisory-pill--high";
     uvLevelText = t("advisory.uv.level.high");
-    uvDescText = t("advisory.uv.desc.high");
   } else if (maxUv >= 3) {
     uvClass = "advisory-pill--mod";
     uvLevelText = t("advisory.uv.level.mod");
-    uvDescText = t("advisory.uv.desc.mod");
   }
 
   if (els.advisoryUvPill) {
@@ -2027,7 +1996,7 @@ function renderAdvisory(data, day) {
     els.uvMeterPointer.style.left = `${clampedPct.toFixed(1)}%`;
   }
 
-  // Peak and Protection Window label
+  // Peak and high intensity Window label
   if (els.advisoryUvPeak) {
     if (peakHour >= 0 && maxUv > 0.5) {
       const peakFormatted = `${String(peakHour).padStart(2, "0")}:00`;
@@ -2041,43 +2010,6 @@ function renderAdvisory(data, day) {
     } else {
       els.advisoryUvPeak.textContent = t("advisory.uv.peak_none");
     }
-  }
-
-  if (els.advisoryUvDesc) {
-    els.advisoryUvDesc.textContent = uvDescText;
-  }
-
-  // Actions list based on WHO standards
-  if (els.advisoryUvActions) {
-    const actions = [];
-    if (maxUv < 3) {
-      actions.push({ icon: "🕶️", label: t("advisory.action.glasses") });
-      actions.push({ icon: "✅", label: t("advisory.action.safe") });
-    } else if (maxUv < 6) {
-      actions.push({ icon: "🕶️", label: t("advisory.action.glasses") });
-      actions.push({ icon: "🧴", label: t("advisory.action.sunscreen") });
-      actions.push({ icon: "👒", label: t("advisory.action.hat") });
-      actions.push({ icon: "🌳", label: t("advisory.action.shade") });
-    } else if (maxUv < 8) {
-      actions.push({ icon: "🕶️", label: t("advisory.action.glasses") });
-      actions.push({ icon: "🧴", label: t("advisory.action.sunscreen") });
-      actions.push({ icon: "👒", label: t("advisory.action.hat") });
-      actions.push({ icon: "👕", label: t("advisory.action.clothing") });
-      actions.push({ icon: "🌳", label: t("advisory.action.shade") });
-    } else {
-      actions.push({ icon: "🕶️", label: t("advisory.action.glasses") });
-      actions.push({ icon: "🧴", label: t("advisory.action.sunscreen50") });
-      actions.push({ icon: "👒", label: t("advisory.action.hat") });
-      actions.push({ icon: "👕", label: t("advisory.action.clothing") });
-      actions.push({ icon: "🏠", label: t("advisory.action.shade") });
-    }
-
-    els.advisoryUvActions.innerHTML = actions
-      .map(
-        (a) =>
-          `<div class="advisory-action-item"><span class="advisory-action-item__icon" aria-hidden="true">${a.icon}</span><span>${a.label}</span></div>`
-      )
-      .join("");
   }
 
   // 4. Evaluate Severe Weather Alerts

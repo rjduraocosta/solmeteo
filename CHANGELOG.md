@@ -2,13 +2,24 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.10.0**
+Current Version: **2.10.1**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.10.1] — 2026-11-06
+
+### Changed
+- **Removed Health/Medical Advisory & Protection Actions**:
+  - Removed medical protection actions (sunscreen, sunglasses, clothing recommendations) and subjective health risk claims from the UV card.
+  - Refocused the UV card strictly on objective meteorological information: the standard international WMO UV Index Scale (0–2 Baixo, 3–5 Moderado, 6–7 Elevado, 8–10 Muito Alto, 11+ Extremo), animated position meter pointer, peak UV forecast, and period of highest solar intensity.
+  - Streamlined severe weather alert descriptions to convey purely meteorological data without behavioural/medical directives.
+  - Updated Section 4.1 in `manual.html` to document the meteorological UV scale in both Portuguese and English.
 
 ---
 
