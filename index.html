@@ -128,15 +128,17 @@
             <span class="stat__label" data-i18n="stat.wind">Vento</span>
             <span class="stat__value" id="statWind">-- km/h</span>
           </div>
-          <div class="stat stat--clickable" id="statUvBox" tabindex="0" role="button" title="Ver recomendações do Índice UV e alertas" data-i18n-title="stat.uv.toggle">
+          <div class="stat stat--uv" id="statUvBox">
             <span class="stat__label" data-i18n="stat.uv">Índice UV</span>
             <span class="stat__value" id="statUv">--</span>
+            <span class="stat__sub" id="statUvPeak">—</span>
           </div>
           <div class="stat stat--aqi" id="statAqiBox">
             <span class="stat__label" data-i18n="stat.aqi">Qualidade do Ar</span>
             <span class="stat__value" id="statAqi">--</span>
           </div>
         </div>
+        <div class="hero__alerts-banner" id="heroAlertsBanner" hidden></div>
       </div>
 
       <div class="hero__side">
@@ -279,61 +281,6 @@
           </div>
           <div class="chart__canvas" id="rainChart"></div>
           <div class="chart__axis" id="rainAxis"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="panel" id="advisoryPanel" hidden>
-      <div class="panel__head">
-        <div>
-          <h2 class="panel__title" data-i18n="advisory.title">Índice UV &amp; Alertas Meteorológicos</h2>
-          <span class="panel__sub" id="advisorySpan">—</span>
-        </div>
-      </div>
-
-      <div class="advisory-grid">
-        <!-- Card 1: Índice UV & Saúde da Pele -->
-        <div class="advisory-card" id="advisoryUvCard">
-          <div class="advisory-card__head">
-            <div class="advisory-card__title-group">
-              <span class="advisory-card__title" data-i18n="advisory.uv.title">Escala do Índice UV</span>
-              <span class="advisory-card__sub" id="advisoryUvPeak">—</span>
-            </div>
-            <span class="advisory-pill" id="advisoryUvPill">UV —</span>
-          </div>
-
-          <!-- Segmented Risk Meter with Pointer -->
-          <div class="uv-meter" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="12">
-            <div class="uv-meter__track">
-              <div class="uv-meter__seg uv-meter__seg--low" title="0-2 Baixo"></div>
-              <div class="uv-meter__seg uv-meter__seg--mod" title="3-5 Moderado"></div>
-              <div class="uv-meter__seg uv-meter__seg--high" title="6-7 Elevado"></div>
-              <div class="uv-meter__seg uv-meter__seg--veryhigh" title="8-10 Muito Alto"></div>
-              <div class="uv-meter__seg uv-meter__seg--extreme" title="11+ Extremo"></div>
-              <div class="uv-meter__pointer" id="uvMeterPointer" style="left: 0%"></div>
-            </div>
-            <div class="uv-meter__labels">
-              <span>0 (Baixo)</span>
-              <span>3</span>
-              <span>6</span>
-              <span>8</span>
-              <span>11+ (Extremo)</span>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Card 2: Alertas Meteorológicos Severos -->
-        <div class="advisory-card" id="advisoryAlertsCard">
-          <div class="advisory-card__head">
-            <div class="advisory-card__title-group">
-              <span class="advisory-card__title" data-i18n="advisory.alerts.title">Alertas Meteorológicos</span>
-              <span class="advisory-card__sub" id="advisoryAlertsSub">—</span>
-            </div>
-            <span class="advisory-pill" id="advisoryAlertsBadge">Estável</span>
-          </div>
-
-          <div class="advisory-alerts-list" id="advisoryAlertsList"></div>
         </div>
       </div>
     </section>
@@ -724,7 +671,7 @@
     <footer class="footer">
       <span><span data-i18n="footer.source">Fonte:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
       <span><a href="manual.html" data-i18n="footer.manual">Manual de utilização</a></span>
-      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.12.0</span></span>
+      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.12.1</span></span>
     </footer>
   </main>
 

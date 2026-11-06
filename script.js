@@ -152,16 +152,8 @@ const els = {
   statAqiBox: document.getElementById("statAqiBox"),
   statUvBox: document.getElementById("statUvBox"),
   heroAlertChip: document.getElementById("heroAlertChip"),
-  advisoryPanel: document.getElementById("advisoryPanel"),
-  advisorySpan: document.getElementById("advisorySpan"),
-  advisoryUvCard: document.getElementById("advisoryUvCard"),
-  advisoryUvPeak: document.getElementById("advisoryUvPeak"),
-  advisoryUvPill: document.getElementById("advisoryUvPill"),
-  uvMeterPointer: document.getElementById("uvMeterPointer"),
-  advisoryAlertsCard: document.getElementById("advisoryAlertsCard"),
-  advisoryAlertsSub: document.getElementById("advisoryAlertsSub"),
-  advisoryAlertsBadge: document.getElementById("advisoryAlertsBadge"),
-  advisoryAlertsList: document.getElementById("advisoryAlertsList"),
+  heroAlertsBanner: document.getElementById("heroAlertsBanner"),
+  statUvPeak: document.getElementById("statUvPeak"),
   themeBtn: document.getElementById("themeBtn"),
   pvTariffType: document.getElementById("pvTariffType"),
   pvTariffSimpleBox: document.getElementById("pvTariffSimpleBox"),
@@ -238,7 +230,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.12.0";
+const APP_VERSION = "2.12.1";
 
 const LANG_KEY = "skycast:lang";
 
@@ -489,6 +481,9 @@ const I18N = {
     "sun.arc.sunrise_in": "Nascer do sol em {0}",
     "sun.arc.night": "Noite",
     "sun.arc.daylight_total": "{0} de luz solar",
+    "stat.uv.peak_sub": "pico {0} às {1}",
+    "stat.uv.peak_hour": "pico às {0}",
+    "hero.alerts.none": "Sem alertas ativos",
   },
   en: {
     locale: "en-GB",
@@ -709,6 +704,9 @@ const I18N = {
     "sun.arc.sunrise_in": "Sunrise in {0}",
     "sun.arc.night": "Nighttime",
     "sun.arc.daylight_total": "{0} of daylight",
+    "stat.uv.peak_sub": "peak {0} at {1}",
+    "stat.uv.peak_hour": "peak at {0}",
+    "hero.alerts.none": "No active alerts",
   },
 };
 
@@ -1229,7 +1227,21 @@ function renderHeroCurrent(data, name) {
   els.statMaxMin.textContent = `${tempDisplay(max)}° / ${tempDisplay(min)}°`;
   els.statHumidity.textContent = `${Math.round(c.relative_humidity_2m)}%`;
   els.statWind.textContent = `${windDisplay(c.wind_speed_10m)} ${degToCompass(c.wind_direction_10m)}`;
-  els.statUv.textContent = uvLevel(c.uv_index);
+  // UV Index with peak
+  const dailyUvs0 = data.hourly && data.hourly.uv_index ? data.hourly.uv_index.slice(0, 24) : [];
+  let peakUv0 = 0;
+  let peakHour0 = "12:00";
+  if (dailyUvs0.length > 0) {
+    peakUv0 = Math.max(...dailyUvs0);
+    const maxIdx0 = dailyUvs0.indexOf(peakUv0);
+    peakHour0 = formatClock(data.hourly.time[maxIdx0]);
+  }
+  const uvVal0 = c.uv_index != null ? c.uv_index : 0;
+  const tierClass0 = getUvTierClass(uvVal0);
+  els.statUv.innerHTML = `<span class="${tierClass0}">${uvVal0.toFixed(1)} &middot; ${uvTierName(uvVal0)}</span>`;
+  if (els.statUvPeak) {
+    els.statUvPeak.textContent = t("stat.uv.peak_sub", [peakUv0.toFixed(1), peakHour0]);
+  }
 
   els.sunrise.textContent = formatTime(data.daily.sunrise[0]);
   els.sunset.textContent = formatTime(data.daily.sunset[0]);
@@ -1253,7 +1265,20 @@ function renderHeroDay(data, day, name) {
   els.statMaxMin.textContent = `${tempDisplay(max)}° / ${tempDisplay(min)}°`;
   els.statHumidity.textContent = `${Math.round(data.hourly.relative_humidity_2m[idx])}%`;
   els.statWind.textContent = windDisplay(data.hourly.wind_speed_10m[idx]);
-  els.statUv.textContent = uvLevel(data.hourly.uv_index[idx] || 0);
+  // UV Index for selected day
+  const dailyUvsDay = data.hourly && data.hourly.uv_index ? data.hourly.uv_index.slice(day * 24, (day + 1) * 24) : [];
+  let peakUvDay = 0;
+  let peakHourDay = "12:00";
+  if (dailyUvsDay.length > 0) {
+    peakUvDay = Math.max(...dailyUvsDay);
+    const maxIdxDay = dailyUvsDay.indexOf(peakUvDay);
+    peakHourDay = formatClock(data.hourly.time[day * 24 + maxIdxDay]);
+  }
+  const tierClassDay = getUvTierClass(peakUvDay);
+  els.statUv.innerHTML = `<span class="${tierClassDay}">${peakUvDay.toFixed(1)} &middot; ${uvTierName(peakUvDay)}</span>`;
+  if (els.statUvPeak) {
+    els.statUvPeak.textContent = t("stat.uv.peak_hour", [peakHourDay]);
+  }
 
   els.sunrise.textContent = formatTime(data.daily.sunrise[day]);
   els.sunset.textContent = formatTime(data.daily.sunset[day]);
@@ -1261,6 +1286,23 @@ function renderHeroDay(data, day, name) {
   renderSunArc(data, day);
 }
 
+
+
+function getUvTierClass(uv) {
+  if (uv < 3) return "stat__value--low";
+  if (uv < 6) return "stat__value--mod";
+  if (uv < 8) return "stat__value--high";
+  if (uv < 11) return "stat__value--veryhigh";
+  return "stat__value--extreme";
+}
+
+function uvTierName(uv) {
+  if (uv < 3) return t("advisory.uv.level.low");
+  if (uv < 6) return t("advisory.uv.level.mod");
+  if (uv < 8) return t("advisory.uv.level.high");
+  if (uv < 11) return t("advisory.uv.level.veryhigh");
+  return t("advisory.uv.level.extreme");
+}
 
 function renderSunArc(data, day = 0) {
   if (!els.sunArcSvg || !data.daily || !data.daily.sunrise) return;
@@ -2360,7 +2402,7 @@ function simulateForecastBattery(data, settings) {
 }
 
 
-function scrollToAdvisory() {
+function toggleHeroAlerts() {
   if (!els.advisoryPanel) return;
   els.advisoryPanel.hidden = false;
   els.advisoryPanel.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -3249,21 +3291,21 @@ els.pvExportBtn.addEventListener("click", exportPvCsv);
   }
 
   if (els.statUvBox) {
-    els.statUvBox.addEventListener("click", scrollToAdvisory);
+    els.statUvBox.addEventListener("click", toggleHeroAlerts);
     els.statUvBox.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        scrollToAdvisory();
+        toggleHeroAlerts();
       }
     });
   }
 
   if (els.heroAlertChip) {
-    els.heroAlertChip.addEventListener("click", scrollToAdvisory);
+    els.heroAlertChip.addEventListener("click", toggleHeroAlerts);
     els.heroAlertChip.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        scrollToAdvisory();
+        toggleHeroAlerts();
       }
     });
   }

@@ -2,13 +2,22 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.12.0**
+Current Version: **2.12.1**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.12.1] — 2026-11-06
+
+### Improved & Simplified
+- **Unified UV Index in Hero**: Condensed UV display into the Hero statistics block (`#statUvBox`), displaying both real-time index and forecasted daily peak hour (`0.1 · Baixo / pico 1.6 às 12:00`) with WHO tier colors.
+- **Removed Redundant Advisory Panel**: Eliminated the redundant bottom UV scale panel (`#advisoryPanel`), reclaiming significant vertical layout space.
+- **Dynamic On-Demand Weather Alerts**: Severe weather alerts now display dynamically via the Hero alert badge (`#heroAlertChip`) and expandable banner (`#heroAlertsBanner`) only when adverse conditions are forecast.
 
 ---
 
