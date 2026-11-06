@@ -93,6 +93,14 @@ const els = {
   statUv: document.getElementById("statUv"),
   sunrise: document.getElementById("sunrise"),
   sunset: document.getElementById("sunset"),
+  heroCoordsChip: document.getElementById("heroCoordsChip"),
+  heroDaylightVal: document.getElementById("heroDaylightVal"),
+  sunArcSvg: document.getElementById("sunArcSvg"),
+  sunArcBg: document.getElementById("sunArcBg"),
+  sunArcActive: document.getElementById("sunArcActive"),
+  sunArcNoonTime: document.getElementById("sunArcNoonTime"),
+  sunArcBody: document.getElementById("sunArcBody"),
+  sunArcStatusText: document.getElementById("sunArcStatusText"),
   hourlyList: document.getElementById("hourlyList"),
   dailyList: document.getElementById("dailyList"),
   hourlySpan: document.getElementById("hourlySpan"),
@@ -230,7 +238,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.11.2";
+const APP_VERSION = "2.12.0";
 
 const LANG_KEY = "skycast:lang";
 
@@ -475,6 +483,12 @@ const I18N = {
     "advisory.alert.aqi.desc": "Índice Europeu de Qualidade do Ar (EAQI) elevado.",
     "advisory.alerts.none_title": "Condições Favoráveis",
     "advisory.alerts.none_desc": "Não foram identificados limiares meteorológicos severos para este dia.",
+    "sun.arc.coords_title": "Coordenadas geográficas",
+    "sun.arc.daylight_title": "Duração total de luz solar",
+    "sun.arc.sunset_in": "Pôr do sol em {0}",
+    "sun.arc.sunrise_in": "Nascer do sol em {0}",
+    "sun.arc.night": "Noite",
+    "sun.arc.daylight_total": "{0} de luz solar",
   },
   en: {
     locale: "en-GB",
@@ -689,6 +703,12 @@ const I18N = {
     "advisory.alert.aqi.desc": "Elevated European Air Quality Index (EAQI).",
     "advisory.alerts.none_title": "Favorable Conditions",
     "advisory.alerts.none_desc": "No severe weather thresholds detected for this day.",
+    "sun.arc.coords_title": "Geographic coordinates",
+    "sun.arc.daylight_title": "Total daylight duration",
+    "sun.arc.sunset_in": "Sunset in {0}",
+    "sun.arc.sunrise_in": "Sunrise in {0}",
+    "sun.arc.night": "Nighttime",
+    "sun.arc.daylight_total": "{0} of daylight",
   },
 };
 
@@ -1094,7 +1114,11 @@ function updateDayNav() {
 }
 
 function coordsLabel(data) {
-  return `${data.latitude.toFixed(2)}°, ${data.longitude.toFixed(2)}°`;
+  const lat = data.latitude;
+  const lon = data.longitude;
+  const latHemi = lat >= 0 ? "N" : "S";
+  const lonHemi = lon >= 0 ? "E" : (lang === "pt" ? "O" : "W");
+  return `${Math.abs(lat).toFixed(2)}° ${latHemi} · ${Math.abs(lon).toFixed(2)}° ${lonHemi}`;
 }
 
 function fmtDec(v) {
@@ -1210,6 +1234,7 @@ function renderHeroCurrent(data, name) {
   els.sunrise.textContent = formatTime(data.daily.sunrise[0]);
   els.sunset.textContent = formatTime(data.daily.sunset[0]);
   els.heroCoords.textContent = coordsLabel(data);
+  renderSunArc(data, 0);
 }
 
 function renderHeroDay(data, day, name) {
@@ -1233,6 +1258,107 @@ function renderHeroDay(data, day, name) {
   els.sunrise.textContent = formatTime(data.daily.sunrise[day]);
   els.sunset.textContent = formatTime(data.daily.sunset[day]);
   els.heroCoords.textContent = coordsLabel(data);
+  renderSunArc(data, day);
+}
+
+
+function renderSunArc(data, day = 0) {
+  if (!els.sunArcSvg || !data.daily || !data.daily.sunrise) return;
+
+  const sunriseStr = data.daily.sunrise[day];
+  const sunsetStr = data.daily.sunset[day];
+  if (!sunriseStr || !sunsetStr) return;
+
+  const sunriseDate = new Date(sunriseStr);
+  const sunsetDate = new Date(sunsetStr);
+  const daylightMs = Math.max(0, sunsetDate.getTime() - sunriseDate.getTime());
+  const daylightHours = Math.floor(daylightMs / (1000 * 60 * 60));
+  const daylightMins = Math.round((daylightMs % (1000 * 60 * 60)) / (1000 * 60));
+  const daylightFormatted = `${daylightHours}h ${daylightMins}m`;
+
+  if (els.heroDaylightVal) {
+    els.heroDaylightVal.textContent = daylightFormatted;
+  }
+
+  // Solar Noon time (midpoint between sunrise and sunset)
+  const solarNoonMs = sunriseDate.getTime() + daylightMs / 2;
+  const solarNoonDate = new Date(solarNoonMs);
+  if (els.sunArcNoonTime) {
+    els.sunArcNoonTime.textContent = formatTime(solarNoonDate);
+  }
+
+  // Determine current position
+  const now = day === 0 ? new Date() : null;
+  let isDaytime = true;
+  let progress = 0.5; // default noon for future days
+  let statusText = t("sun.arc.daylight_total", [daylightFormatted]);
+
+  if (now && day === 0) {
+    const nowMs = now.getTime();
+    const srMs = sunriseDate.getTime();
+    const ssMs = sunsetDate.getTime();
+
+    if (nowMs >= srMs && nowMs <= ssMs) {
+      isDaytime = true;
+      progress = Math.max(0, Math.min(1, (nowMs - srMs) / (ssMs - srMs)));
+      const msToSunset = Math.max(0, ssMs - nowMs);
+      const hToSunset = Math.floor(msToSunset / (1000 * 60 * 60));
+      const mToSunset = Math.round((msToSunset % (1000 * 60 * 60)) / (1000 * 60));
+      const timeRemaining = hToSunset > 0 ? `${hToSunset}h ${mToSunset}m` : `${mToSunset}m`;
+      statusText = `${t("sun.arc.sunset_in", [timeRemaining])} · ${Math.round(progress * 100)}%`;
+    } else {
+      isDaytime = false;
+      let nextSunriseDate;
+      if (nowMs < srMs) {
+        nextSunriseDate = sunriseDate;
+      } else {
+        nextSunriseDate = data.daily.sunrise[1] ? new Date(data.daily.sunrise[1]) : new Date(srMs + 24 * 3600 * 1000);
+      }
+      const msToSunrise = Math.max(0, nextSunriseDate.getTime() - nowMs);
+      const hToSunrise = Math.floor(msToSunrise / (1000 * 60 * 60));
+      const mToSunrise = Math.round((msToSunrise % (1000 * 60 * 60)) / (1000 * 60));
+      const timeRemaining = hToSunrise > 0 ? `${hToSunrise}h ${mToSunrise}m` : `${mToSunrise}m`;
+      statusText = `${t("sun.arc.night")} · ${t("sun.arc.sunrise_in", [timeRemaining])}`;
+      progress = nowMs > ssMs ? 1 : 0;
+    }
+  }
+
+  if (els.sunArcStatusText) {
+    els.sunArcStatusText.textContent = statusText;
+  }
+
+  // Update SVG Arc stroke and Sun/Moon Body position
+  // Parametric ellipse: a = 125, b = 85, center (150, 105)
+  if (isDaytime) {
+    const tAngle = progress * Math.PI;
+    const x = 150 - 125 * Math.cos(tAngle);
+    const y = 105 - 85 * Math.sin(tAngle);
+
+    if (els.sunArcBody) {
+      els.sunArcBody.setAttribute("transform", `translate(${x.toFixed(1)}, ${y.toFixed(1)})`);
+      els.sunArcBody.classList.remove("is-night");
+      els.sunArcBody.classList.add("is-day");
+    }
+
+    if (els.sunArcActive) {
+      const totalLen = els.sunArcActive.getTotalLength ? els.sunArcActive.getTotalLength() : 333;
+      els.sunArcActive.style.strokeDasharray = `${totalLen} ${totalLen}`;
+      els.sunArcActive.style.strokeDashoffset = `${totalLen * (1 - progress)}`;
+      els.sunArcActive.style.opacity = "1";
+    }
+  } else {
+    // Night position on lower night arc
+    const x = 150;
+    const y = 135;
+    if (els.sunArcBody) {
+      els.sunArcBody.setAttribute("transform", `translate(${x}, ${y})`);
+      els.sunArcBody.classList.add("is-night");
+      els.sunArcBody.classList.remove("is-day");
+    }
+    if (els.sunArcActive) {
+      els.sunArcActive.style.opacity = "0";
+    }
+  }
 }
 
 function renderHourly(data, day) {

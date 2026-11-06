@@ -2,13 +2,26 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.11.2**
+Current Version: **2.12.0**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.12.0] — 2026-11-06
+
+### Added
+- **Visual Celestial Sun Arc (`#sunArcCard`)**: Dynamic SVG celestial trajectory widget in the Hero card side area.
+  - Real-time animated sun orb accurately positioned along the daytime elliptical path according to current time and solar elevation.
+  - Progressive golden gradient active path indicating elapsed daylight percentage.
+  - Solar noon apex marker with exact astronomical zenith time.
+  - Nighttime mode with crescent moon indicator on twilight track and sunrise countdown.
+  - Total daylight duration chip (`#heroDaylightVal`) and formatted hemispheric geographic coordinates chip (`#heroCoordsChip`).
+  - Modernized Sunrise (🌅) and Sunset (🌇) cards with high-contrast typography and theme adaptation.
 
 ---
 

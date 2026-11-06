@@ -140,18 +140,85 @@
       </div>
 
       <div class="hero__side">
-        <div class="hero__coords">
-          <span id="heroCoords">—, —</span>
-        </div>
-        <div class="sun">
-          <div class="sun__item sun__item--rise">
-            <span class="sun__label" data-i18n="sun.rise">Nascer do sol</span>
-            <span class="sun__value" id="sunrise">--:--</span>
+        <div class="hero__side-head">
+          <div class="hero__coords-chip" id="heroCoordsChip" title="Coordenadas geográficas" data-i18n-title="sun.arc.coords_title">
+            <svg class="hero__coords-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span id="heroCoords">—, —</span>
           </div>
-          <div class="sun__divider"></div>
-          <div class="sun__item sun__item--set">
-            <span class="sun__label" data-i18n="sun.set">Pôr do sol</span>
-            <span class="sun__value" id="sunset">--:--</span>
+          <div class="hero__daylight-chip" id="heroDaylightChip" title="Duração da luz solar" data-i18n-title="sun.arc.daylight_title">
+            <svg class="hero__daylight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"/>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+            </svg>
+            <span id="heroDaylightVal">--h --m</span>
+          </div>
+        </div>
+
+        <div class="sun-arc-card" id="sunArcCard" aria-label="Trajetória solar">
+          <div class="sun-arc-wrap">
+            <svg class="sun-arc-svg" id="sunArcSvg" viewBox="0 0 300 135" role="img" aria-label="Trajetória solar diurna e noturna">
+              <defs>
+                <linearGradient id="sunArcDayGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.9"/>
+                  <stop offset="50%" stop-color="#fbbf24" stop-opacity="1"/>
+                  <stop offset="100%" stop-color="#f97316" stop-opacity="0.9"/>
+                </linearGradient>
+                <radialGradient id="sunGlowGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.85"/>
+                  <stop offset="60%" stop-color="#f59e0b" stop-opacity="0.3"/>
+                  <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Nighttime lower arc -->
+              <path class="sun-arc-night" id="sunArcNight" d="M 25,105 A 125,30 0 0,0 275,105" />
+
+              <!-- Daytime track background (dashed) -->
+              <path class="sun-arc-bg" id="sunArcBg" d="M 25,105 A 125,85 0 0,1 275,105" />
+
+              <!-- Daytime active progress track -->
+              <path class="sun-arc-active" id="sunArcActive" d="M 25,105 A 125,85 0 0,1 275,105" />
+
+              <!-- Horizon line -->
+              <line class="sun-arc-horizon" x1="12" y1="105" x2="288" y2="105" />
+
+              <!-- Solar Noon apex marker -->
+              <g class="sun-arc-noon" id="sunArcNoon">
+                <circle cx="150" cy="20" r="2.5" class="sun-arc-noon-dot" />
+                <text x="150" y="11" class="sun-arc-noon-text" id="sunArcNoonTime">12:00</text>
+              </g>
+
+              <!-- Sun / Moon Indicator Body -->
+              <g class="sun-arc-body" id="sunArcBody" transform="translate(150, 20)">
+                <circle class="sun-arc-glow" id="sunArcGlow" cx="0" cy="0" r="14" fill="url(#sunGlowGrad)" />
+                <circle class="sun-arc-core" id="sunArcCore" cx="0" cy="0" r="6" />
+              </g>
+            </svg>
+          </div>
+
+          <div class="sun-arc-status" id="sunArcStatus">
+            <span class="sun-arc-status__dot"></span>
+            <span class="sun-arc-status__text" id="sunArcStatusText">--</span>
+          </div>
+
+          <div class="sun-arc-times">
+            <div class="sun-arc-time sun-arc-time--rise">
+              <span class="sun-arc-time__icon" aria-hidden="true">🌅</span>
+              <div class="sun-arc-time__info">
+                <span class="sun-arc-time__label" data-i18n="sun.rise">Nascer do sol</span>
+                <span class="sun-arc-time__value" id="sunrise">--:--</span>
+              </div>
+            </div>
+            <div class="sun-arc-time sun-arc-time--set">
+              <span class="sun-arc-time__icon" aria-hidden="true">🌇</span>
+              <div class="sun-arc-time__info">
+                <span class="sun-arc-time__label" data-i18n="sun.set">Pôr do sol</span>
+                <span class="sun-arc-time__value" id="sunset">--:--</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -657,7 +724,7 @@
     <footer class="footer">
       <span><span data-i18n="footer.source">Fonte:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
       <span><a href="manual.html" data-i18n="footer.manual">Manual de utilização</a></span>
-      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.11.2</span></span>
+      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.12.0</span></span>
     </footer>
   </main>
 
