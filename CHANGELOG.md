@@ -2,13 +2,28 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.10.1**
+Current Version: **2.11.0**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.11.0] — 2026-11-06
+
+### Added
+- **Interactive Visual Compass & Array Azimuth Alignment (`#pvCompassCard`)**:
+  - Integrated an interactive SVG circular compass dial inside the *Painéis Solares & Orientações* configuration section.
+  - Added orientation selector tabs for all 4 panel arrays with real-time degree readouts and palette colors (Array 1: Sky, Array 2: Indigo, Array 3: Emerald, Array 4: Rose).
+  - Multi-needle visualization: displays active array pointer needle with draggable touch handle, alongside dashed ghost needles for all other configured orientations with active wattage.
+  - Direct pointer drag & touch interaction on SVG dial calculating mathematical azimuth angles (0°–360°) via standard arctangent transposition.
+  - One-click cardinal preset buttons: **N (0°)**, **NE (45°)**, **E (90°)**, **SE (135°)**, **S (180° ★)**, **SO/SW (225°)**, **O/W (270°)**, **NO/NW (315°)** with visual highlight when active.
+  - Highlighted optimal solar azimuth zone (150°–210° South sector) indicating maximum Northern Hemisphere yield.
+  - Seamless bidirectional synchronization between numeric input fields and visual compass needle.
+  - User manual synchronization in Portuguese and English (Sections 5.2 & 5.3).
 
 ---
 

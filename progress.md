@@ -4,7 +4,7 @@
 * **Application:** SolMeteo (Solar & Meteorological Forecast PWA)
 * **Architecture:** Static single-page application (Vanilla JS, CSS3, HTML5) with zero dependencies.
 * **Data Sources:** Open-Meteo APIs (Forecast, Geocoding, Air Quality) + IP geolocation fallback.
-* **Current Version:** `2.10.1` (Production live on `main`)
+* **Current Version:** `2.11.0` (Production live on `main`)
 * **Live Deployment:** GitHub Pages (`https://rjduraocosta.github.io/solmeteo/`) from `main` branch.
 
 ---
@@ -34,6 +34,7 @@
 
 | Version | Milestone Date | Summary of Changes |
 | :--- | :--- | :--- |
+| **v2.11.0**| 2026-11-06 | Interactive visual compass & PV array azimuth alignment (`#pvCompassCard`), multi-needle visualization, 1-click cardinal presets, bidirectional sync, manual sections 5.2 & 5.3. |
 | **v2.10.1**| 2026-11-06 | Removed health/medical advisory and personal protection actions from the UV card, preserving the objective meteorological WMO UV Index Scale (0-12 meter pointer, peak UV forecast, intensity window). |
 | **v2.10.0**| 2026-11-06 | WHO UV Index health advisory card (5 risk tiers, segmented risk meter, peak UV window, protection actions), automated severe weather alerts (gusts, heavy rain, thunderstorms/hail, extreme heat/freeze), topbar shortcuts, manual sections 4.1 & 4.2. |
 | **v2.9.2** | 2026-11-04 | Battery cyclic steady-state convergence (spin-up loop), eliminating Day 1 boundary artifacts and artificial early-morning grid imports. |
@@ -84,7 +85,7 @@
 ### ⏳ Pending & Upcoming Tasks
 - [x] Step 3: Battery simulation, baseload modeling, energy balance dashboard, partition bar, manual section 5.6.
 - [x] Step 4: UV index health advisory cards & severe weather alerts.
-- [ ] Step 5: Interactive visual compass alignment for PV array azimuth input.
+- [x] Step 5: Interactive visual compass alignment for PV array azimuth input.
 - [ ] Cross-browser regression and mobile rendering audit.
 
 ---

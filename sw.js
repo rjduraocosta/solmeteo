@@ -1,4 +1,4 @@
-const CACHE_NAME = "solmeteo-v2.10.1";
+const CACHE_NAME = "solmeteo-v2.11.0";
 const APP_SHELL = [
   "./",
   "./index.html",

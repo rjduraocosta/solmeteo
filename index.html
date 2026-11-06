@@ -325,6 +325,105 @@
               <input type="number" id="pvAz3" min="0" max="360" step="1" inputmode="numeric" placeholder="0" />
             </div>
           </div>
+
+          <!-- Rosa dos Ventos & Bússola Visual Interativa -->
+          <div class="pv-compass-card" id="pvCompassCard">
+            <div class="pv-compass-head">
+              <div class="pv-compass-tabs" id="pvCompassTabs" role="tablist" aria-label="Selecionar orientação dos painéis">
+                <button type="button" class="pv-compass-tab active" data-group="0" style="--grp-color: #38bdf8" role="tab" aria-selected="true">
+                  <span class="pv-compass-tab__dot"></span>
+                  <span data-i18n="pv.compass.g1">Painel 1</span>
+                  <strong class="pv-compass-tab__val" id="pvCompassVal0">0°</strong>
+                </button>
+                <button type="button" class="pv-compass-tab" data-group="1" style="--grp-color: #818cf8" role="tab" aria-selected="false">
+                  <span class="pv-compass-tab__dot"></span>
+                  <span data-i18n="pv.compass.g2">Painel 2</span>
+                  <strong class="pv-compass-tab__val" id="pvCompassVal1">0°</strong>
+                </button>
+                <button type="button" class="pv-compass-tab" data-group="2" style="--grp-color: #34d399" role="tab" aria-selected="false">
+                  <span class="pv-compass-tab__dot"></span>
+                  <span data-i18n="pv.compass.g3">Painel 3</span>
+                  <strong class="pv-compass-tab__val" id="pvCompassVal2">0°</strong>
+                </button>
+                <button type="button" class="pv-compass-tab" data-group="3" style="--grp-color: #fb7185" role="tab" aria-selected="false">
+                  <span class="pv-compass-tab__dot"></span>
+                  <span data-i18n="pv.compass.g4">Painel 4</span>
+                  <strong class="pv-compass-tab__val" id="pvCompassVal3">0°</strong>
+                </button>
+              </div>
+
+              <div class="pv-compass-readout">
+                <span class="pv-compass-readout__angle" id="pvCompassReadoutAngle">0°</span>
+                <span class="pv-compass-readout__dir" id="pvCompassReadoutDir">N · Norte</span>
+                <span class="pv-compass-readout__opt" id="pvCompassReadoutOpt" data-i18n="pv.compass.opt">180° (Sul) = Ótimo solar</span>
+              </div>
+            </div>
+
+            <div class="pv-compass-body">
+              <div class="pv-compass-dial-wrap">
+                <svg class="pv-compass-svg" id="pvCompassSvg" viewBox="0 0 240 240" role="application" aria-label="Bússola interativa para azimute">
+                  <!-- Outer rings -->
+                  <circle cx="120" cy="120" r="108" class="pv-compass-ring" />
+                  <circle cx="120" cy="120" r="88" class="pv-compass-ring-inner" />
+                  
+                  <!-- Optimal Solar Zone Highlight (South 150° to 210°) -->
+                  <path d="M 70 206.6 A 100 100 0 0 0 170 206.6 L 157.5 185 A 75 75 0 0 1 82.5 185 Z" class="pv-compass-opt-sector" />
+
+                  <!-- Ticks (every 30 deg) -->
+                  <g class="pv-compass-ticks">
+                    <line x1="120" y1="14" x2="120" y2="28" />
+                    <line x1="173" y1="28.2" x2="166" y2="40.3" />
+                    <line x1="211.8" y1="67" x2="199.7" y2="74" />
+                    <line x1="226" y1="120" x2="212" y2="120" />
+                    <line x1="211.8" y1="173" x2="199.7" y2="166" />
+                    <line x1="173" y1="211.8" x2="166" y2="199.7" />
+                    <line x1="120" y1="226" x2="120" y2="212" />
+                    <line x1="67" y1="211.8" x2="74" y2="199.7" />
+                    <line x1="28.2" y1="173" x2="40.3" y2="166" />
+                    <line x1="14" y1="120" x2="28" y2="120" />
+                    <line x1="28.2" y1="67" x2="40.3" y2="74" />
+                    <line x1="67" y1="28.2" x2="74" y2="40.3" />
+                  </g>
+
+                  <!-- Cardinal & Colateral Labels -->
+                  <text x="120" y="38" class="pv-compass-label pv-compass-label--cardinal" id="compassLblN">N</text>
+                  <text x="180" y="62" class="pv-compass-label pv-compass-label--colateral" id="compassLblNE">NE</text>
+                  <text x="202" y="125" class="pv-compass-label pv-compass-label--cardinal" id="compassLblE">E</text>
+                  <text x="180" y="188" class="pv-compass-label pv-compass-label--colateral" id="compassLblSE">SE</text>
+                  <text x="120" y="208" class="pv-compass-label pv-compass-label--cardinal pv-compass-label--opt" id="compassLblS">S</text>
+                  <text x="60" y="188" class="pv-compass-label pv-compass-label--colateral" id="compassLblSO">SO</text>
+                  <text x="38" y="125" class="pv-compass-label pv-compass-label--cardinal" id="compassLblO">O</text>
+                  <text x="60" y="62" class="pv-compass-label pv-compass-label--colateral" id="compassLblNO">NO</text>
+
+                  <!-- Ghost Needles of other configured arrays -->
+                  <g id="pvCompassGhostNeedles"></g>
+
+                  <!-- Active Pointer Needle -->
+                  <g id="pvCompassNeedleGroup" transform="rotate(0, 120, 120)">
+                    <circle cx="120" cy="120" r="14" class="pv-compass-needle__center" />
+                    <line x1="120" y1="120" x2="120" y2="30" class="pv-compass-needle__line" stroke="#38bdf8" stroke-width="4.5" stroke-linecap="round" />
+                    <!-- Needle panel arrow head -->
+                    <polygon points="120,16 112,34 128,34" class="pv-compass-needle__tip" fill="#38bdf8" />
+                    <!-- Drag handle at tip -->
+                    <circle cx="120" cy="16" r="10" class="pv-compass-needle__handle" />
+                  </g>
+                </svg>
+                <span class="pv-compass-hint" data-i18n="pv.compass.drag_hint">Arrasta o mostrador para rodar</span>
+              </div>
+
+              <!-- Quick Cardinal Points Chips -->
+              <div class="pv-compass-presets" id="pvCompassPresets">
+                <button type="button" class="pv-compass-chip" data-az="0"><span class="pv-compass-chip__name" id="chipLblN">N</span> <strong>0°</strong></button>
+                <button type="button" class="pv-compass-chip" data-az="45"><span class="pv-compass-chip__name" id="chipLblNE">NE</span> <strong>45°</strong></button>
+                <button type="button" class="pv-compass-chip" data-az="90"><span class="pv-compass-chip__name" id="chipLblE">E</span> <strong>90°</strong></button>
+                <button type="button" class="pv-compass-chip" data-az="135"><span class="pv-compass-chip__name" id="chipLblSE">SE</span> <strong>135°</strong></button>
+                <button type="button" class="pv-compass-chip pv-compass-chip--opt" data-az="180"><span class="pv-compass-chip__name" id="chipLblS">S</span> <strong>180° ★</strong></button>
+                <button type="button" class="pv-compass-chip" data-az="225"><span class="pv-compass-chip__name" id="chipLblSO">SO</span> <strong>225°</strong></button>
+                <button type="button" class="pv-compass-chip" data-az="270"><span class="pv-compass-chip__name" id="chipLblO">O</span> <strong>270°</strong></button>
+                <button type="button" class="pv-compass-chip" data-az="315"><span class="pv-compass-chip__name" id="chipLblNO">NO</span> <strong>315°</strong></button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Secção 2: Tarifário de Eletricidade & Rede -->
@@ -558,7 +657,7 @@
     <footer class="footer">
       <span><span data-i18n="footer.source">Fonte:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a></span>
       <span><a href="manual.html" data-i18n="footer.manual">Manual de utilização</a></span>
-      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.10.1</span></span>
+      <span>SolMeteo © 2026 · <span data-i18n="footer.version">Versão</span> <span id="appVersion">2.11.0</span></span>
     </footer>
   </main>
 

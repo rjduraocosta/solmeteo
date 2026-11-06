@@ -180,6 +180,35 @@ const els = {
   pvSegSelf: document.getElementById("pvSegSelf"),
   pvSegBatt: document.getElementById("pvSegBatt"),
   pvSegExport: document.getElementById("pvSegExport"),
+  pvCompassCard: document.getElementById("pvCompassCard"),
+  pvCompassTabs: document.getElementById("pvCompassTabs"),
+  pvCompassVal0: document.getElementById("pvCompassVal0"),
+  pvCompassVal1: document.getElementById("pvCompassVal1"),
+  pvCompassVal2: document.getElementById("pvCompassVal2"),
+  pvCompassVal3: document.getElementById("pvCompassVal3"),
+  pvCompassReadoutAngle: document.getElementById("pvCompassReadoutAngle"),
+  pvCompassReadoutDir: document.getElementById("pvCompassReadoutDir"),
+  pvCompassReadoutOpt: document.getElementById("pvCompassReadoutOpt"),
+  pvCompassSvg: document.getElementById("pvCompassSvg"),
+  pvCompassNeedleGroup: document.getElementById("pvCompassNeedleGroup"),
+  pvCompassGhostNeedles: document.getElementById("pvCompassGhostNeedles"),
+  pvCompassPresets: document.getElementById("pvCompassPresets"),
+  compassLblN: document.getElementById("compassLblN"),
+  compassLblNE: document.getElementById("compassLblNE"),
+  compassLblE: document.getElementById("compassLblE"),
+  compassLblSE: document.getElementById("compassLblSE"),
+  compassLblS: document.getElementById("compassLblS"),
+  compassLblSO: document.getElementById("compassLblSO"),
+  compassLblO: document.getElementById("compassLblO"),
+  compassLblNO: document.getElementById("compassLblNO"),
+  chipLblN: document.getElementById("chipLblN"),
+  chipLblNE: document.getElementById("chipLblNE"),
+  chipLblE: document.getElementById("chipLblE"),
+  chipLblSE: document.getElementById("chipLblSE"),
+  chipLblS: document.getElementById("chipLblS"),
+  chipLblSO: document.getElementById("chipLblSO"),
+  chipLblO: document.getElementById("chipLblO"),
+  chipLblNO: document.getElementById("chipLblNO"),
 };
 
 let weatherData = null;
@@ -201,7 +230,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.10.1";
+const APP_VERSION = "2.11.0";
 
 const LANG_KEY = "skycast:lang";
 const I18N = {
@@ -372,6 +401,21 @@ const I18N = {
     "pv.metric.import": "Importado da Rede",
     "pv.metric.cost": "Custo: {0} €",
     "pv.balance.nobatt": "Sem bateria",
+    "pv.compass.title": "Rosa dos Ventos & Orientação dos Painéis",
+    "pv.compass.g1": "Painel 1",
+    "pv.compass.g2": "Painel 2",
+    "pv.compass.g3": "Painel 3",
+    "pv.compass.g4": "Painel 4",
+    "pv.compass.opt": "180° (Sul) = Ótimo solar",
+    "pv.compass.drag_hint": "Arrasta o mostrador para rodar",
+    "cardinal.n": "Norte",
+    "cardinal.ne": "Nordeste",
+    "cardinal.e": "Este",
+    "cardinal.se": "Sudeste",
+    "cardinal.s": "Sul",
+    "cardinal.so": "Sudoeste",
+    "cardinal.o": "Oeste",
+    "cardinal.no": "Noroeste",
     "stat.uv.toggle": "Ver Índice UV e alertas meteorológicos",
     "hero.alert.chip": "⚠ {0} Alerta(s)",
     "advisory.title": "Índice UV & Alertas Meteorológicos",
@@ -571,6 +615,21 @@ const I18N = {
     "pv.metric.import": "Imported from Grid",
     "pv.metric.cost": "Cost: {0} €",
     "pv.balance.nobatt": "No battery",
+    "pv.compass.title": "Interactive Compass & Array Azimuth",
+    "pv.compass.g1": "Array 1",
+    "pv.compass.g2": "Array 2",
+    "pv.compass.g3": "Array 3",
+    "pv.compass.g4": "Array 4",
+    "pv.compass.opt": "180° (South) = Optimal solar",
+    "pv.compass.drag_hint": "Drag dial to rotate",
+    "cardinal.n": "North",
+    "cardinal.ne": "Northeast",
+    "cardinal.e": "East",
+    "cardinal.se": "Southeast",
+    "cardinal.s": "South",
+    "cardinal.so": "Southwest",
+    "cardinal.o": "West",
+    "cardinal.no": "Northwest",
     "stat.uv.toggle": "View UV Index and weather alerts",
     "hero.alert.chip": "⚠ {0} Alert(s)",
     "advisory.title": "UV Index & Severe Weather Alerts",
@@ -675,6 +734,8 @@ function setLang(next) {
   if (next === lang) return;
   saveLang(next);
   applyStaticTranslations();
+  updateCompassLabels();
+  updatePvCompass();
   if (weatherData) renderDay(selectedDay);
 }
 
@@ -1032,6 +1093,7 @@ function setUnit(next) {
   applyWindUnitButtons();
   pvViewMode = localStorage.getItem(PV_VIEW_KEY) || "both";
   applyPvViewButtons();
+  initPvCompass();
   if (weatherData) renderDay(selectedDay);
 }
 
@@ -1574,6 +1636,243 @@ function updateTariffVisibility(type) {
   if (els.pvTariffOffPeakBox) els.pvTariffOffPeakBox.hidden = !isBi;
 }
 
+
+let activeCompassGroup = 0;
+let isDraggingCompass = false;
+
+function getCardinalDirection(deg) {
+  deg = ((Math.round(deg) % 360) + 360) % 360;
+  const dirs = I18N[lang].dirs;
+  const cardinals = [
+    t("cardinal.n"),
+    t("cardinal.ne"),
+    t("cardinal.e"),
+    t("cardinal.se"),
+    t("cardinal.s"),
+    t("cardinal.so"),
+    t("cardinal.o"),
+    t("cardinal.no"),
+  ];
+  const idx = Math.round(deg / 45) % 8;
+  return {
+    abbr: dirs[idx],
+    full: cardinals[idx],
+  };
+}
+
+function updateCompassLabels() {
+  const dirs = I18N[lang].dirs;
+  if (els.compassLblN) els.compassLblN.textContent = dirs[0];
+  if (els.compassLblNE) els.compassLblNE.textContent = dirs[1];
+  if (els.compassLblE) els.compassLblE.textContent = dirs[2];
+  if (els.compassLblSE) els.compassLblSE.textContent = dirs[3];
+  if (els.compassLblS) els.compassLblS.textContent = dirs[4];
+  if (els.compassLblSO) els.compassLblSO.textContent = dirs[5];
+  if (els.compassLblO) els.compassLblO.textContent = dirs[6];
+  if (els.compassLblNO) els.compassLblNO.textContent = dirs[7];
+
+  if (els.chipLblN) els.chipLblN.textContent = dirs[0];
+  if (els.chipLblNE) els.chipLblNE.textContent = dirs[1];
+  if (els.chipLblE) els.chipLblE.textContent = dirs[2];
+  if (els.chipLblSE) els.chipLblSE.textContent = dirs[3];
+  if (els.chipLblS) els.chipLblS.textContent = dirs[4];
+  if (els.chipLblSO) els.chipLblSO.textContent = dirs[5];
+  if (els.chipLblO) els.chipLblO.textContent = dirs[6];
+  if (els.chipLblNO) els.chipLblNO.textContent = dirs[7];
+}
+
+function updatePvCompass() {
+  if (!els.pvCompassCard || !els.pvGroups) return;
+
+  const angles = els.pvGroups.map((g) => {
+    const val = parseFloat(g.az ? g.az.value : 0);
+    return isNaN(val) ? 0 : ((val % 360) + 360) % 360;
+  });
+
+  const kwps = els.pvGroups.map((g) => {
+    const val = parseFloat(g.kwp ? g.kwp.value : 0);
+    return isNaN(val) ? 0 : val;
+  });
+
+  // 1. Update tab indicators
+  for (let i = 0; i < 4; i++) {
+    const valEl = document.getElementById("pvCompassVal" + i);
+    if (valEl) valEl.textContent = `${Math.round(angles[i])}°`;
+    const tabEl = document.querySelector(`.pv-compass-tab[data-group="${i}"]`);
+    if (tabEl) {
+      tabEl.classList.toggle("active", i === activeCompassGroup);
+      tabEl.setAttribute("aria-selected", i === activeCompassGroup ? "true" : "false");
+    }
+  }
+
+  // 2. Active Needle
+  const activeAngle = Math.round(angles[activeCompassGroup]);
+  const activeColor = PV_PALETTE[activeCompassGroup];
+
+  if (els.pvCompassNeedleGroup) {
+    els.pvCompassNeedleGroup.setAttribute("transform", `rotate(${activeAngle}, 120, 120)`);
+    const needleLine = els.pvCompassNeedleGroup.querySelector(".pv-compass-needle__line");
+    const needleTip = els.pvCompassNeedleGroup.querySelector(".pv-compass-needle__tip");
+    if (needleLine) needleLine.setAttribute("stroke", activeColor);
+    if (needleTip) needleTip.setAttribute("fill", activeColor);
+  }
+
+  // 3. Ghost Needles for other configured orientations
+  if (els.pvCompassGhostNeedles) {
+    let ghostsHtml = "";
+    for (let i = 0; i < 4; i++) {
+      if (i !== activeCompassGroup && kwps[i] > 0) {
+        const ang = Math.round(angles[i]);
+        const col = PV_PALETTE[i];
+        ghostsHtml += `
+          <g transform="rotate(${ang}, 120, 120)" opacity="0.6">
+            <line x1="120" y1="120" x2="120" y2="35" stroke="${col}" stroke-width="2.5" stroke-dasharray="4 3" stroke-linecap="round" />
+            <polygon points="120,24 115,35 125,35" fill="${col}" />
+          </g>
+        `;
+      }
+    }
+    els.pvCompassGhostNeedles.innerHTML = ghostsHtml;
+  }
+
+  // 4. Update Readout
+  const dirInfo = getCardinalDirection(activeAngle);
+  if (els.pvCompassReadoutAngle) {
+    els.pvCompassReadoutAngle.textContent = `${activeAngle}°`;
+    els.pvCompassReadoutAngle.style.color = activeColor;
+  }
+  if (els.pvCompassReadoutDir) {
+    els.pvCompassReadoutDir.textContent = `${dirInfo.abbr} · ${dirInfo.full}`;
+  }
+  if (els.pvCompassReadoutOpt) {
+    const isOpt = activeAngle >= 150 && activeAngle <= 210;
+    els.pvCompassReadoutOpt.classList.toggle("is-optimal", isOpt);
+  }
+
+  // 5. Update Preset Buttons active state
+  document.querySelectorAll(".pv-compass-chip").forEach((chip) => {
+    const chipAz = parseInt(chip.getAttribute("data-az"), 10);
+    chip.classList.toggle("active", Math.abs(chipAz - activeAngle) <= 5);
+  });
+}
+
+function setCompassAngleFromEvent(e) {
+  if (!els.pvCompassSvg || !els.pvGroups[activeCompassGroup]) return;
+  const rect = els.pvCompassSvg.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+
+  const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : null);
+  const clientY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : null);
+  if (clientX == null || clientY == null) return;
+
+  const dx = clientX - centerX;
+  const dy = clientY - centerY;
+  let angle = Math.round(Math.atan2(dx, -dy) * (180 / Math.PI));
+  if (angle < 0) angle += 360;
+  if (angle >= 360) angle = 0;
+
+  const azInput = els.pvGroups[activeCompassGroup].az;
+  if (azInput) {
+    azInput.value = angle;
+    updatePvCompass();
+  }
+}
+
+function initPvCompass() {
+  if (!els.pvCompassCard) return;
+
+  updateCompassLabels();
+
+  // Tabs click
+  document.querySelectorAll(".pv-compass-tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const g = parseInt(tab.getAttribute("data-group"), 10);
+      if (!isNaN(g)) {
+        activeCompassGroup = g;
+        updatePvCompass();
+        if (els.pvGroups[g] && els.pvGroups[g].az) {
+          els.pvGroups[g].az.focus();
+        }
+      }
+    });
+  });
+
+  // Presets click
+  document.querySelectorAll(".pv-compass-chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const az = parseInt(chip.getAttribute("data-az"), 10);
+      if (!isNaN(az) && els.pvGroups[activeCompassGroup]) {
+        els.pvGroups[activeCompassGroup].az.value = az;
+        updatePvCompass();
+      }
+    });
+  });
+
+  // Pointer drag on SVG dial
+  if (els.pvCompassSvg) {
+    const onPointerDown = (e) => {
+      isDraggingCompass = true;
+      try {
+        if (e.setPointerCapture && e.pointerId != null) {
+          e.currentTarget.setPointerCapture(e.pointerId);
+        }
+      } catch {}
+      setCompassAngleFromEvent(e);
+    };
+
+    const onPointerMove = (e) => {
+      if (!isDraggingCompass) return;
+      setCompassAngleFromEvent(e);
+    };
+
+    const onPointerUp = (e) => {
+      if (isDraggingCompass) {
+        isDraggingCompass = false;
+        try {
+          if (e.releasePointerCapture && e.pointerId != null) {
+            e.currentTarget.releasePointerCapture(e.pointerId);
+          }
+        } catch {}
+      }
+    };
+
+    els.pvCompassSvg.addEventListener("pointerdown", onPointerDown);
+    els.pvCompassSvg.addEventListener("pointermove", onPointerMove);
+    els.pvCompassSvg.addEventListener("pointerup", onPointerUp);
+    els.pvCompassSvg.addEventListener("pointercancel", onPointerUp);
+  }
+
+  // Connect input events of pvGroups to compass
+  els.pvGroups.forEach((g, idx) => {
+    if (g.az) {
+      g.az.addEventListener("input", () => {
+        activeCompassGroup = idx;
+        updatePvCompass();
+      });
+      g.az.addEventListener("focus", () => {
+        activeCompassGroup = idx;
+        updatePvCompass();
+      });
+    }
+    if (g.kwp) {
+      g.kwp.addEventListener("input", updatePvCompass);
+      g.kwp.addEventListener("focus", () => {
+        activeCompassGroup = idx;
+        updatePvCompass();
+      });
+    }
+    if (g.tilt) {
+      g.tilt.addEventListener("focus", () => {
+        activeCompassGroup = idx;
+        updatePvCompass();
+      });
+    }
+  });
+
+  updatePvCompass();
+}
+
 function pvFillForm() {
   const s = loadPvSettings(weatherData ? weatherData.latitude : 0);
   els.pvGroups.forEach((r, i) => {
@@ -1596,6 +1895,7 @@ function pvFillForm() {
   if (els.pvBattMinSoc) els.pvBattMinSoc.value = s.battMinSoc != null ? s.battMinSoc : 20;
   if (els.pvDailyKwh) els.pvDailyKwh.value = Number(s.dailyKwh != null ? s.dailyKwh : 10).toFixed(1);
   if (els.pvExportTariff) els.pvExportTariff.value = s.exportPrice != null ? s.exportPrice : 0.05;
+  updatePvCompass();
 }
 
 function equationOfTime(dayOfYear) {

@@ -2027,3 +2027,313 @@ body {
   border-color: rgba(2, 132, 199, 0.2);
   color: var(--text);
 }
+
+
+/* ---------- Visual Interactive Compass for PV Azimuth ---------- */
+.pv-compass-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin-top: 6px;
+  transition: border-color 0.3s ease;
+}
+
+[data-theme="light"] .pv-compass-card {
+  background: rgba(0, 0, 0, 0.025);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.pv-compass-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pv-compass-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.pv-compass-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.pv-compass-tab:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+}
+
+.pv-compass-tab.active {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--grp-color);
+  color: var(--text);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+[data-theme="light"] .pv-compass-tab {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--text-dim);
+}
+
+[data-theme="light"] .pv-compass-tab.active {
+  background: #ffffff;
+  border-color: var(--grp-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.pv-compass-tab__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--grp-color);
+  flex-shrink: 0;
+}
+
+.pv-compass-tab__val {
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.pv-compass-tab.active .pv-compass-tab__val {
+  color: var(--grp-color);
+  font-weight: 700;
+}
+
+.pv-compass-readout {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pv-compass-readout__angle {
+  font-size: 1.35rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.pv-compass-readout__dir {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.pv-compass-readout__opt {
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  transition: all 0.2s ease;
+}
+
+.pv-compass-readout__opt.is-optimal {
+  color: #fbbf24;
+  background: rgba(251, 191, 36, 0.12);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  font-weight: 700;
+}
+
+.pv-compass-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.pv-compass-dial-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.pv-compass-svg {
+  width: 210px;
+  height: 210px;
+  touch-action: none;
+  cursor: crosshair;
+  user-select: none;
+}
+
+.pv-compass-ring {
+  fill: rgba(255, 255, 255, 0.02);
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+
+.pv-compass-ring-inner {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.07);
+  stroke-dasharray: 2 4;
+  stroke-width: 1;
+}
+
+[data-theme="light"] .pv-compass-ring {
+  fill: rgba(0, 0, 0, 0.015);
+  stroke: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .pv-compass-ring-inner {
+  stroke: rgba(0, 0, 0, 0.07);
+}
+
+.pv-compass-opt-sector {
+  fill: rgba(251, 191, 36, 0.12);
+  stroke: rgba(251, 191, 36, 0.35);
+  stroke-width: 1;
+}
+
+.pv-compass-ticks line {
+  stroke: rgba(255, 255, 255, 0.25);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+
+[data-theme="light"] .pv-compass-ticks line {
+  stroke: rgba(0, 0, 0, 0.2);
+}
+
+.pv-compass-label {
+  text-anchor: middle;
+  dominant-baseline: middle;
+  font-family: var(--font);
+  user-select: none;
+  pointer-events: none;
+}
+
+.pv-compass-label--cardinal {
+  font-size: 13px;
+  font-weight: 800;
+  fill: var(--text);
+}
+
+.pv-compass-label--colateral {
+  font-size: 9px;
+  font-weight: 600;
+  fill: var(--text-faint);
+}
+
+.pv-compass-label--opt {
+  fill: #fbbf24;
+}
+
+.pv-compass-needle__center {
+  fill: #0b1020;
+  stroke: var(--border);
+  stroke-width: 2;
+}
+
+[data-theme="light"] .pv-compass-needle__center {
+  fill: #ffffff;
+  stroke: rgba(0, 0, 0, 0.2);
+}
+
+.pv-compass-needle__handle {
+  fill: rgba(255, 255, 255, 0.25);
+  stroke: #ffffff;
+  stroke-width: 2;
+  cursor: grab;
+  transition: transform 0.15s;
+}
+
+.pv-compass-needle__handle:active {
+  cursor: grabbing;
+}
+
+.pv-compass-hint {
+  font-size: 0.68rem;
+  color: var(--text-faint);
+  text-align: center;
+}
+
+.pv-compass-presets {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  max-width: 290px;
+  width: 100%;
+}
+
+.pv-compass-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 7px 6px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 0.74rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pv-compass-chip:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: var(--text);
+}
+
+.pv-compass-chip.active {
+  background: rgba(56, 189, 248, 0.16);
+  border-color: rgba(56, 189, 248, 0.65);
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.pv-compass-chip--opt {
+  border-color: rgba(251, 191, 36, 0.35);
+}
+
+.pv-compass-chip--opt.active {
+  background: rgba(251, 191, 36, 0.18);
+  border-color: #fbbf24;
+  color: #fbbf24;
+}
+
+[data-theme="light"] .pv-compass-chip {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: var(--text-dim);
+}
+
+[data-theme="light"] .pv-compass-chip:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text);
+}
+
+[data-theme="light"] .pv-compass-chip.active {
+  background: rgba(2, 132, 199, 0.1);
+  border-color: #0284c7;
+  color: #0284c7;
+}
+
+[data-theme="light"] .pv-compass-chip--opt.active {
+  background: rgba(217, 119, 6, 0.12);
+  border-color: #d97706;
+  color: #d97706;
+}
