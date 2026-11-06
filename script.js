@@ -142,6 +142,20 @@ const els = {
   dayNavLabel: document.getElementById("dayNavLabel"),
   statAqi: document.getElementById("statAqi"),
   statAqiBox: document.getElementById("statAqiBox"),
+  statUvBox: document.getElementById("statUvBox"),
+  heroAlertChip: document.getElementById("heroAlertChip"),
+  advisoryPanel: document.getElementById("advisoryPanel"),
+  advisorySpan: document.getElementById("advisorySpan"),
+  advisoryUvCard: document.getElementById("advisoryUvCard"),
+  advisoryUvPeak: document.getElementById("advisoryUvPeak"),
+  advisoryUvPill: document.getElementById("advisoryUvPill"),
+  uvMeterPointer: document.getElementById("uvMeterPointer"),
+  advisoryUvDesc: document.getElementById("advisoryUvDesc"),
+  advisoryUvActions: document.getElementById("advisoryUvActions"),
+  advisoryAlertsCard: document.getElementById("advisoryAlertsCard"),
+  advisoryAlertsSub: document.getElementById("advisoryAlertsSub"),
+  advisoryAlertsBadge: document.getElementById("advisoryAlertsBadge"),
+  advisoryAlertsList: document.getElementById("advisoryAlertsList"),
   themeBtn: document.getElementById("themeBtn"),
   pvTariffType: document.getElementById("pvTariffType"),
   pvTariffSimpleBox: document.getElementById("pvTariffSimpleBox"),
@@ -189,7 +203,7 @@ const AQI_API = "https://air-quality-api.open-meteo.com/v1/air-quality";
 const REVERSE_GEO_API = "https://geocoding-api.open-meteo.com/v1/reverse";
 const WEATHER_CACHE_KEY = "skycast:wc";
 const CACHE_TTL_MS = 20 * 60 * 1000;
-const APP_VERSION = "2.9.2";
+const APP_VERSION = "2.10.0";
 
 const LANG_KEY = "skycast:lang";
 const I18N = {
@@ -360,6 +374,49 @@ const I18N = {
     "pv.metric.import": "Importado da Rede",
     "pv.metric.cost": "Custo: {0} €",
     "pv.balance.nobatt": "Sem bateria",
+    "stat.uv.toggle": "Ver recomendações do Índice UV e alertas",
+    "hero.alert.chip": "⚠ {0} Alerta(s)",
+    "advisory.title": "Saúde Solar & Alertas Meteorológicos",
+    "advisory.uv.title": "Índice UV & Exposição Solar",
+    "advisory.uv.peak": "Pico estimado de {0} às {1}",
+    "advisory.uv.peak_none": "Sem radiação UV significativa hoje",
+    "advisory.uv.window": "Proteção solar recomendada entre as {0} e as {1}",
+    "advisory.uv.level.low": "Baixo (0–2)",
+    "advisory.uv.level.mod": "Moderado (3–5)",
+    "advisory.uv.level.high": "Elevado (6–7)",
+    "advisory.uv.level.veryhigh": "Muito Alto (8–10)",
+    "advisory.uv.level.extreme": "Extremo (11+)",
+    "advisory.uv.desc.low": "Risco baixo de danos por radiação solar. Pode permanecer ao ar livre com segurança.",
+    "advisory.uv.desc.mod": "Risco moderado de queimaduras solares sem proteção. Procure sombra nas horas centrais e utilize proteção adequada.",
+    "advisory.uv.desc.high": "Risco elevado. Danos rápidos na pele e olhos desprotegidos. Reduza a exposição direta entre as 11h e as 16h.",
+    "advisory.uv.desc.veryhigh": "Risco muito elevado. Queimaduras solares em poucos minutos. Evite exposição direta prolongada e cubra-se bem.",
+    "advisory.uv.desc.extreme": "Risco extremo. Queimaduras graves em minutos de exposição desprotegida. Evite permanecer ao ar livre nas horas centrais.",
+    "advisory.action.glasses": "Óculos de Sol UV400",
+    "advisory.action.sunscreen": "Protetor FPS 30+",
+    "advisory.action.sunscreen50": "Protetor FPS 50+",
+    "advisory.action.hat": "Chapéu de abas largas",
+    "advisory.action.shade": "Procurar sombra",
+    "advisory.action.clothing": "Roupas compridas de proteção",
+    "advisory.action.safe": "Sem precauções especiais",
+    "advisory.alerts.title": "Alertas Meteorológicos",
+    "advisory.alerts.sub_count": "{0} alerta(s) ativo(s) para hoje",
+    "advisory.alerts.sub_none": "Sem avisos meteorológicos ativos para hoje",
+    "advisory.alerts.stable": "Estável",
+    "advisory.alerts.active": "Atenção ({0})",
+    "advisory.alert.wind.title": "Vento Muito Forte / Rajadas",
+    "advisory.alert.wind.desc": "Rajadas estimadas de até {0} ({1} nós). Fixe objetos soltos no exterior.",
+    "advisory.alert.rain.title": "Precipitação Intensa / Acumulada",
+    "advisory.alert.rain.desc": "Precipitação acumulada diária prevista de {0} mm. Risco de acumulação e lençóis de água.",
+    "advisory.alert.storm.title": "Trovoada / Risco de Granizo",
+    "advisory.alert.storm.desc": "Condições atmosféricas instáveis com trovoada e risco de descargas elétricas e granizo.",
+    "advisory.alert.heat.title": "Calor Extremo / Alerta Térmico",
+    "advisory.alert.heat.desc": "Temperatura máxima de {0} {1}. Mantenha hidratação frequente e evite esforço físico exterior.",
+    "advisory.alert.frost.title": "Risco de Gelo / Temperatura Negativa",
+    "advisory.alert.frost.desc": "Temperatura mínima prevista de {0} {1}. Risco de formação de gelo na estrada e danos em plantas sensíveis.",
+    "advisory.alert.aqi.title": "Qualidade do Ar Degradada",
+    "advisory.alert.aqi.desc": "Índice Europeu de Qualidade do Ar (EAQI) elevado. Pessoas sensíveis devem moderar atividade ao ar livre.",
+    "advisory.alerts.none_title": "Condições Favoráveis",
+    "advisory.alerts.none_desc": "Não foram identificados limiares meteorológicos severos para este dia.",
   },
   en: {
     locale: "en-GB",
@@ -528,6 +585,49 @@ const I18N = {
     "pv.metric.import": "Imported from Grid",
     "pv.metric.cost": "Cost: {0} €",
     "pv.balance.nobatt": "No battery",
+    "stat.uv.toggle": "View UV Index recommendations & alerts",
+    "hero.alert.chip": "⚠ {0} Alert(s)",
+    "advisory.title": "Solar Health & Weather Advisories",
+    "advisory.uv.title": "UV Index & Sun Exposure",
+    "advisory.uv.peak": "Peak estimated at {0} at {1}",
+    "advisory.uv.peak_none": "No significant UV radiation today",
+    "advisory.uv.window": "Sun protection recommended between {0} and {1}",
+    "advisory.uv.level.low": "Low (0–2)",
+    "advisory.uv.level.mod": "Moderate (3–5)",
+    "advisory.uv.level.high": "High (6–7)",
+    "advisory.uv.level.veryhigh": "Very High (8–10)",
+    "advisory.uv.level.extreme": "Extreme (11+)",
+    "advisory.uv.desc.low": "Low risk of UV radiation harm. Safe to stay outdoors with minimal precautions.",
+    "advisory.uv.desc.mod": "Moderate risk of harm from unprotected sun exposure. Seek shade during peak hours and wear protection.",
+    "advisory.uv.desc.high": "High risk of harm. Unprotected skin and eyes will burn quickly. Reduce sun exposure between 11 AM and 4 PM.",
+    "advisory.uv.desc.veryhigh": "Very high risk of harm. Sunburn can occur rapidly. Avoid direct midday sun and wear protective clothing.",
+    "advisory.uv.desc.extreme": "Extreme risk of harm. Severe burns can occur in minutes without protection. Avoid being outdoors around midday.",
+    "advisory.action.glasses": "UV400 Sunglasses",
+    "advisory.action.sunscreen": "SPF 30+ Sunscreen",
+    "advisory.action.sunscreen50": "SPF 50+ Sunscreen",
+    "advisory.action.hat": "Wide-Brimmed Hat",
+    "advisory.action.shade": "Seek shade",
+    "advisory.action.clothing": "Protective long-sleeve clothing",
+    "advisory.action.safe": "No special precautions needed",
+    "advisory.alerts.title": "Severe Weather Alerts",
+    "advisory.alerts.sub_count": "{0} active alert(s) today",
+    "advisory.alerts.sub_none": "No active weather warnings today",
+    "advisory.alerts.stable": "Calm",
+    "advisory.alerts.active": "Alert ({0})",
+    "advisory.alert.wind.title": "High Wind / Gust Warning",
+    "advisory.alert.wind.desc": "Estimated wind gusts up to {0} ({1} kt). Secure loose outdoor objects.",
+    "advisory.alert.rain.title": "Heavy / Torrential Rainfall Warning",
+    "advisory.alert.rain.desc": "Forecast daily rainfall of {0} mm. Risk of pooling water and local flooding.",
+    "advisory.alert.storm.title": "Thunderstorm / Hail Warning",
+    "advisory.alert.storm.desc": "Unstable atmospheric conditions with lightning discharges and possible hail.",
+    "advisory.alert.heat.title": "Extreme Heat Warning",
+    "advisory.alert.heat.desc": "Maximum temperature reaching {0} {1}. Stay hydrated and avoid strenuous outdoor activity.",
+    "advisory.alert.frost.title": "Frost & Freeze Warning",
+    "advisory.alert.frost.desc": "Minimum temperature forecast at {0} {1}. Risk of black ice and damage to frost-sensitive plants.",
+    "advisory.alert.aqi.title": "Degraded Air Quality Warning",
+    "advisory.alert.aqi.desc": "Elevated European Air Quality Index (EAQI). Sensitive groups should reduce outdoor exertion.",
+    "advisory.alerts.none_title": "Favorable Conditions",
+    "advisory.alerts.none_desc": "No severe weather thresholds detected for this day.",
   },
 };
 
@@ -558,12 +658,15 @@ const saveLang = (next) => {
   lang = I18N[next] ? next : "pt";
   localStorage.setItem(LANG_KEY, lang);
 };
-const t = (key, args) => {
+const t = (key, ...rest) => {
   let s = I18N[lang][key];
   if (s == null) s = key;
-  if (args) args.forEach((v, i) => {
-    s = s.split("{" + i + "}").join(String(v));
-  });
+  const args = rest.length === 1 && Array.isArray(rest[0]) ? rest[0] : rest;
+  if (args && args.length) {
+    args.forEach((v, i) => {
+      s = s.split("{" + i + "}").join(String(v));
+    });
+  }
   return s;
 };
 const wmoLabel = (code) => (WMO_LABELS[lang][code] != null ? WMO_LABELS[lang][code] : t("place.unknown"));
@@ -829,6 +932,7 @@ async function loadWeather(lat, lon, name, region) {
   els.forecastPanel.hidden = true;
   els.tempPanel.hidden = true;
   els.solarPanel.hidden = true;
+  if (els.advisoryPanel) els.advisoryPanel.hidden = true;
   els.pvPanel.hidden = true;
   els.dailyPanel.hidden = true;
 
@@ -840,7 +944,7 @@ async function loadWeather(lat, lon, name, region) {
     hourly:
       "temperature_2m,weather_code,precipitation_probability,shortwave_radiation,precipitation,relative_humidity_2m,wind_speed_10m,uv_index,direct_normal_irradiance,diffuse_radiation",
     daily:
-      "weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max",
+      "weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max,precipitation_sum,wind_speed_10m_max,wind_gusts_10m_max",
     timezone: "auto",
     forecast_days: "7",
   });
@@ -881,6 +985,7 @@ function renderWeather(data, name, region) {
   els.forecastPanel.hidden = false;
   els.tempPanel.hidden = false;
   els.solarPanel.hidden = false;
+  if (els.advisoryPanel) els.advisoryPanel.hidden = false;
   els.pvPanel.hidden = false;
   els.dailyPanel.hidden = false;
   els.hero.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -896,6 +1001,7 @@ function renderDay(day) {
   renderHourly(weatherData, day);
   renderCharts(weatherData, day);
   renderTempChart(weatherData, day);
+  renderAdvisory(weatherData, day);
   renderPv(weatherData, day);
   renderDaily(weatherData, day);
   updateDayNav();
@@ -1828,6 +1934,340 @@ function simulateForecastBattery(data, settings) {
   return results;
 }
 
+
+function scrollToAdvisory() {
+  if (!els.advisoryPanel) return;
+  els.advisoryPanel.hidden = false;
+  els.advisoryPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+  if (els.advisoryUvCard) {
+    els.advisoryUvCard.classList.remove("highlight-pulse");
+    void els.advisoryUvCard.offsetWidth; // force reflow
+    els.advisoryUvCard.classList.add("highlight-pulse");
+    setTimeout(() => {
+      els.advisoryUvCard.classList.remove("highlight-pulse");
+    }, 2000);
+  }
+}
+
+function renderAdvisory(data, day) {
+  if (!els.advisoryPanel || !data || !data.hourly) return;
+
+  const startIdx = day * 24;
+  const endIdx = startIdx + 24;
+  const dayUv = data.hourly.uv_index ? data.hourly.uv_index.slice(startIdx, endIdx) : [];
+
+  // 1. Calculate Peak UV and Protection Window
+  let maxUv = 0;
+  let peakHour = -1;
+  for (let h = 0; h < dayUv.length; h++) {
+    const val = dayUv[h] != null ? Number(dayUv[h]) : 0;
+    if (val > maxUv) {
+      maxUv = val;
+      peakHour = h;
+    }
+  }
+
+  // Daily parameter check if higher
+  if (data.daily && data.daily.uv_index_max && data.daily.uv_index_max[day] != null) {
+    const dailyMax = Number(data.daily.uv_index_max[day]);
+    if (dailyMax > maxUv) maxUv = dailyMax;
+  }
+  maxUv = Math.round(maxUv * 10) / 10;
+
+  // Protection Window: hours where UV >= 2.95 (WHO threshold for protection)
+  let winStart = -1;
+  let winEnd = -1;
+  for (let h = 0; h < dayUv.length; h++) {
+    const val = dayUv[h] != null ? Number(dayUv[h]) : 0;
+    if (val >= 2.95) {
+      if (winStart === -1) winStart = h;
+      winEnd = h;
+    }
+  }
+
+  // 2. Set Advisory Panel subtitle (day label)
+  if (els.advisorySpan) {
+    const d = new Date(data.daily.time[day] + "T12:00:00");
+    const dayName = day === 0 ? t("hero.today") : I18N[lang].days[d.getDay()];
+    const dateFormatted = `${d.getDate()} ${I18N[lang].months[d.getMonth()]}`;
+    els.advisorySpan.textContent = `${dayName} · ${dateFormatted}`;
+  }
+
+  // 3. Determine UV risk level & pill
+  let uvClass = "advisory-pill--low";
+  let uvLevelText = t("advisory.uv.level.low");
+  let uvDescText = t("advisory.uv.desc.low");
+
+  if (maxUv >= 11) {
+    uvClass = "advisory-pill--extreme";
+    uvLevelText = t("advisory.uv.level.extreme");
+    uvDescText = t("advisory.uv.desc.extreme");
+  } else if (maxUv >= 8) {
+    uvClass = "advisory-pill--veryhigh";
+    uvLevelText = t("advisory.uv.level.veryhigh");
+    uvDescText = t("advisory.uv.desc.veryhigh");
+  } else if (maxUv >= 6) {
+    uvClass = "advisory-pill--high";
+    uvLevelText = t("advisory.uv.level.high");
+    uvDescText = t("advisory.uv.desc.high");
+  } else if (maxUv >= 3) {
+    uvClass = "advisory-pill--mod";
+    uvLevelText = t("advisory.uv.level.mod");
+    uvDescText = t("advisory.uv.desc.mod");
+  }
+
+  if (els.advisoryUvPill) {
+    els.advisoryUvPill.className = `advisory-pill ${uvClass}`;
+    els.advisoryUvPill.textContent = `UV ${maxUv.toFixed(1)} · ${uvLevelText}`;
+  }
+
+  // UV meter pointer position: map 0 to 12 scale to percentage (0% to 100%)
+  if (els.uvMeterPointer) {
+    const clampedPct = Math.min(100, Math.max(0, (maxUv / 12) * 100));
+    els.uvMeterPointer.style.left = `${clampedPct.toFixed(1)}%`;
+  }
+
+  // Peak and Protection Window label
+  if (els.advisoryUvPeak) {
+    if (peakHour >= 0 && maxUv > 0.5) {
+      const peakFormatted = `${String(peakHour).padStart(2, "0")}:00`;
+      let text = t("advisory.uv.peak", maxUv.toFixed(1), peakFormatted);
+      if (winStart !== -1 && winEnd !== -1) {
+        const startStr = `${String(winStart).padStart(2, "0")}:00`;
+        const endStr = `${String(winEnd + 1).padStart(2, "0")}:00`;
+        text += ` · ${t("advisory.uv.window", startStr, endStr)}`;
+      }
+      els.advisoryUvPeak.textContent = text;
+    } else {
+      els.advisoryUvPeak.textContent = t("advisory.uv.peak_none");
+    }
+  }
+
+  if (els.advisoryUvDesc) {
+    els.advisoryUvDesc.textContent = uvDescText;
+  }
+
+  // Actions list based on WHO standards
+  if (els.advisoryUvActions) {
+    const actions = [];
+    if (maxUv < 3) {
+      actions.push({ icon: "🕶️", label: t("advisory.action.glasses") });
+      actions.push({ icon: "✅", label: t("advisory.action.safe") });
+    } else if (maxUv < 6) {
+      actions.push({ icon: "🕶️", label: t("advisory.action.glasses") });
+      actions.push({ icon: "🧴", label: t("advisory.action.sunscreen") });
+      actions.push({ icon: "👒", label: t("advisory.action.hat") });
+      actions.push({ icon: "🌳", label: t("advisory.action.shade") });
+    } else if (maxUv < 8) {
+      actions.push({ icon: "🕶️", label: t("advisory.action.glasses") });
+      actions.push({ icon: "🧴", label: t("advisory.action.sunscreen") });
+      actions.push({ icon: "👒", label: t("advisory.action.hat") });
+      actions.push({ icon: "👕", label: t("advisory.action.clothing") });
+      actions.push({ icon: "🌳", label: t("advisory.action.shade") });
+    } else {
+      actions.push({ icon: "🕶️", label: t("advisory.action.glasses") });
+      actions.push({ icon: "🧴", label: t("advisory.action.sunscreen50") });
+      actions.push({ icon: "👒", label: t("advisory.action.hat") });
+      actions.push({ icon: "👕", label: t("advisory.action.clothing") });
+      actions.push({ icon: "🏠", label: t("advisory.action.shade") });
+    }
+
+    els.advisoryUvActions.innerHTML = actions
+      .map(
+        (a) =>
+          `<div class="advisory-action-item"><span class="advisory-action-item__icon" aria-hidden="true">${a.icon}</span><span>${a.label}</span></div>`
+      )
+      .join("");
+  }
+
+  // 4. Evaluate Severe Weather Alerts
+  const alerts = [];
+
+  // Wind / Gusts
+  let gustMax = 0;
+  if (data.daily && data.daily.wind_gusts_10m_max && data.daily.wind_gusts_10m_max[day] != null) {
+    gustMax = Number(data.daily.wind_gusts_10m_max[day]);
+  }
+  let windMax = 0;
+  if (data.daily && data.daily.wind_speed_10m_max && data.daily.wind_speed_10m_max[day] != null) {
+    windMax = Number(data.daily.wind_speed_10m_max[day]);
+  }
+  const gustDisplayStr = windDisplay(gustMax);
+  const tempUnitStr = unitCelsius ? "°C" : "°F";
+
+  if (gustMax >= 70) {
+    alerts.push({
+      type: "danger",
+      icon: "🌪️",
+      title: t("advisory.alert.wind.title"),
+      desc: t("advisory.alert.wind.desc", gustDisplayStr, Math.round(gustMax * 0.539957)),
+    });
+  } else if (gustMax >= 50 || windMax >= 40) {
+    alerts.push({
+      type: "warning",
+      icon: "💨",
+      title: t("advisory.alert.wind.title"),
+      desc: t("advisory.alert.wind.desc", gustDisplayStr, Math.round(gustMax * 0.539957)),
+    });
+  }
+
+  // Heavy Rain / Precipitation
+  let rainSum = 0;
+  if (data.daily && data.daily.precipitation_sum && data.daily.precipitation_sum[day] != null) {
+    rainSum = Number(data.daily.precipitation_sum[day]);
+  } else if (data.hourly && data.hourly.precipitation) {
+    for (let h = 0; h < 24; h++) {
+      rainSum += Number(data.hourly.precipitation[startIdx + h] || 0);
+    }
+  }
+  rainSum = Math.round(rainSum * 10) / 10;
+
+  if (rainSum >= 30) {
+    alerts.push({
+      type: "danger",
+      icon: "🌧️",
+      title: t("advisory.alert.rain.title"),
+      desc: t("advisory.alert.rain.desc", rainSum.toFixed(1)),
+    });
+  } else if (rainSum >= 15) {
+    alerts.push({
+      type: "warning",
+      icon: "🌦️",
+      title: t("advisory.alert.rain.title"),
+      desc: t("advisory.alert.rain.desc", rainSum.toFixed(1)),
+    });
+  }
+
+  // Thunderstorm / Hail
+  const dayCodes = [];
+  if (data.daily && data.daily.weather_code && data.daily.weather_code[day] != null) {
+    dayCodes.push(data.daily.weather_code[day]);
+  }
+  if (data.hourly && data.hourly.weather_code) {
+    for (let h = 0; h < 24; h++) {
+      dayCodes.push(data.hourly.weather_code[startIdx + h]);
+    }
+  }
+  const hasSevereStorm = dayCodes.some((c) => c === 96 || c === 99);
+  const hasStorm = dayCodes.some((c) => c === 95);
+
+  if (hasSevereStorm) {
+    alerts.push({
+      type: "danger",
+      icon: "⛈️",
+      title: t("advisory.alert.storm.title"),
+      desc: t("advisory.alert.storm.desc"),
+    });
+  } else if (hasStorm) {
+    alerts.push({
+      type: "warning",
+      icon: "🌩️",
+      title: t("advisory.alert.storm.title"),
+      desc: t("advisory.alert.storm.desc"),
+    });
+  }
+
+  // Extreme Heat
+  let tempMax = -999;
+  if (data.daily && data.daily.temperature_2m_max && data.daily.temperature_2m_max[day] != null) {
+    tempMax = Number(data.daily.temperature_2m_max[day]);
+  }
+  if (tempMax >= 38) {
+    alerts.push({
+      type: "danger",
+      icon: "🔥",
+      title: t("advisory.alert.heat.title"),
+      desc: t("advisory.alert.heat.desc", tempDisplay(tempMax), tempUnitStr),
+    });
+  } else if (tempMax >= 33) {
+    alerts.push({
+      type: "warning",
+      icon: "☀️",
+      title: t("advisory.alert.heat.title"),
+      desc: t("advisory.alert.heat.desc", tempDisplay(tempMax), tempUnitStr),
+    });
+  }
+
+  // Frost / Freezing
+  let tempMin = 999;
+  if (data.daily && data.daily.temperature_2m_min && data.daily.temperature_2m_min[day] != null) {
+    tempMin = Number(data.daily.temperature_2m_min[day]);
+  }
+  if (tempMin <= -4) {
+    alerts.push({
+      type: "danger",
+      icon: "❄️",
+      title: t("advisory.alert.frost.title"),
+      desc: t("advisory.alert.frost.desc", tempDisplay(tempMin), tempUnitStr),
+    });
+  } else if (tempMin <= 0) {
+    alerts.push({
+      type: "warning",
+      icon: "🧊",
+      title: t("advisory.alert.frost.title"),
+      desc: t("advisory.alert.frost.desc", tempDisplay(tempMin), tempUnitStr),
+    });
+  }
+
+  // Render Alerts List
+  if (els.advisoryAlertsList) {
+    if (alerts.length === 0) {
+      els.advisoryAlertsList.innerHTML = `
+        <div class="alert-item alert-item--info">
+          <span class="alert-item__icon" aria-hidden="true">☀️</span>
+          <div class="alert-item__content">
+            <span class="alert-item__title">${t("advisory.alerts.none_title")}</span>
+            <span class="alert-item__desc">${t("advisory.alerts.none_desc")}</span>
+          </div>
+        </div>
+      `;
+      if (els.advisoryAlertsBadge) {
+        els.advisoryAlertsBadge.className = "advisory-pill advisory-pill--stable";
+        els.advisoryAlertsBadge.textContent = t("advisory.alerts.stable");
+      }
+      if (els.advisoryAlertsSub) {
+        els.advisoryAlertsSub.textContent = t("advisory.alerts.sub_none");
+      }
+    } else {
+      const hasDanger = alerts.some((a) => a.type === "danger");
+      const badgeClass = hasDanger ? "advisory-pill--danger" : "advisory-pill--warning";
+
+      if (els.advisoryAlertsBadge) {
+        els.advisoryAlertsBadge.className = `advisory-pill ${badgeClass}`;
+        els.advisoryAlertsBadge.textContent = t("advisory.alerts.active", alerts.length);
+      }
+      if (els.advisoryAlertsSub) {
+        els.advisoryAlertsSub.textContent = t("advisory.alerts.sub_count", alerts.length);
+      }
+
+      els.advisoryAlertsList.innerHTML = alerts
+        .map(
+          (a) => `
+          <div class="alert-item alert-item--${a.type}">
+            <span class="alert-item__icon" aria-hidden="true">${a.icon}</span>
+            <div class="alert-item__content">
+              <span class="alert-item__title">${a.title}</span>
+              <span class="alert-item__desc">${a.desc}</span>
+            </div>
+          </div>
+        `
+        )
+        .join("");
+    }
+  }
+
+  // Hero Alert Chip
+  if (els.heroAlertChip) {
+    if (alerts.length > 0) {
+      els.heroAlertChip.hidden = false;
+      els.heroAlertChip.textContent = t("hero.alert.chip", alerts.length);
+      els.heroAlertChip.title = alerts.map((a) => a.title).join(" · ");
+    } else {
+      els.heroAlertChip.hidden = true;
+    }
+  }
+}
+
 function renderPv(data, day) {
   const settings = loadPvSettings(data.latitude);
   const start = day * 24;
@@ -2421,6 +2861,26 @@ els.pvExportBtn.addEventListener("click", exportPvCsv);
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         toggleWindUnit();
+      }
+    });
+  }
+
+  if (els.statUvBox) {
+    els.statUvBox.addEventListener("click", scrollToAdvisory);
+    els.statUvBox.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        scrollToAdvisory();
+      }
+    });
+  }
+
+  if (els.heroAlertChip) {
+    els.heroAlertChip.addEventListener("click", scrollToAdvisory);
+    els.heroAlertChip.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        scrollToAdvisory();
       }
     });
   }

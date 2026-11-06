@@ -2,13 +2,38 @@
 
 The application version is displayed in the footer of both the app and the manual (**SolMeteo © 2026 · Version X.Y.Z**) and is incremented on every iteration. The top entry always corresponds to the current release.
 
-Current Version: **2.9.2**
+Current Version: **2.10.0**
 
 Format based on [Semantic Versioning](https://semver.org/):
 
 - **MAJOR** — Structural architectural changes or core application behavioral breaks;
 - **MINOR** — New features, modules, or capabilities;
 - **PATCH** — Bug fixes, layout adjustments, and precision optimizations.
+
+---
+
+## [2.10.0] — 2026-11-06
+
+### Added
+- **UV Index Health Advisory Card (WHO Standards)**:
+  - Integrated 5-tier WHO UV risk classification (Baixo 0–2, Moderado 3–5, Elevado 6–7, Muito Alto 8–10, Extremo 11+).
+  - Segmented visual risk meter with animated position pointer (`#uvMeterPointer`) reflecting peak daily solar radiation.
+  - Calculated peak UV hour and protection window (e.g. UV $\ge 3$) indicating exact hours when sun protection is essential.
+  - Actionable health recommendations based on risk tier (UV400 sunglasses, SPF 30+ / 50+ sunscreen, wide-brimmed hats, protective clothing, shade seeking).
+- **Severe Weather Warnings Engine**:
+  - Continuous automatic detection of high-impact atmospheric hazards from Open-Meteo hourly and daily data:
+    - High wind gusts ($\ge 50$ km/h alert, $\ge 70$ km/h danger warning);
+    - Heavy/torrential precipitation ($\ge 15$ mm warning, $\ge 30$ mm danger alert);
+    - Thunderstorm & hail hazard (WMO codes 95, 96, 99);
+    - Extreme heat ($\ge 33$ °C warning, $\ge 38$ °C danger alert);
+    - Frost and sub-zero freeze ($\le 0$ °C warning, $\le -4$ °C danger alert).
+  - Favorable conditions banner displayed when no severe thresholds are met.
+- **Top Navigation Shortcuts & Interactive Scrolling**:
+  - Interactive clickable UV stat card in hero (`#statUvBox`) and dynamic hero alert chip (`#heroAlertChip`) with smooth scrolling and highlight pulse animation on `#advisoryUvCard`.
+  - Day navigation synchronization: updating health advice and severe alerts dynamically whenever the user selects any day from the 7-day forecast.
+- **Documentation & User Manual Synchronization**:
+  - Added Section 4.1 (*Saúde Solar & Índice UV*) and Section 4.2 (*Alertas Meteorológicos Severos*) in `manual.html` with 100% bilingual parity (PT/EN).
+  - Synchronized Service Worker offline cache to `solmeteo-v2.10.0`.
 
 ---
 
